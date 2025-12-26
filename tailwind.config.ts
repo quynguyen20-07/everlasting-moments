@@ -13,6 +13,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        body: ['Lora', 'Georgia', 'serif'],
+        sans: ['Lora', 'Georgia', 'serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +62,23 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Wedding specific colors
+        rose: {
+          DEFAULT: "hsl(var(--rose))",
+          dark: "hsl(var(--rose-dark))",
+          deeper: "hsl(var(--rose-deeper))",
+        },
+        champagne: {
+          DEFAULT: "hsl(var(--champagne))",
+          dark: "hsl(var(--champagne-dark))",
+        },
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          light: "hsl(var(--gold-light))",
+          dark: "hsl(var(--gold-dark))",
+        },
+        ivory: "hsl(var(--ivory))",
+        blush: "hsl(var(--blush))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +87,57 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(10px)" },
+        },
+        "scale-in": {
+          "0%": { transform: "scale(0.95)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        "slide-in-right": {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        "slide-out-right": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
+        "fade-out": "fade-out 0.3s ease-out",
+        "scale-in": "scale-in 0.2s ease-out",
+        "slide-in-right": "slide-in-right 0.3s ease-out",
+        "slide-out-right": "slide-out-right 0.3s ease-out",
+        "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+      },
+      backgroundImage: {
+        'gradient-rose': 'linear-gradient(135deg, hsl(var(--rose)) 0%, hsl(var(--blush)) 100%)',
+        'gradient-gold': 'linear-gradient(135deg, hsl(var(--gold-light)) 0%, hsl(var(--gold)) 100%)',
+        'gradient-champagne': 'linear-gradient(180deg, hsl(var(--ivory)) 0%, hsl(var(--champagne)) 100%)',
+      },
+      boxShadow: {
+        'soft': '0 4px 20px -4px hsl(var(--foreground) / 0.08)',
+        'gold': '0 4px 20px -4px hsl(var(--gold) / 0.25)',
+        'elevated': '0 8px 30px -8px hsl(var(--foreground) / 0.12)',
       },
     },
   },
