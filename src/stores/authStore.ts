@@ -1,22 +1,15 @@
+// Auth Store - Zustand store for authentication state
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, LoginCredentials, RegisterCredentials } from '@/types';
-import { authApi } from '@/lib/api/auth';
+import type { User, AuthState } from '@/types/wedding';
+import { loginApi, registerApi, verifyTokenApi, type LoginInput, type RegisterInput } from '@/lib/api/auth';
 
-interface AuthStore {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-  
-  // Actions
-  login: (credentials: LoginCredentials) => Promise<void>;
-  register: (credentials: RegisterCredentials) => Promise<void>;
+interface AuthStore extends AuthState {
+  login: (input: LoginInput) => Promise<void>;
+  register: (input: RegisterInput) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
-  clearError: () => void;
-  setUser: (user: User) => void;
+  setLoading: (loading: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -25,43 +18,36 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      isLoading: false,
-      error: null,
+      isLoading: true,
 
-      login: async (credentials) => {
-        set({ isLoading: true, error: null });
+      login: async (input: LoginInput) => {
+        set({ isLoading: true });
         try {
-          const response = await authApi.login(credentials);
+          const { user, token } = await loginApi(input);
           set({
-            user: response.user,
-            token: response.token,
+            user,
+            token,
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch (error: any) {
-          set({
-            error: error.message || 'Đăng nhập thất bại',
-            isLoading: false,
-          });
+        } catch (error) {
+          set({ isLoading: false });
           throw error;
         }
       },
 
-      register: async (credentials) => {
-        set({ isLoading: true, error: null });
+      register: async (input: RegisterInput) => {
+        set({ isLoading: true });
         try {
-          const response = await authApi.register(credentials);
+          const { user, token } = await registerApi(input);
           set({
-            user: response.user,
-            token: response.token,
+            user,
+            token,
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch (error: any) {
-          set({
-            error: error.message || 'Đăng ký thất bại',
-            isLoading: false,
-          });
+        } catch (error) {
+          set({ isLoading: false });
           throw error;
         }
       },
@@ -71,46 +57,34 @@ export const useAuthStore = create<AuthStore>()(
           user: null,
           token: null,
           isAuthenticated: false,
-          error: null,
+          isLoading: false,
         });
       },
 
       checkAuth: async () => {
-        const token = get().token;
+        const { token } = get();
         if (!token) {
-          set({ isAuthenticated: false });
+          set({ isLoading: false });
           return;
         }
 
-        set({ isLoading: true });
         try {
-          const user = await authApi.getMe();
-          set({
-            user,
-            isAuthenticated: true,
-            isLoading: false,
-          });
-        } catch (error) {
-          set({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-            isLoading: false,
-          });
+          const user = await verifyTokenApi(token);
+          if (user) {
+            set({ user, isAuthenticated: true, isLoading: false });
+          } else {
+            set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+          }
+        } catch {
+          set({ user: null, token: null, isAuthenticated: false, isLoading: false });
         }
       },
 
-      clearError: () => set({ error: null }),
-      
-      setUser: (user) => set({ user }),
+      setLoading: (loading: boolean) => set({ isLoading: loading }),
     }),
     {
       name: 'wedding-auth',
-      partialize: (state) => ({
-        token: state.token,
-        user: state.user,
-        isAuthenticated: state.isAuthenticated,
-      }),
+      partialize: (state) => ({ token: state.token }),
     }
   )
 );

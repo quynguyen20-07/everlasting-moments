@@ -1,343 +1,242 @@
-import type { User, Wedding, Guest, Table } from '@/types';
+// Mock data for development and demo purposes
+import type { User, Wedding, Guest } from '@/types/wedding';
 
-// =====================
-// MOCK USERS
-// =====================
+// Generate unique IDs
+const generateId = () => Math.random().toString(36).substring(2, 15);
 
+// Mock Users
 export const mockUsers: User[] = [
   {
-    id: '1',
-    email: 'user@wedding.com',
-    name: 'Nguyễn Văn An',
+    id: 'user-1',
+    email: 'demo@wedding.com',
+    name: 'Nguyễn Văn A',
     role: 'user',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+    isLocked: false,
     createdAt: '2024-01-15T10:00:00Z',
     updatedAt: '2024-01-15T10:00:00Z',
-    isActive: true,
   },
   {
-    id: '2',
+    id: 'user-2',
     email: 'admin@wedding.com',
-    name: 'Admin Wedding',
+    name: 'Admin',
     role: 'admin',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    isLocked: false,
     createdAt: '2024-01-01T10:00:00Z',
     updatedAt: '2024-01-01T10:00:00Z',
-    isActive: true,
   },
   {
-    id: '3',
-    email: 'couple@wedding.com',
-    name: 'Trần Thị Mai',
+    id: 'user-3',
+    email: 'couple@test.com',
+    name: 'Trần Thị B',
     role: 'user',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+    isLocked: false,
     createdAt: '2024-02-01T10:00:00Z',
     updatedAt: '2024-02-01T10:00:00Z',
-    isActive: true,
   },
 ];
 
-// =====================
-// MOCK WEDDINGS
-// =====================
-
+// Mock Weddings
 export const mockWeddings: Wedding[] = [
   {
-    id: '1',
-    userId: '1',
-    slug: 'an-va-mai',
-    title: 'Đám Cưới An & Mai',
+    id: 'wedding-1',
+    userId: 'user-1',
+    slug: 'minh-anh-wedding',
+    name: 'Đám cưới Minh & Anh',
     status: 'published',
-    weddingDate: '2024-12-20T10:00:00Z',
-    venue: 'Trung Tâm Hội Nghị White Palace',
     bride: {
-      id: 'b1',
-      name: 'Mai',
-      fullName: 'Trần Thị Mai',
+      id: 'bride-1',
+      fullName: 'Trần Thị Mai Anh',
       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
-      bio: 'Một cô gái yêu cuộc sống và tin vào tình yêu đích thực.',
-      fatherName: 'Trần Văn Hùng',
+      description: 'Một cô gái yêu thích nghệ thuật và âm nhạc',
+      fatherName: 'Trần Văn Hoàng',
       motherName: 'Nguyễn Thị Lan',
     },
     groom: {
-      id: 'g1',
-      name: 'An',
-      fullName: 'Nguyễn Văn An',
+      id: 'groom-1',
+      fullName: 'Nguyễn Văn Minh',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-      bio: 'Chàng trai mơ mộng tìm thấy bến đỗ bình yên.',
-      fatherName: 'Nguyễn Văn Minh',
-      motherName: 'Lê Thị Hoa',
+      description: 'Kỹ sư phần mềm, yêu thích du lịch',
+      fatherName: 'Nguyễn Văn Hùng',
+      motherName: 'Lê Thị Thu',
     },
-    loveStory: {
-      id: 'ls1',
-      content: '<p>Chúng tôi gặp nhau trong một ngày mưa tháng 6...</p>',
-      milestones: [
-        {
-          id: 'm1',
-          date: '2020-06-15',
-          title: 'Lần đầu gặp gỡ',
-          description: 'Chúng tôi tình cờ gặp nhau tại quán cà phê nhỏ góc phố.',
-          image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400',
-        },
-        {
-          id: 'm2',
-          date: '2021-02-14',
-          title: 'Ngày Valentine đầu tiên',
-          description: 'Anh ấy cầu hôn tôi bên bờ biển lúc hoàng hôn.',
-          image: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=400',
-        },
-        {
-          id: 'm3',
-          date: '2024-06-20',
-          title: 'Đính hôn',
-          description: 'Chúng tôi chính thức đính hôn với sự chứng kiến của hai bên gia đình.',
-          image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400',
-        },
-      ],
-    },
-    events: [
+    loveStory: [
       {
-        id: 'e1',
-        type: 'ceremony',
-        title: 'Lễ Vu Quy',
-        date: '2024-12-20',
-        time: '08:00',
-        endTime: '10:00',
-        venue: 'Nhà Cô Dâu',
-        address: '123 Đường Nguyễn Huệ, Quận 1, TP.HCM',
-        description: 'Lễ rước dâu truyền thống',
+        id: 'story-1',
+        date: '2020-03-15',
+        title: 'Lần đầu gặp gỡ',
+        description: 'Chúng tôi gặp nhau tại một buổi hội thảo công nghệ...',
+        image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600',
       },
       {
-        id: 'e2',
+        id: 'story-2',
+        date: '2021-02-14',
+        title: 'Ngày hẹn hò đầu tiên',
+        description: 'Valentine đầu tiên bên nhau tại một quán café nhỏ...',
+        image: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600',
+      },
+      {
+        id: 'story-3',
+        date: '2023-12-25',
+        title: 'Cầu hôn',
+        description: 'Dưới ánh đèn Giáng sinh lung linh...',
+        image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600',
+      },
+    ],
+    events: [
+      {
+        id: 'event-1',
+        type: 'ceremony',
+        name: 'Lễ Vu Quy',
+        date: '2025-02-14',
+        time: '08:00',
+        address: '123 Đường Nguyễn Huệ, Quận 1, TP.HCM',
+        mapUrl: 'https://maps.google.com/?q=123+Nguyen+Hue',
+        description: 'Lễ vu quy tại nhà gái',
+      },
+      {
+        id: 'event-2',
         type: 'reception',
-        title: 'Tiệc Cưới',
-        date: '2024-12-20',
+        name: 'Tiệc Cưới',
+        date: '2025-02-14',
         time: '18:00',
-        endTime: '22:00',
-        venue: 'White Palace',
-        address: '194 Hoàng Văn Thụ, Quận Phú Nhuận, TP.HCM',
-        mapUrl: 'https://maps.google.com',
+        address: 'Trung tâm tiệc cưới White Palace, Quận 7, TP.HCM',
+        mapUrl: 'https://maps.google.com/?q=White+Palace',
         description: 'Tiệc cưới chính thức',
       },
     ],
-    gallery: [
+    albums: [
       {
-        id: 'img1',
-        url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800',
-        caption: 'Pre-wedding shoot',
+        id: 'album-1',
+        name: 'Pre-wedding',
+        coverImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600',
         order: 1,
-      },
-      {
-        id: 'img2',
-        url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
-        caption: 'Romantic moment',
-        order: 2,
-      },
-      {
-        id: 'img3',
-        url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800',
-        caption: 'Beach sunset',
-        order: 3,
-      },
-      {
-        id: 'img4',
-        url: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800',
-        caption: 'Together forever',
-        order: 4,
+        items: [
+          {
+            id: 'media-1',
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200',
+            order: 1,
+          },
+          {
+            id: 'media-2',
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200',
+            order: 2,
+          },
+          {
+            id: 'media-3',
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?w=1200',
+            order: 3,
+          },
+        ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        type: 'youtube',
-        title: 'Our Love Story Video',
-      },
+    guests: [],
+    tables: [
+      { id: 'table-1', weddingId: 'wedding-1', name: 'Bàn VIP 1', capacity: 10, guests: [] },
+      { id: 'table-2', weddingId: 'wedding-1', name: 'Bàn VIP 2', capacity: 10, guests: [] },
+      { id: 'table-3', weddingId: 'wedding-1', name: 'Bàn 1', capacity: 8, guests: [] },
     ],
     bankAccounts: [
       {
-        id: 'bank1',
-        accountName: 'NGUYEN VAN AN',
-        accountNumber: '1234567890',
+        id: 'bank-1',
         bankName: 'Vietcombank',
-        branch: 'Chi nhánh Hồ Chí Minh',
+        accountNumber: '1234567890',
+        accountHolder: 'NGUYEN VAN MINH',
+        branch: 'Chi nhánh Quận 1',
       },
       {
-        id: 'bank2',
-        accountName: 'TRAN THI MAI',
-        accountNumber: '0987654321',
+        id: 'bank-2',
         bankName: 'Techcombank',
+        accountNumber: '0987654321',
+        accountHolder: 'TRAN THI MAI ANH',
         branch: 'Chi nhánh Tân Bình',
       },
     ],
     theme: {
-      id: 'theme1',
-      name: 'Rose Garden',
-      primaryColor: '#f4e4e4',
-      secondaryColor: '#f7f3e9',
-      accentColor: '#c9a962',
+      primaryColor: '#D4A574',
+      secondaryColor: '#F6C1CC',
       fontFamily: 'Playfair Display',
+      template: 'elegant',
     },
     settings: {
-      showCountdown: true,
-      showRsvp: true,
-      showGuestWishes: true,
       showGallery: true,
       showLoveStory: true,
-      showBankQr: true,
-      autoplayMusic: false,
-      language: 'vi',
+      showRsvp: true,
+      showWishes: true,
+      showBankInfo: true,
+      showMusic: true,
+      showSeating: true,
+      musicUrl: '/music/wedding-song.mp3',
     },
+    viewCount: 1250,
     createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-06-20T15:30:00Z',
-  },
-  {
-    id: '2',
-    userId: '3',
-    slug: 'minh-va-linh',
-    title: 'Đám Cưới Minh & Linh',
-    status: 'draft',
-    weddingDate: '2025-02-14T10:00:00Z',
-    venue: 'The Reverie Saigon',
-    bride: {
-      id: 'b2',
-      name: 'Linh',
-      fullName: 'Phạm Thị Linh',
-      bio: 'Yêu nghệ thuật và âm nhạc.',
-    },
-    groom: {
-      id: 'g2',
-      name: 'Minh',
-      fullName: 'Lê Văn Minh',
-      bio: 'Đam mê công nghệ và du lịch.',
-    },
-    events: [],
-    gallery: [],
-    videos: [],
-    bankAccounts: [],
-    theme: {
-      id: 'theme2',
-      name: 'Classic White',
-      primaryColor: '#ffffff',
-      secondaryColor: '#f5f5f5',
-      accentColor: '#d4af37',
-      fontFamily: 'Playfair Display',
-    },
-    settings: {
-      showCountdown: true,
-      showRsvp: true,
-      showGuestWishes: true,
-      showGallery: true,
-      showLoveStory: true,
-      showBankQr: true,
-      autoplayMusic: false,
-      language: 'vi',
-    },
-    createdAt: '2024-06-01T10:00:00Z',
-    updatedAt: '2024-06-15T10:00:00Z',
+    updatedAt: '2024-12-20T15:30:00Z',
   },
 ];
 
-// =====================
-// MOCK GUESTS
-// =====================
-
+// Mock Guests
 export const mockGuests: Guest[] = [
   {
-    id: 'guest1',
-    weddingId: '1',
-    name: 'Nguyễn Thị Hương',
-    email: 'huong@email.com',
+    id: 'guest-1',
+    weddingId: 'wedding-1',
+    name: 'Lê Văn Cường',
     phone: '0901234567',
+    email: 'cuong@email.com',
     numberOfGuests: 2,
-    rsvpStatus: 'confirmed',
-    wishes: 'Chúc hai bạn trăm năm hạnh phúc!',
-    createdAt: '2024-06-01T10:00:00Z',
-    updatedAt: '2024-06-01T10:00:00Z',
+    attendance: 'confirmed',
+    tableId: 'table-1',
+    message: 'Chúc hai bạn trăm năm hạnh phúc!',
+    createdAt: '2024-12-01T10:00:00Z',
   },
   {
-    id: 'guest2',
-    weddingId: '1',
-    name: 'Trần Văn Đức',
-    email: 'duc@email.com',
-    phone: '0909876543',
-    numberOfGuests: 1,
-    rsvpStatus: 'confirmed',
-    wishes: 'Mong hai bạn luôn yêu thương nhau!',
-    createdAt: '2024-06-02T10:00:00Z',
-    updatedAt: '2024-06-02T10:00:00Z',
-  },
-  {
-    id: 'guest3',
-    weddingId: '1',
-    name: 'Lê Thị Ngọc',
-    email: 'ngoc@email.com',
-    numberOfGuests: 3,
-    rsvpStatus: 'pending',
-    createdAt: '2024-06-03T10:00:00Z',
-    updatedAt: '2024-06-03T10:00:00Z',
-  },
-  {
-    id: 'guest4',
-    weddingId: '1',
-    name: 'Phạm Minh Tuấn',
+    id: 'guest-2',
+    weddingId: 'wedding-1',
+    name: 'Phạm Thị Dung',
     phone: '0912345678',
+    numberOfGuests: 1,
+    attendance: 'confirmed',
+    message: 'Happy Wedding!',
+    createdAt: '2024-12-02T11:00:00Z',
+  },
+  {
+    id: 'guest-3',
+    weddingId: 'wedding-1',
+    name: 'Hoàng Minh Tuấn',
+    phone: '0923456789',
+    numberOfGuests: 3,
+    attendance: 'pending',
+    createdAt: '2024-12-05T09:00:00Z',
+  },
+  {
+    id: 'guest-4',
+    weddingId: 'wedding-1',
+    name: 'Vũ Thị Hoa',
+    phone: '0934567890',
     numberOfGuests: 2,
-    rsvpStatus: 'declined',
-    dietaryNotes: 'Ăn chay',
-    createdAt: '2024-06-04T10:00:00Z',
-    updatedAt: '2024-06-04T10:00:00Z',
+    attendance: 'declined',
+    message: 'Rất tiếc không thể tham dự được',
+    createdAt: '2024-12-06T14:00:00Z',
   },
 ];
 
-// =====================
-// MOCK TABLES
-// =====================
+// Add guests to wedding
+mockWeddings[0].guests = mockGuests;
 
-export const mockTables: Table[] = [
-  {
-    id: 'table1',
-    weddingId: '1',
-    name: 'Bàn 1 - Gia đình nhà trai',
-    capacity: 10,
-    shape: 'round',
-    position: { x: 100, y: 100 },
-    guests: ['guest1', 'guest2'],
-  },
-  {
-    id: 'table2',
-    weddingId: '1',
-    name: 'Bàn 2 - Gia đình nhà gái',
-    capacity: 10,
-    shape: 'round',
-    position: { x: 300, y: 100 },
-    guests: [],
-  },
-  {
-    id: 'table3',
-    weddingId: '1',
-    name: 'Bàn 3 - Bạn bè cô dâu',
-    capacity: 8,
-    shape: 'round',
-    position: { x: 200, y: 300 },
-    guests: ['guest3'],
-  },
-];
+// Helper functions for mock API
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// =====================
-// HELPER FUNCTIONS
-// =====================
+export const findUserByEmail = (email: string) => 
+  mockUsers.find(u => u.email === email);
 
-export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const findWeddingById = (id: string) =>
+  mockWeddings.find(w => w.id === id);
 
-export const generateId = () => Math.random().toString(36).substring(2, 11);
+export const findWeddingsByUserId = (userId: string) =>
+  mockWeddings.filter(w => w.userId === userId);
 
-export const generateSlug = (title: string) => {
-  return title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[đĐ]/g, 'd')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-};
+export const generateMockToken = (user: User) =>
+  btoa(JSON.stringify({ userId: user.id, role: user.role, exp: Date.now() + 86400000 }));
+
+export { generateId };

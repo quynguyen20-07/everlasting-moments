@@ -1,36 +1,37 @@
+// UI Store - Zustand store for UI state
 import { create } from 'zustand';
 
 interface UIStore {
-  isSidebarOpen: boolean;
-  isSidebarCollapsed: boolean;
+  sidebarOpen: boolean;
   isMobileMenuOpen: boolean;
-  isLoading: boolean;
-  activeModal: string | null;
+  previewMode: 'desktop' | 'mobile';
+  musicPlaying: boolean;
+  language: 'vi' | 'en';
   
   // Actions
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
-  toggleSidebarCollapsed: () => void;
   toggleMobileMenu: () => void;
   setMobileMenuOpen: (open: boolean) => void;
-  setLoading: (loading: boolean) => void;
-  openModal: (modalId: string) => void;
-  closeModal: () => void;
+  setPreviewMode: (mode: 'desktop' | 'mobile') => void;
+  toggleMusic: () => void;
+  setMusicPlaying: (playing: boolean) => void;
+  setLanguage: (lang: 'vi' | 'en') => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
-  isSidebarOpen: true,
-  isSidebarCollapsed: false,
+  sidebarOpen: true,
   isMobileMenuOpen: false,
-  isLoading: false,
-  activeModal: null,
+  previewMode: 'desktop',
+  musicPlaying: false,
+  language: 'vi',
 
-  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-  setSidebarOpen: (open) => set({ isSidebarOpen: open }),
-  toggleSidebarCollapsed: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
   toggleMobileMenu: () => set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
-  setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
-  setLoading: (loading) => set({ isLoading: loading }),
-  openModal: (modalId) => set({ activeModal: modalId }),
-  closeModal: () => set({ activeModal: null }),
+  setMobileMenuOpen: (open: boolean) => set({ isMobileMenuOpen: open }),
+  setPreviewMode: (mode: 'desktop' | 'mobile') => set({ previewMode: mode }),
+  toggleMusic: () => set((state) => ({ musicPlaying: !state.musicPlaying })),
+  setMusicPlaying: (playing: boolean) => set({ musicPlaying: playing }),
+  setLanguage: (lang: 'vi' | 'en') => set({ language: lang }),
 }));
