@@ -1,9 +1,39 @@
+<<<<<<< Updated upstream
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Heart,
+  Plus,
+  LayoutDashboard,
+  Calendar,
+  Users,
+  Settings,
+  LogOut,
+  Eye,
+  Edit,
+  MoreVertical,
+  BarChart3,
+  Menu,
+  X,
+  Image,
+  MessageCircle,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+=======
 import { Eye, Heart, Menu, MessageCircle, Plus, Users } from "lucide-react";
 import { WeddingList } from "@/components/wedding/WeddingList";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState } from "react";
+>>>>>>> Stashed changes
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -17,10 +47,56 @@ const Dashboard = () => {
   ];
 
   return (
+<<<<<<< Updated upstream
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="p-6 border-b border-border">
+            <Link to="/" className="flex items-center gap-2">
+              <Heart className="w-6 h-6 text-primary fill-primary" />
+              <span className="font-display text-xl font-semibold">
+                WeddingCard
+              </span>
+            </Link>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              >
+                <item.icon className="w-5 h-5" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* User Section */}
+          <div className="p-4 border-t border-border">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center font-display font-semibold text-primary">
+                U
+              </div>
+              <div>
+                <p className="font-medium text-sm">User Name</p>
+                <p className="text-xs text-muted-foreground">user@example.com</p>
+              </div>
+            </div>
+=======
     <div>
       <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
+>>>>>>> Stashed changes
             <Button
               variant="ghost"
               size="icon"
@@ -64,12 +140,18 @@ const Dashboard = () => {
           ))}
         </div>
 
+<<<<<<< Updated upstream
+          {/* Weddings List */}
+          <div className="bg-card rounded-2xl border border-border shadow-soft">
+            <div className="p-6 border-b border-border">
+=======
         {/* Weddings List */}
         <div className="bg-card rounded-2xl border border-border shadow-soft">
           <div className="p-6 border-b border-border">
             <WeddingList />
           </div>
           {/* <div className="p-6 border-b border-border">
+>>>>>>> Stashed changes
               <h2 className="font-display text-xl font-semibold">
                 My Weddings
               </h2>
@@ -159,7 +241,66 @@ const Dashboard = () => {
                   </div>
                 </motion.div>
               ))}
+<<<<<<< Updated upstream
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="p-6 rounded-2xl bg-gradient-to-br from-secondary to-blush-light border border-border"
+            >
+              <h3 className="font-display text-lg font-semibold mb-2">
+                Need Help?
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Check our guides and tutorials to create the perfect invitation.
+              </p>
+              <Button variant="outline" size="sm">
+                View Tutorials
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="p-6 rounded-2xl bg-gradient-to-br from-champagne-light/20 to-cream border border-border"
+            >
+              <h3 className="font-display text-lg font-semibold mb-2">
+                Upgrade to Pro
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Unlock premium templates and remove branding.
+              </p>
+              <Button variant="gold" size="sm">
+                View Plans
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="p-6 rounded-2xl bg-card border border-border"
+            >
+              <h3 className="font-display text-lg font-semibold mb-2">
+                Contact Support
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Have questions? Our team is here to help.
+              </p>
+              <Button variant="outline" size="sm">
+                Get in Touch
+              </Button>
+            </motion.div>
+          </div>
+=======
             </div> */}
+>>>>>>> Stashed changes
         </div>
 
         {/* Quick Actions */}
