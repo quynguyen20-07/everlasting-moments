@@ -1,17 +1,17 @@
+import type { GraphQLResponse, GraphQLError } from "@/types/graphql";
 // GraphQL Client - Handles all GraphQL requests with auth
-import { useAuthStore } from '@/stores/authStore';
-import type { GraphQLResponse, GraphQLError } from '@/types/graphql';
+import { useAuthStore } from "@/stores/authStore";
 
 // GraphQL endpoint - will be configured via environment variable
-const GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_ENDPOINT || '/graphql';
+const GRAPHQL_ENDPOINT = import.meta.env.VITE_API_DOMAIN + "/graphql";
 
 export class GraphQLClientError extends Error {
   errors: GraphQLError[];
-  
+
   constructor(errors: GraphQLError[]) {
-    super(errors[0]?.message || 'GraphQL Error');
+    super(errors[0]?.message || "GraphQL Error");
     this.errors = errors;
-    this.name = 'GraphQLClientError';
+    this.name = "GraphQLClientError";
   }
 }
 
@@ -28,20 +28,20 @@ export async function graphqlRequest<T>(
   options: RequestOptions = { requireAuth: true }
 ): Promise<T> {
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   // Add authorization header if required
   if (options.requireAuth) {
     const token = useAuthStore.getState().token;
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
   }
 
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
-      method: 'POST',
+      method: "POST",
       headers,
       body: JSON.stringify({
         query,
@@ -52,7 +52,9 @@ export async function graphqlRequest<T>(
     // Handle 401 - Unauthorized
     if (response.status === 401) {
       useAuthStore.getState().logout();
-      throw new GraphQLClientError([{ message: 'Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.' }]);
+      throw new GraphQLClientError([
+        { message: "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại." },
+      ]);
     }
 
     const result: GraphQLResponse<T> = await response.json();
@@ -63,7 +65,9 @@ export async function graphqlRequest<T>(
     }
 
     if (!result.data) {
-      throw new GraphQLClientError([{ message: 'Không có dữ liệu trả về từ server' }]);
+      throw new GraphQLClientError([
+        { message: "Không có dữ liệu trả về từ server" },
+      ]);
     }
 
     return result.data;
@@ -71,11 +75,16 @@ export async function graphqlRequest<T>(
     if (error instanceof GraphQLClientError) {
       throw error;
     }
-    
+
     // Network or other errors
-    throw new GraphQLClientError([{ 
-      message: error instanceof Error ? error.message : 'Lỗi kết nối. Vui lòng thử lại.' 
-    }]);
+    throw new GraphQLClientError([
+      {
+        message:
+          error instanceof Error
+            ? error.message
+            : "Lỗi kết nối. Vui lòng thử lại.",
+      },
+    ]);
   }
 }
 
