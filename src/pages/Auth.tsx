@@ -49,7 +49,7 @@ const Auth = () => {
 
     try {
       if (mode === "signup") {
-        await register({ name: formData.name, email: formData.email, password: formData.password });
+        await register({ fullName: formData.name, email: formData.email, password: formData.password });
         toast({ title: "Tạo tài khoản thành công!", description: "Đang chuyển hướng..." });
       } else {
         await login({ email: formData.email, password: formData.password });

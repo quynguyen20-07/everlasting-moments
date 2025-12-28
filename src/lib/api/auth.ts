@@ -1,6 +1,16 @@
-// Auth API - Mock authentication service
-import { delay, findUserByEmail, generateMockToken, mockUsers, generateId } from './mock-data';
-import type { User } from '@/types/wedding';
+// Auth API Service - GraphQL authentication
+import { graphqlRequest, graphqlPublicRequest } from '@/lib/graphql/client';
+import { LOGIN_MUTATION, REGISTER_MUTATION, LOGOUT_MUTATION, REFRESH_TOKEN_MUTATION } from '@/lib/graphql/mutations';
+import { ME_QUERY } from '@/lib/graphql/queries';
+import type { 
+  User,
+  AuthPayload,
+  LoginResponse, 
+  RegisterResponse, 
+  LogoutResponse,
+  RefreshTokenResponse,
+  MeResponse 
+} from '@/types/graphql';
 
 export interface LoginInput {
   email: string;
@@ -8,89 +18,62 @@ export interface LoginInput {
 }
 
 export interface RegisterInput {
-  name: string;
   email: string;
   password: string;
+  fullName: string;
+  phone?: string;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
-}
-
-// Mock login - accepts any password for demo
-export const loginApi = async (input: LoginInput): Promise<AuthResponse> => {
-  await delay(800); // Simulate network delay
-  
-  const user = findUserByEmail(input.email);
-  
-  if (!user) {
-    throw new Error('Email hoặc mật khẩu không đúng');
-  }
-  
-  if (user.isLocked) {
-    throw new Error('Tài khoản đã bị khóa');
-  }
-  
-  const token = generateMockToken(user);
-  
-  return { user, token };
-};
-
-// Mock register
-export const registerApi = async (input: RegisterInput): Promise<AuthResponse> => {
-  await delay(800);
-  
-  const existingUser = findUserByEmail(input.email);
-  
-  if (existingUser) {
-    throw new Error('Email đã được sử dụng');
-  }
-  
-  const newUser: User = {
-    id: generateId(),
+/**
+ * Login user with email and password
+ */
+export async function loginApi(input: LoginInput): Promise<AuthPayload> {
+  const data = await graphqlPublicRequest<LoginResponse>(LOGIN_MUTATION, {
     email: input.email,
-    name: input.name,
-    role: 'user',
-    isLocked: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  
-  mockUsers.push(newUser);
-  const token = generateMockToken(newUser);
-  
-  return { user: newUser, token };
-};
+    password: input.password,
+  });
+  return data.login;
+}
 
-// Verify token and get user
-export const verifyTokenApi = async (token: string): Promise<User | null> => {
-  await delay(200);
-  
+/**
+ * Register new user
+ */
+export async function registerApi(input: RegisterInput): Promise<AuthPayload> {
+  const data = await graphqlPublicRequest<RegisterResponse>(REGISTER_MUTATION, {
+    email: input.email,
+    password: input.password,
+    fullName: input.fullName,
+    phone: input.phone,
+  });
+  return data.register;
+}
+
+/**
+ * Logout current user
+ */
+export async function logoutApi(): Promise<boolean> {
+  const data = await graphqlRequest<LogoutResponse>(LOGOUT_MUTATION);
+  return data.logout;
+}
+
+/**
+ * Refresh access token using refresh token
+ */
+export async function refreshTokenApi(refreshToken: string): Promise<AuthPayload> {
+  const data = await graphqlPublicRequest<RefreshTokenResponse>(REFRESH_TOKEN_MUTATION, {
+    refreshToken,
+  });
+  return data.refreshToken;
+}
+
+/**
+ * Get current authenticated user
+ */
+export async function getMeApi(): Promise<User | null> {
   try {
-    const decoded = JSON.parse(atob(token));
-    
-    if (decoded.exp < Date.now()) {
-      return null;
-    }
-    
-    const user = mockUsers.find(u => u.id === decoded.userId);
-    return user || null;
+    const data = await graphqlRequest<MeResponse>(ME_QUERY);
+    return data.me;
   } catch {
     return null;
   }
-};
-
-// Forgot password (mock)
-export const forgotPasswordApi = async (email: string): Promise<void> => {
-  await delay(800);
-  
-  const user = findUserByEmail(email);
-  
-  if (!user) {
-    throw new Error('Email không tồn tại trong hệ thống');
-  }
-  
-  // In real app, would send email
-  console.log('Password reset email sent to:', email);
-};
+}

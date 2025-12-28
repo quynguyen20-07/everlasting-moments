@@ -183,11 +183,11 @@ export const DashboardSidebar = ({ isAdmin = false }: SidebarProps) => {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="text-primary font-medium">
-                {user?.name?.charAt(0).toUpperCase()}
+                {user?.fullName?.charAt(0).toUpperCase()}
               </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">{user?.name}</p>
+              <p className="font-medium truncate">{user?.fullName}</p>
               <p className="text-sm text-muted-foreground truncate">
                 {user?.email}
               </p>
