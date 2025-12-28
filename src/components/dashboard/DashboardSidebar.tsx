@@ -41,10 +41,11 @@ const userNavItems: NavItem[] = [
   {
     title: "Tiệc cưới",
     icon: Heart,
-    children: [
-      { title: "Danh sách", href: "/dashboard/weddings" },
-      { title: "Tạo mới", href: "/dashboard/weddings/create" },
-    ],
+    href: "/dashboard/weddings",
+    // children: [
+    //   { title: "Danh sách", href: "/dashboard/weddings" },
+    //   { title: "Tạo mới", href: "/dashboard/weddings/create" },
+    // ],
   },
   {
     title: "Khách mời",
