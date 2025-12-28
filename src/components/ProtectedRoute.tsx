@@ -12,15 +12,17 @@ export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRout
   const { isAuthenticated, isLoading, user } = useAuthStore();
   const location = useLocation();
 
+  // Don't show loading here since App already handles initial auth check
   if (isLoading) {
     return <PageLoading text="Đang xác thực..." />;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
+    // Save the attempted URL for redirecting after login
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (requireAdmin && user?.role !== 'admin') {
+  if (requireAdmin && user.role !== 'admin') {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -35,9 +37,9 @@ export const PublicOnlyRoute = ({ children }: { children: React.ReactNode }) => 
     return <PageLoading />;
   }
 
-  if (isAuthenticated) {
+  if (isAuthenticated && user) {
     // Redirect based on role
-    const redirectPath = user?.role === 'admin' ? '/admin' : '/dashboard';
+    const redirectPath = user.role === 'admin' ? '/admin' : '/dashboard';
     return <Navigate to={redirectPath} replace />;
   }
 
