@@ -255,14 +255,14 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <div className="p-4 border-t border-border">
           <div className="flex items-center gap-3 mb-3">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={user?.avatar} alt={user?.name} />
+              <AvatarImage src={user?.avatar} alt={user?.fullName} />
               <AvatarFallback className="bg-primary/10 text-primary">
-                {user?.name ? getInitials(user.name) : "U"}
+                {user?.fullName ? getInitials(user.fullName) : "U"}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate">
-                {user?.name || "User Name"}
+                {user?.fullName || "User Name"}
               </p>
               <p className="text-xs text-muted-foreground truncate">
                 {user?.email || "user@example.com"}

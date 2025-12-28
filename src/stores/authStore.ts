@@ -1,8 +1,16 @@
 // Auth Store - Zustand store for authentication state
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, AuthState } from '@/types/wedding';
-import { loginApi, registerApi, verifyTokenApi, type LoginInput, type RegisterInput } from '@/lib/api/auth';
+import type { User } from '@/types/graphql';
+import { loginApi, registerApi, getMeApi, type LoginInput, type RegisterInput } from '@/lib/api/auth';
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  refreshToken: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
 
 interface AuthStore extends AuthState {
   login: (input: LoginInput) => Promise<void>;
@@ -17,16 +25,18 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       user: null,
       token: null,
+      refreshToken: null,
       isAuthenticated: false,
       isLoading: true,
 
       login: async (input: LoginInput) => {
         set({ isLoading: true });
         try {
-          const { user, token } = await loginApi(input);
+          const result = await loginApi(input);
           set({
-            user,
-            token,
+            user: result.user,
+            token: result.accessToken,
+            refreshToken: result.refreshToken,
             isAuthenticated: true,
             isLoading: false,
           });
@@ -39,10 +49,11 @@ export const useAuthStore = create<AuthStore>()(
       register: async (input: RegisterInput) => {
         set({ isLoading: true });
         try {
-          const { user, token } = await registerApi(input);
+          const result = await registerApi(input);
           set({
-            user,
-            token,
+            user: result.user,
+            token: result.accessToken,
+            refreshToken: result.refreshToken,
             isAuthenticated: true,
             isLoading: false,
           });
@@ -56,6 +67,7 @@ export const useAuthStore = create<AuthStore>()(
         set({
           user: null,
           token: null,
+          refreshToken: null,
           isAuthenticated: false,
           isLoading: false,
         });
@@ -69,14 +81,14 @@ export const useAuthStore = create<AuthStore>()(
         }
 
         try {
-          const user = await verifyTokenApi(token);
+          const user = await getMeApi();
           if (user) {
             set({ user, isAuthenticated: true, isLoading: false });
           } else {
-            set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+            set({ user: null, token: null, refreshToken: null, isAuthenticated: false, isLoading: false });
           }
         } catch {
-          set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+          set({ user: null, token: null, refreshToken: null, isAuthenticated: false, isLoading: false });
         }
       },
 
@@ -86,6 +98,7 @@ export const useAuthStore = create<AuthStore>()(
       name: 'wedding-auth',
       partialize: (state) => ({ 
         token: state.token,
+        refreshToken: state.refreshToken,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
