@@ -84,7 +84,11 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'wedding-auth',
-      partialize: (state) => ({ token: state.token }),
+      partialize: (state) => ({ 
+        token: state.token,
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );
