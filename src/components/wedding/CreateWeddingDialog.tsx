@@ -1,11 +1,3 @@
-// Create Wedding Dialog - Modal form for creating new wedding
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Heart, Loader2 } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
 import {
   Dialog,
   DialogContent,
@@ -13,8 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -24,7 +14,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useWeddingStore } from "@/stores/weddingStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Heart, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+// Create Wedding Dialog - Modal form for creating new wedding
+import { useState } from "react";
+import { z } from "zod";
 
 const createWeddingSchema = z.object({
   name: z.string().min(1, "Vui lòng nhập tên thiệp cưới").max(100),
@@ -40,7 +40,10 @@ interface CreateWeddingDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const CreateWeddingDialog = ({ open, onOpenChange }: CreateWeddingDialogProps) => {
+export const CreateWeddingDialog = ({
+  open,
+  onOpenChange,
+}: CreateWeddingDialogProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuthStore();
@@ -59,14 +62,18 @@ export const CreateWeddingDialog = ({ open, onOpenChange }: CreateWeddingDialogP
 
   const onSubmit = async (data: CreateWeddingFormData) => {
     if (!user?.id) return;
-    
+
     setIsLoading(true);
     try {
-      const wedding = await createWedding(user.id, {
-        name: data.name,
-        bride: { fullName: data.brideName },
-        groom: { fullName: data.groomName },
-        eventDate: data.eventDate || undefined,
+      const wedding = await createWedding({
+        title: data.name,
+        weddingDate: data.eventDate,
+        bride: {
+          fullName: data.brideName,
+        },
+        groom: {
+          fullName: data.groomName,
+        },
       });
 
       toast({
@@ -76,7 +83,7 @@ export const CreateWeddingDialog = ({ open, onOpenChange }: CreateWeddingDialogP
 
       onOpenChange(false);
       form.reset();
-      navigate(`/dashboard/wedding/${wedding.id}/edit`);
+      navigate(`/dashboard/weddings`);
     } catch (error) {
       toast({
         title: "Lỗi",
@@ -104,7 +111,10 @@ export const CreateWeddingDialog = ({ open, onOpenChange }: CreateWeddingDialogP
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mt-4"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -172,7 +182,12 @@ export const CreateWeddingDialog = ({ open, onOpenChange }: CreateWeddingDialogP
               >
                 Hủy
               </Button>
-              <Button type="submit" variant="gold" className="flex-1" disabled={isLoading}>
+              <Button
+                type="submit"
+                variant="gold"
+                className="flex-1"
+                disabled={isLoading}
+              >
                 {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Tạo thiệp cưới
               </Button>

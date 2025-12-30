@@ -1,8 +1,9 @@
 // Wedding types - Core data structures for wedding management
 
-export type WeddingStatus = 'draft' | 'published' | 'archived';
-export type AttendanceStatus = 'pending' | 'confirmed' | 'declined';
-export type UserRole = 'user' | 'admin';
+export type WeddingStatus = "draft" | "published" | "archived";
+export type AttendanceStatus = "pending" | "confirmed" | "declined";
+export type UserRole = "user" | "admin";
+export type WeddingLanguage = "vi" | "en";
 
 export interface User {
   id: string;
@@ -41,7 +42,7 @@ export interface LoveStoryEvent {
 
 export interface WeddingEvent {
   id: string;
-  type: 'ceremony' | 'reception' | 'other';
+  type: "ceremony" | "reception" | "other";
   name: string;
   date: string;
   time: string;
@@ -52,7 +53,7 @@ export interface WeddingEvent {
 
 export interface MediaItem {
   id: string;
-  type: 'image' | 'video';
+  type: "image" | "video";
   url: string;
   thumbnail?: string;
   caption?: string;
@@ -114,11 +115,44 @@ export interface WeddingSettings {
   musicUrl?: string;
 }
 
+export interface WeddingResponse {
+  weddings: Wedding[];
+}
+export interface ListWeddingResponse {
+  weddings: ListWedding[];
+}
+
+export interface BrideGroom {
+  fullName: string;
+  avatar?: string | null;
+  shortBio?: string | null;
+  familyInfo?: string | null;
+  socialLinks?: unknown | null;
+}
+export interface ThemeSettings {
+  primaryColor: string;
+  secondaryColor: string;
+  fontHeading: string;
+  fontBody: string;
+  backgroundMusic?: string;
+}
+
+export interface WeddingDetail {
+  id: string;
+  weddingId: string;
+  bride: BrideGroom;
+  groom: BrideGroom;
+  loveStories?: LoveStoryEvent[];
+  weddingEvents?: WeddingEvent[];
+}
+
 export interface Wedding {
   id: string;
   userId: string;
   slug: string;
-  name: string;
+  title: string;
+  weddingDate: string;
+  language: WeddingLanguage;
   status: WeddingStatus;
   bride: Person;
   groom: Person;
@@ -135,6 +169,22 @@ export interface Wedding {
   updatedAt: string;
 }
 
+export interface ListWedding {
+  id: string;
+  userId: string;
+  slug: string;
+  title: string;
+  status: WeddingStatus;
+  language: WeddingLanguage;
+  weddingDate: string;
+  viewCount: number;
+  publishedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  weddingDetail?: WeddingDetail;
+  themeSettings: ThemeSettings;
+}
+
 export interface WeddingFormData {
   name: string;
   brideName: string;
@@ -143,10 +193,28 @@ export interface WeddingFormData {
 }
 
 export interface CreateWeddingInput {
-  name: string;
-  bride: Partial<Person>;
-  groom: Partial<Person>;
-  eventDate?: string;
+  title: string;
+  slug?: string;
+  language?: WeddingLanguage;
+  themeSettings?: IThemeSettingInput;
+  weddingDate: string;
+  bride: IBrideGroomInput;
+  groom: IBrideGroomInput;
+}
+
+export interface IThemeSettingInput {
+  primaryColor?: string;
+  secondaryColor?: string;
+  fontHeading?: string;
+  fontBody?: string;
+  backgroundMusic?: string;
+}
+export interface IBrideGroomInput {
+  fullName: string;
+  avatar?: string;
+  shortBio?: string;
+  familyInfo?: string;
+  socialLinks?: JSON;
 }
 
 // API Response types

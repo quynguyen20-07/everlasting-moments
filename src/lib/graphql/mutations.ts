@@ -1,7 +1,3 @@
-// GraphQL Mutations - All mutation definitions matching schema exactly
-
-// ==================== Auth Mutations ====================
-
 export const REGISTER_MUTATION = `
   mutation Register($email: String!, $password: String!, $fullName: String!, $phone: String) {
     register(email: $email, password: $password, fullName: $fullName, phone: $phone) {
@@ -72,29 +68,38 @@ export const REFRESH_TOKEN_MUTATION = `
 `;
 
 // ==================== Wedding Mutations ====================
-
-export const CREATE_WEDDING_MUTATION = `
-  mutation CreateWedding($title: String!, $slug: String, $language: String) {
-    createWedding(title: $title, slug: $slug, language: $language) {
-      id
-      userId
-      slug
-      title
-      status
-      language
-      themeSettings {
-        primaryColor
-        secondaryColor
-        fontHeading
-        fontBody
-        backgroundMusic
+export const CREATE_WEDDING_MUTATION = `mutation CreateWedding(
+  $title: String!
+  $slug: String
+  $language: String
+  $weddingDate: String!
+  $bride: BrideGroomInput!
+  $groom: BrideGroomInput!
+) {
+  createWedding(
+    title: $title
+    slug: $slug
+    language: $language
+    weddingDate: $weddingDate
+    bride: $bride
+    groom: $groom
+  ) {
+    id
+    title
+    weddingDate
+    status
+    weddingDetail {
+      bride {
+        fullName
+        avatar
       }
-      viewCount
-      publishedAt
-      createdAt
-      updatedAt
+      groom {
+        fullName
+        avatar
+      }
     }
   }
+}
 `;
 
 export const UPDATE_WEDDING_MUTATION = `

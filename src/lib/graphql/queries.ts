@@ -1,7 +1,3 @@
-// GraphQL Queries - All query definitions matching schema exactly
-
-// ==================== Auth Queries ====================
-
 export const ME_QUERY = `
   query Me {
     me {
@@ -21,66 +17,46 @@ export const ME_QUERY = `
 
 // ==================== Wedding Queries ====================
 
-export const WEDDINGS_QUERY = `
-  query Weddings {
+export const WEDDINGS_QUERY = `query Weddings {
     weddings {
-      id
-      userId
-      slug
-      title
-      status
-      language
-      themeSettings {
-        primaryColor
-        secondaryColor
-        fontHeading
-        fontBody
-        backgroundMusic
-      }
-      viewCount
-      publishedAt
-      createdAt
-      updatedAt
-      weddingDetail {
         id
-        weddingId
-        bride {
-          fullName
-          avatar
-          shortBio
-          familyInfo
-          socialLinks
+        userId
+        slug
+        title
+        status
+        language
+        viewCount
+        publishedAt
+        createdAt
+        updatedAt
+        weddingDate
+        weddingDetail {
+            id
+            weddingId
+            bride {
+                fullName
+                avatar
+                shortBio
+                familyInfo
+                socialLinks
+            }
+            groom {
+                fullName
+                avatar
+                shortBio
+                familyInfo
+                socialLinks
+            }
         }
-        groom {
-          fullName
-          avatar
-          shortBio
-          familyInfo
-          socialLinks
+        themeSettings {
+            primaryColor
+            secondaryColor
+            fontHeading
+            fontBody
+            backgroundMusic
         }
-        loveStories {
-          id
-          title
-          content
-          storyDate
-          imageUrl
-        }
-        weddingEvents {
-          id
-          title
-          type
-          eventDate
-          startTime
-          endTime
-          address
-          locationLat
-          locationLng
-          mapEmbedUrl
-          description
-        }
-      }
     }
-  }
+}
 `;
 
 export const WEDDING_QUERY = `

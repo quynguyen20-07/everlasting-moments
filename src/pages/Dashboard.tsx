@@ -1,11 +1,14 @@
 import { Eye, Heart, Menu, MessageCircle, Plus, Users } from "lucide-react";
-import { WeddingList } from "@/components/wedding/WeddingList";
-import { Link } from "react-router-dom";
+import { WeddingCard } from "@/components/wedding/WeddingCard";
+import { useWeddingStore } from "@/stores/weddingStore";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
 const Dashboard = () => {
+  const { weddings } = useWeddingStore();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const stats = [
@@ -68,12 +71,18 @@ const Dashboard = () => {
         {/* Weddings List */}
         <div className="bg-card rounded-2xl border border-border shadow-soft">
           <div className="p-6 border-b border-border">
-            <h2 className="font-display text-xl font-semibold">
-              Thiệp cưới của bạn
-            </h2>
+            <h2 className="font-display text-xl font-semibold">Thiệp cưới</h2>
           </div>
           <div className="p-6">
-            <WeddingList />
+            {weddings.map((wedding, index) => (
+              <WeddingCard
+                key={wedding.id}
+                wedding={wedding}
+                index={index}
+                onPublishToggle={() => {}}
+                onDelete={() => {}}
+              />
+            ))}
           </div>
         </div>
 

@@ -1,9 +1,3 @@
-// Wedding List Component - Displays all user's weddings
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Plus, Heart, Search, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,25 +5,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { WeddingCard } from "./WeddingCard";
-import { CreateWeddingDialog } from "./CreateWeddingDialog";
-import { DeleteWeddingDialog } from "./DeleteWeddingDialog";
-import { useWeddingStore } from "@/stores/weddingStore";
-import { useAuthStore } from "@/stores/authStore";
-import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { Plus, Heart, Search, Filter } from "lucide-react";
+import { useWeddingStore } from "@/stores/weddingStore";
 import type { WeddingStatus } from "@/types/wedding";
+import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+// Wedding List Component - Displays all user's weddings
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+
+import { DeleteWeddingDialog } from "./DeleteWeddingDialog";
+import { CreateWeddingDialog } from "./CreateWeddingDialog";
+import { WeddingCard } from "./WeddingCard";
 
 export const WeddingList = () => {
   const { toast } = useToast();
   const { user } = useAuthStore();
-  const { weddings, isLoading, fetchWeddings, updateStatus } = useWeddingStore();
-  
+  const { weddings, isLoading, fetchWeddings, updateStatus } =
+    useWeddingStore();
+
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedWeddingId, setSelectedWeddingId] = useState<string | null>(null);
+  const [selectedWeddingId, setSelectedWeddingId] = useState<string | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<WeddingStatus | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<WeddingStatus | "all">(
+    "all"
+  );
 
   useEffect(() => {
     if (user?.id) {
@@ -39,11 +45,11 @@ export const WeddingList = () => {
 
   const handlePublishToggle = async (id: string, publish: boolean) => {
     try {
-      await updateStatus(id, publish ? 'published' : 'draft');
+      await updateStatus(id, publish ? "published" : "draft");
       toast({
         title: publish ? "Đã xuất bản" : "Đã hủy xuất bản",
-        description: publish 
-          ? "Thiệp cưới của bạn đã được công khai." 
+        description: publish
+          ? "Thiệp cưới của bạn đã được công khai."
           : "Thiệp cưới đã chuyển về chế độ nháp.",
       });
     } catch (error) {
@@ -60,19 +66,23 @@ export const WeddingList = () => {
     setDeleteDialogOpen(true);
   };
 
-  const selectedWedding = weddings.find(w => w.id === selectedWeddingId);
+  const selectedWedding = weddings.find((w) => w.id === selectedWeddingId);
 
-  // Filter weddings
-  const filteredWeddings = weddings.filter(wedding => {
-    const matchesSearch = 
-      wedding.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      wedding.bride.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      wedding.groom.fullName.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = statusFilter === "all" || wedding.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
-  });
+  // const filteredWeddings = weddings.filter((wedding) => {
+  //   const matchesSearch =
+  //     wedding.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     // wedding.bride.fullName
+  //     //   .toLowerCase()
+  //     //   .includes(searchQuery.toLowerCase()) ||
+  //     wedding.weddingDetail.groom.fullName
+  //       .toLowerCase()
+  //       .includes(searchQuery.toLowerCase());
+
+  //   const matchesStatus =
+  //     statusFilter === "all" || wedding.status === statusFilter;
+
+  //   return matchesSearch && matchesStatus;
+  // });
 
   if (isLoading) {
     return (
@@ -87,7 +97,9 @@ export const WeddingList = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold">Thiệp cưới của tôi</h1>
+          <h1 className="font-display text-2xl font-semibold">
+            Thiệp cưới của tôi
+          </h1>
           <p className="text-muted-foreground text-sm mt-1">
             Quản lý và chỉnh sửa các thiệp cưới của bạn
           </p>
@@ -109,9 +121,11 @@ export const WeddingList = () => {
             className="pl-9"
           />
         </div>
-        <Select 
-          value={statusFilter} 
-          onValueChange={(value) => setStatusFilter(value as WeddingStatus | "all")}
+        <Select
+          value={statusFilter}
+          onValueChange={(value) =>
+            setStatusFilter(value as WeddingStatus | "all")
+          }
         >
           <SelectTrigger className="w-full sm:w-40">
             <Filter className="w-4 h-4 mr-2" />
@@ -126,7 +140,7 @@ export const WeddingList = () => {
       </div>
 
       {/* Wedding Cards */}
-      {filteredWeddings.length === 0 ? (
+      {weddings.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -136,16 +150,14 @@ export const WeddingList = () => {
             <Heart className="w-10 h-10 text-primary fill-primary" />
           </div>
           <h3 className="font-display text-xl font-semibold mb-2">
-            {searchQuery || statusFilter !== "all" 
-              ? "Không tìm thấy thiệp cưới" 
-              : "Chưa có thiệp cưới nào"
-            }
+            {searchQuery || statusFilter !== "all"
+              ? "Không tìm thấy thiệp cưới"
+              : "Chưa có thiệp cưới nào"}
           </h3>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">
             {searchQuery || statusFilter !== "all"
               ? "Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm."
-              : "Bắt đầu tạo thiệp cưới đầu tiên của bạn và chia sẻ niềm vui với mọi người."
-            }
+              : "Bắt đầu tạo thiệp cưới đầu tiên của bạn và chia sẻ niềm vui với mọi người."}
           </p>
           {!searchQuery && statusFilter === "all" && (
             <Button variant="gold" onClick={() => setCreateDialogOpen(true)}>
@@ -156,7 +168,7 @@ export const WeddingList = () => {
         </motion.div>
       ) : (
         <div className="bg-card rounded-2xl border border-border shadow-soft divide-y divide-border">
-          {filteredWeddings.map((wedding, index) => (
+          {weddings.map((wedding, index) => (
             <WeddingCard
               key={wedding.id}
               wedding={wedding}
@@ -173,10 +185,10 @@ export const WeddingList = () => {
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
       />
-      
+
       <DeleteWeddingDialog
         weddingId={selectedWeddingId}
-        weddingName={selectedWedding?.name}
+        weddingName={selectedWedding?.title}
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
       />
