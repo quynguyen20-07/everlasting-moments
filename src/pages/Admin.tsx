@@ -1,29 +1,24 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Heart,
-  LayoutDashboard,
-  Users,
-  Settings,
-  LogOut,
-  Menu,
-  Search,
-  Shield,
+  AlertTriangle,
   BarChart3,
   Bell,
-  FileText,
-  Palette,
-  CreditCard,
-  AlertTriangle,
   CheckCircle,
-  XCircle,
-  MoreVertical,
+  CreditCard,
   Eye,
+  FileText,
+  Heart,
+  LayoutDashboard,
   Lock,
+  LogOut,
+  Menu,
+  MoreVertical,
+  Palette,
+  Search,
+  Settings,
+  Shield,
   Unlock,
+  Users,
+  XCircle,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -31,8 +26,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
-// Mock admin data
+// Dữ liệu admin giả lập
 const mockStats = {
   totalUsers: 1247,
   totalWeddings: 856,
@@ -56,7 +56,7 @@ const mockUsers = [
     email: "thib@example.com",
     weddings: 1,
     status: "active",
-    plan: "Free",
+    plan: "Miễn phí",
     joinedAt: "2024-02-20",
   },
   {
@@ -101,15 +101,15 @@ const mockWeddings = [
 ];
 
 const adminNavItems = [
-  { icon: LayoutDashboard, label: "Overview", href: "/admin" },
-  { icon: Users, label: "Users", href: "/admin/users" },
-  { icon: Heart, label: "Weddings", href: "/admin/weddings" },
-  { icon: Palette, label: "Templates", href: "/admin/templates" },
-  { icon: FileText, label: "Content", href: "/admin/content" },
-  { icon: CreditCard, label: "Payments", href: "/admin/payments" },
-  { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
-  { icon: Shield, label: "Security", href: "/admin/security" },
-  { icon: Settings, label: "Settings", href: "/admin/settings" },
+  { icon: LayoutDashboard, label: "Tổng quan", href: "/admin" },
+  { icon: Users, label: "Người dùng", href: "/admin/users" },
+  { icon: Heart, label: "Đám cưới", href: "/admin/weddings" },
+  { icon: Palette, label: "Mẫu", href: "/admin/templates" },
+  { icon: FileText, label: "Nội dung", href: "/admin/content" },
+  { icon: CreditCard, label: "Thanh toán", href: "/admin/payments" },
+  { icon: BarChart3, label: "Phân tích", href: "/admin/analytics" },
+  { icon: Shield, label: "Bảo mật", href: "/admin/security" },
+  { icon: Settings, label: "Cài đặt", href: "/admin/settings" },
 ];
 
 const Admin = () => {
@@ -118,15 +118,35 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState<"users" | "weddings">("users");
 
   const stats = [
-    { label: "Total Users", value: mockStats.totalUsers.toLocaleString(), icon: Users, trend: "+12%" },
-    { label: "Total Weddings", value: mockStats.totalWeddings.toLocaleString(), icon: Heart, trend: "+8%" },
-    { label: "Active Invitations", value: mockStats.activeInvitations.toLocaleString(), icon: CheckCircle, trend: "+15%" },
-    { label: "Monthly Revenue", value: `$${mockStats.monthlyRevenue.toLocaleString()}`, icon: CreditCard, trend: "+23%" },
+    {
+      label: "Tổng người dùng",
+      value: mockStats.totalUsers.toLocaleString(),
+      icon: Users,
+      trend: "+12%",
+    },
+    {
+      label: "Tổng đám cưới",
+      value: mockStats.totalWeddings.toLocaleString(),
+      icon: Heart,
+      trend: "+8%",
+    },
+    {
+      label: "Lời mời hoạt động",
+      value: mockStats.activeInvitations.toLocaleString(),
+      icon: CheckCircle,
+      trend: "+15%",
+    },
+    {
+      label: "Doanh thu hàng tháng",
+      value: `$${mockStats.monthlyRevenue.toLocaleString()}`,
+      icon: CreditCard,
+      trend: "+23%",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
+      {/* Thanh bên */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -137,11 +157,13 @@ const Admin = () => {
           <div className="p-6 border-b border-border">
             <Link to="/" className="flex items-center gap-2">
               <Shield className="w-6 h-6 text-primary" />
-              <span className="font-display text-xl font-semibold">Admin</span>
+              <span className="font-display text-xl font-semibold">
+                Quản trị
+              </span>
             </Link>
           </div>
 
-          {/* Navigation */}
+          {/* Điều hướng */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {adminNavItems.map((item) => (
               <Link
@@ -155,15 +177,17 @@ const Admin = () => {
             ))}
           </nav>
 
-          {/* Admin User */}
+          {/* Người dùng quản trị */}
           <div className="p-4 border-t border-border">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-display font-semibold text-primary-foreground">
                 A
               </div>
               <div>
-                <p className="font-medium text-sm">Admin User</p>
-                <p className="text-xs text-muted-foreground">Super Admin</p>
+                <p className="font-medium text-sm">Người dùng quản trị</p>
+                <p className="text-xs text-muted-foreground">
+                  Siêu quản trị viên
+                </p>
               </div>
             </div>
             <Button
@@ -172,13 +196,13 @@ const Admin = () => {
               onClick={() => navigate("/auth")}
             >
               <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              Đăng xuất
             </Button>
           </div>
         </div>
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Lớp phủ thanh bên di động */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-foreground/50 backdrop-blur-sm z-40 lg:hidden"
@@ -186,9 +210,9 @@ const Admin = () => {
         />
       )}
 
-      {/* Main Content */}
+      {/* Nội dung chính */}
       <main className="flex-1 lg:ml-64">
-        {/* Top Bar */}
+        {/* Thanh trên cùng */}
         <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-sm border-b border-border">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center gap-4">
@@ -201,13 +225,13 @@ const Admin = () => {
                 <Menu className="w-5 h-5" />
               </Button>
               <h1 className="font-display text-2xl font-semibold">
-                Admin Dashboard
+                Bảng điều khiển quản trị
               </h1>
             </div>
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search..." className="pl-10 w-64" />
+                <Input placeholder="Tìm kiếm..." className="pl-10 w-64" />
               </div>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
@@ -218,7 +242,7 @@ const Admin = () => {
         </header>
 
         <div className="p-6">
-          {/* Stats Grid */}
+          {/* Lưới thống kê */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (
               <motion.div
@@ -244,46 +268,61 @@ const Admin = () => {
             ))}
           </div>
 
-          {/* Tabs */}
+          {/* Các tab */}
           <div className="flex gap-4 mb-6">
             <Button
               variant={activeTab === "users" ? "gold" : "outline"}
               onClick={() => setActiveTab("users")}
             >
               <Users className="w-4 h-4 mr-2" />
-              Users
+              Người dùng
             </Button>
             <Button
               variant={activeTab === "weddings" ? "gold" : "outline"}
               onClick={() => setActiveTab("weddings")}
             >
               <Heart className="w-4 h-4 mr-2" />
-              Weddings
+              Đám cưới
             </Button>
           </div>
 
-          {/* Content */}
+          {/* Nội dung */}
           {activeTab === "users" ? (
             <div className="bg-card rounded-2xl border border-border shadow-soft overflow-hidden">
               <div className="p-6 border-b border-border flex items-center justify-between">
                 <h2 className="font-display text-xl font-semibold">
-                  User Management
+                  Quản lý người dùng
                 </h2>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input placeholder="Search users..." className="pl-10 w-64" />
+                  <Input
+                    placeholder="Tìm kiếm người dùng..."
+                    className="pl-10 w-64"
+                  />
                 </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-secondary/50">
                     <tr>
-                      <th className="text-left px-6 py-3 text-sm font-medium">User</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Weddings</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Plan</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Status</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Joined</th>
-                      <th className="text-right px-6 py-3 text-sm font-medium">Actions</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Người dùng
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Đám cưới
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Gói
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Trạng thái
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Ngày tham gia
+                      </th>
+                      <th className="text-right px-6 py-3 text-sm font-medium">
+                        Hành động
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -296,24 +335,38 @@ const Admin = () => {
                             </div>
                             <div>
                               <p className="font-medium">{user.name}</p>
-                              <p className="text-sm text-muted-foreground">{user.email}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {user.email}
+                              </p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">{user.weddings}</td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-                            user.plan === "Pro" ? "bg-primary/10 text-primary" : "bg-secondary"
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-medium ${
+                              user.plan === "Pro"
+                                ? "bg-primary/10 text-primary"
+                                : "bg-secondary"
+                            }`}
+                          >
                             {user.plan}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
-                            user.status === "active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                          }`}>
-                            {user.status === "active" ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                            {user.status}
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
+                              user.status === "active"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {user.status === "active" ? (
+                              <CheckCircle className="w-3 h-3" />
+                            ) : (
+                              <XCircle className="w-3 h-3" />
+                            )}
+                            {user.status === "active" ? "Hoạt động" : "Bị khóa"}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-muted-foreground">
@@ -329,18 +382,18 @@ const Admin = () => {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem>
                                 <Eye className="w-4 h-4 mr-2" />
-                                View Details
+                                Xem chi tiết
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 {user.status === "active" ? (
                                   <>
                                     <Lock className="w-4 h-4 mr-2" />
-                                    Lock Account
+                                    Khóa tài khoản
                                   </>
                                 ) : (
                                   <>
                                     <Unlock className="w-4 h-4 mr-2" />
-                                    Unlock Account
+                                    Mở khóa tài khoản
                                   </>
                                 )}
                               </DropdownMenuItem>
@@ -357,23 +410,38 @@ const Admin = () => {
             <div className="bg-card rounded-2xl border border-border shadow-soft overflow-hidden">
               <div className="p-6 border-b border-border flex items-center justify-between">
                 <h2 className="font-display text-xl font-semibold">
-                  Wedding Management
+                  Quản lý đám cưới
                 </h2>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input placeholder="Search weddings..." className="pl-10 w-64" />
+                  <Input
+                    placeholder="Tìm kiếm đám cưới..."
+                    className="pl-10 w-64"
+                  />
                 </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-secondary/50">
                     <tr>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Couple</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Created By</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Date</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Status</th>
-                      <th className="text-left px-6 py-3 text-sm font-medium">Views</th>
-                      <th className="text-right px-6 py-3 text-sm font-medium">Actions</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Cặp đôi
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Được tạo bởi
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Ngày
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Trạng thái
+                      </th>
+                      <th className="text-left px-6 py-3 text-sm font-medium">
+                        Lượt xem
+                      </th>
+                      <th className="text-right px-6 py-3 text-sm font-medium">
+                        Hành động
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -385,7 +453,9 @@ const Admin = () => {
                               <Heart className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="font-medium">{wedding.couple}</span>
+                              <span className="font-medium">
+                                {wedding.couple}
+                              </span>
                               {wedding.flagged && (
                                 <AlertTriangle className="w-4 h-4 text-yellow-500" />
                               )}
@@ -397,13 +467,21 @@ const Admin = () => {
                           {new Date(wedding.date).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-                            wedding.status === "published" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                          }`}>
-                            {wedding.status}
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-medium ${
+                              wedding.status === "published"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            {wedding.status === "published"
+                              ? "Đã xuất bản"
+                              : "Nháp"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm">{wedding.views.toLocaleString()}</td>
+                        <td className="px-6 py-4 text-sm">
+                          {wedding.views.toLocaleString()}
+                        </td>
                         <td className="px-6 py-4 text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -414,11 +492,11 @@ const Admin = () => {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem>
                                 <Eye className="w-4 h-4 mr-2" />
-                                View Wedding
+                                Xem đám cưới
                               </DropdownMenuItem>
                               <DropdownMenuItem className="text-destructive">
                                 <XCircle className="w-4 h-4 mr-2" />
-                                Unpublish
+                                Hủy xuất bản
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

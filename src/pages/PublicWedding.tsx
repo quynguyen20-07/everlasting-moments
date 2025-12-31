@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import { getPublicWeddingApi } from "@/lib/api/wedding";
-import { PageLoading } from "@/components/LoadingSpinner";
 import {
   HeroSection,
   CountdownSection,
@@ -15,6 +10,11 @@ import {
   FooterSection,
 } from "@/components/public-wedding";
 import type { Wedding, BankAccount, Wish } from "@/types/graphql";
+import { PageLoading } from "@/components/LoadingSpinner";
+import { getPublicWeddingApi } from "@/lib/api/wedding";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 
 // Mock bank accounts and wishes for demo (in real app, these would come from API)
@@ -66,8 +66,18 @@ export default function PublicWedding() {
           className="text-center px-4"
         >
           <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
-            <svg className="w-12 h-12 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-12 h-12 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           </div>
           <h1 className="font-display text-2xl text-foreground mb-2">
@@ -80,8 +90,18 @@ export default function PublicWedding() {
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 gold-gradient text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
             </svg>
             Về trang chủ
           </a>
@@ -99,12 +119,27 @@ export default function PublicWedding() {
   return (
     <>
       <Helmet>
-        <title>{`${groom?.fullName || "Chú Rể"} & ${bride?.fullName || "Cô Dâu"} - Thiệp Mời Cưới`}</title>
+        <title>{`${groom?.fullName || "Chú Rể"} & ${
+          bride?.fullName || "Cô Dâu"
+        } - Thiệp Mời Cưới`}</title>
         <meta
           name="description"
-          content={`Thiệp mời đám cưới của ${groom?.fullName || "Chú Rể"} và ${bride?.fullName || "Cô Dâu"}${mainEvent?.eventDate ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString("vi-VN")}` : ""}`}
+          content={`Thiệp mời đám cưới của ${groom?.fullName || "Chú Rể"} và ${
+            bride?.fullName || "Cô Dâu"
+          }${
+            mainEvent?.eventDate
+              ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString(
+                  "vi-VN"
+                )}`
+              : ""
+          }`}
         />
-        <meta property="og:title" content={`${groom?.fullName || "Chú Rể"} & ${bride?.fullName || "Cô Dâu"}`} />
+        <meta
+          property="og:title"
+          content={`${groom?.fullName || "Chú Rể"} & ${
+            bride?.fullName || "Cô Dâu"
+          }`}
+        />
         <meta property="og:description" content={wedding.title} />
         <meta property="og:type" content="website" />
       </Helmet>

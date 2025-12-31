@@ -1,33 +1,30 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import {
-  Heart,
   Calendar,
-  MapPin,
   Camera,
-  MessageCircle,
-  Music,
-  Gift,
-  Clock,
   ChevronDown,
-  Play,
-  Pause,
-  Users,
-  Mail,
-  Phone,
-  Send,
-  Share2,
+  Clock,
   Facebook,
+  Gift,
+  Heart,
   Instagram,
   Link as LinkIcon,
+  MapPin,
+  MessageCircle,
+  Pause,
+  Play,
+  Send,
+  Share2,
+  Users,
   X,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { AnimatePresence, motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
-// Demo couple data
+// Dữ liệu cặp đôi demo
 const coupleData = {
   bride: {
     name: "Ngọc Linh",
@@ -41,7 +38,7 @@ const coupleData = {
   },
   weddingDate: new Date("2025-02-14T10:00:00"),
   story:
-    "We first met at a coffee shop in Da Nang on a rainy afternoon. What started as a chance encounter became a beautiful journey of love, laughter, and countless memories together. After 5 years of being together, we are ready to take the next step and begin our forever.",
+    "Chúng tôi gặp nhau lần đầu tiên tại một quán cà phê ở Đà Nẵng vào một chiều mưa. Điều bắt đầu từ một cuộc gặp gỡ tình cờ đã trở thành một hành trình tuyệt vời đầy yêu thương, tiếng cười và vô vàn kỷ niệm. Sau 5 năm bên nhau, chúng tôi đã sẵn sàng bước vào giai đoạn tiếp theo và xây dựng tương lai mãi mãi.",
   events: [
     {
       name: "Lễ Vu Quy",
@@ -61,7 +58,7 @@ const coupleData = {
       name: "Tiệc Cưới",
       date: "14/02/2025",
       time: "18:00",
-      location: "White Palace Convention Center",
+      location: "Trung Tâm Hội Nghị White Palace",
       mapUrl: "#",
     },
   ],
@@ -76,19 +73,20 @@ const coupleData = {
   wishes: [
     {
       name: "Anh Khoa",
-      message:
-        "Chúc hai bạn trăm năm hạnh phúc, sớm có thiên thần nhỏ nhé! 💕",
-      date: "2 days ago",
+      message: "Chúc hai bạn trăm năm hạnh phúc, sớm có thiên thần nhỏ nhé! 💕",
+      date: "2 ngày trước",
     },
     {
       name: "Hương Giang",
-      message: "Congratulations! Wishing you both a lifetime of love and joy!",
-      date: "3 days ago",
+      message:
+        "Chúc mừng! Hy vọng hai bạn sẽ có một cuộc sống yêu thương và hạnh phúc!",
+      date: "3 ngày trước",
     },
     {
       name: "Thế Anh",
-      message: "Happy wedding! May your love grow stronger each day! 🎊",
-      date: "5 days ago",
+      message:
+        "Chúc hạnh phúc trong ngày cưới! Chúc tình yêu của hai bạn ngày càng lớn hơn! 🎊",
+      date: "5 ngày trước",
     },
   ],
   bankInfo: {
@@ -146,8 +144,8 @@ const Demo = () => {
   const handleRSVP = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "RSVP Submitted!",
-      description: "Thank you for confirming your attendance.",
+      title: "Đã Xác Nhận!",
+      description: "Cảm ơn bạn đã xác nhận sẽ tham dự.",
     });
     setRsvpData({ name: "", phone: "", guests: "1", attending: true });
   };
@@ -155,8 +153,8 @@ const Demo = () => {
   const handleWish = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Wish Sent!",
-      description: "Thank you for your lovely message!",
+      title: "Đã Gửi Lời Chúc!",
+      description: "Cảm ơn bạn đã gửi lời chúc tuyệt vời!",
     });
     setWishData({ name: "", message: "" });
   };
@@ -180,19 +178,23 @@ const Demo = () => {
             {/* Save the Date Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/80 backdrop-blur-sm border border-border mb-8">
               <Heart className="w-4 h-4 text-primary fill-primary" />
-              <span className="text-sm font-medium">Save the Date</span>
+              <span className="text-sm font-medium">Lưu Ngày Cưới</span>
             </div>
 
             {/* Names */}
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold mb-4">
-              <span className="text-gradient-gold">{coupleData.bride.name}</span>
+              <span className="text-gradient-gold">
+                {coupleData.bride.name}
+              </span>
               <span className="text-primary mx-4">&</span>
-              <span className="text-gradient-gold">{coupleData.groom.name}</span>
+              <span className="text-gradient-gold">
+                {coupleData.groom.name}
+              </span>
             </h1>
 
             {/* Date */}
             <p className="font-elegant text-2xl md:text-3xl text-muted-foreground mb-12">
-              February 14, 2025
+              14 Tháng 2, 2025
             </p>
 
             {/* Avatars */}
@@ -215,10 +217,10 @@ const Demo = () => {
             {/* Countdown */}
             <div className="grid grid-cols-4 gap-4 max-w-lg mx-auto mb-12">
               {[
-                { value: countdown.days, label: "Days" },
-                { value: countdown.hours, label: "Hours" },
-                { value: countdown.minutes, label: "Minutes" },
-                { value: countdown.seconds, label: "Seconds" },
+                { value: countdown.days, label: "Ngày" },
+                { value: countdown.hours, label: "Giờ" },
+                { value: countdown.minutes, label: "Phút" },
+                { value: countdown.seconds, label: "Giây" },
               ].map((item, index) => (
                 <motion.div
                   key={item.label}
@@ -249,7 +251,7 @@ const Demo = () => {
                 }
               >
                 <Users className="w-4 h-4" />
-                RSVP Now
+                Xác Nhận Tham Dự
               </Button>
               <Button
                 variant="outline-elegant"
@@ -257,7 +259,7 @@ const Demo = () => {
                 onClick={() => setShowShareModal(true)}
               >
                 <Share2 className="w-4 h-4" />
-                Share
+                Chia Sẻ
               </Button>
             </div>
           </motion.div>
@@ -304,7 +306,7 @@ const Demo = () => {
           >
             <Heart className="w-12 h-12 text-primary fill-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold mb-6">
-              Our Love Story
+              Câu Chuyện Tình Yêu Của Chúng Tôi
             </h2>
             <p className="font-elegant text-xl leading-relaxed text-muted-foreground">
               {coupleData.story}
@@ -324,7 +326,7 @@ const Demo = () => {
           >
             <Calendar className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold">
-              Wedding Events
+              Các Sự Kiện Cưới
             </h2>
           </motion.div>
 
@@ -372,7 +374,7 @@ const Demo = () => {
           >
             <Camera className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold">
-              Our Moments
+              Những Khoảnh Khắc Của Chúng Tôi
             </h2>
           </motion.div>
 
@@ -402,10 +404,10 @@ const Demo = () => {
           >
             <Users className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-              RSVP
+              Xác Nhận Tham Dự
             </h2>
             <p className="text-muted-foreground font-elegant text-lg">
-              Please let us know if you'll be joining us
+              Vui lòng cho chúng tôi biết bạn có sẽ tham dự hay không
             </p>
           </motion.div>
 
@@ -419,10 +421,10 @@ const Demo = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Your Name
+                  Tên của bạn
                 </label>
                 <Input
-                  placeholder="Enter your name"
+                  placeholder="Nhập tên của bạn"
                   value={rsvpData.name}
                   onChange={(e) =>
                     setRsvpData({ ...rsvpData, name: e.target.value })
@@ -432,10 +434,10 @@ const Demo = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Phone Number
+                  Số Điện Thoại
                 </label>
                 <Input
-                  placeholder="Enter your phone"
+                  placeholder="Nhập số điện thoại của bạn"
                   value={rsvpData.phone}
                   onChange={(e) =>
                     setRsvpData({ ...rsvpData, phone: e.target.value })
@@ -445,7 +447,7 @@ const Demo = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Number of Guests
+                  Số Người Tham Dự
                 </label>
                 <Input
                   type="number"
@@ -465,7 +467,7 @@ const Demo = () => {
                   className="flex-1"
                   onClick={() => setRsvpData({ ...rsvpData, attending: true })}
                 >
-                  Attending
+                  Sẽ Tham Dự
                 </Button>
                 <Button
                   type="button"
@@ -473,12 +475,12 @@ const Demo = () => {
                   className="flex-1"
                   onClick={() => setRsvpData({ ...rsvpData, attending: false })}
                 >
-                  Not Attending
+                  Không Tham Dự
                 </Button>
               </div>
               <Button type="submit" variant="gold" className="w-full" size="lg">
                 <Send className="w-4 h-4" />
-                Submit RSVP
+                Gửi Xác Nhận
               </Button>
             </div>
           </motion.form>
@@ -496,10 +498,10 @@ const Demo = () => {
           >
             <MessageCircle className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-              Wishes & Blessings
+              Lời Chúc & Phước Lành
             </h2>
             <p className="text-muted-foreground font-elegant text-lg">
-              Leave your wishes for the happy couple
+              Hãy để lại những lời chúc tốt đẹp cho cặp đôi hạnh phúc
             </p>
           </motion.div>
 
@@ -514,7 +516,7 @@ const Demo = () => {
             >
               <div className="space-y-4">
                 <Input
-                  placeholder="Your name"
+                  placeholder="Tên của bạn"
                   value={wishData.name}
                   onChange={(e) =>
                     setWishData({ ...wishData, name: e.target.value })
@@ -522,7 +524,7 @@ const Demo = () => {
                   required
                 />
                 <Textarea
-                  placeholder="Write your wishes..."
+                  placeholder="Viết lời chúc của bạn..."
                   rows={3}
                   value={wishData.message}
                   onChange={(e) =>
@@ -532,7 +534,7 @@ const Demo = () => {
                 />
                 <Button type="submit" variant="gold">
                   <Send className="w-4 h-4" />
-                  Send Wish
+                  Gửi Lời Chúc
                 </Button>
               </div>
             </motion.form>
@@ -554,7 +556,9 @@ const Demo = () => {
                     </div>
                     <div>
                       <p className="font-medium">{wish.name}</p>
-                      <p className="text-xs text-muted-foreground">{wish.date}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {wish.date}
+                      </p>
                     </div>
                   </div>
                   <p className="text-muted-foreground">{wish.message}</p>
@@ -576,10 +580,11 @@ const Demo = () => {
           >
             <Gift className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-              Wedding Gift
+              Quà Cưới
             </h2>
             <p className="text-muted-foreground font-elegant text-lg">
-              Your presence is the greatest gift, but if you wish to contribute
+              Sự hiện diện của bạn là món quà lớn nhất, nhưng nếu muốn, bạn cũng
+              có thể góp phần
             </p>
           </motion.div>
 
@@ -611,7 +616,7 @@ const Demo = () => {
               <div className="mt-4 p-4 bg-secondary rounded-xl">
                 <div className="w-24 h-24 mx-auto bg-foreground/10 rounded-lg" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  Scan QR to transfer
+                  Quét mã QR để chuyển tiền
                 </p>
               </div>
             </motion.div>
@@ -643,7 +648,7 @@ const Demo = () => {
               <div className="mt-4 p-4 bg-secondary rounded-xl">
                 <div className="w-24 h-24 mx-auto bg-foreground/10 rounded-lg" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  Scan QR to transfer
+                  Quét mã QR để chuyển tiền
                 </p>
               </div>
             </motion.div>
@@ -657,9 +662,9 @@ const Demo = () => {
         <p className="font-display text-2xl mb-2">
           {coupleData.bride.name} & {coupleData.groom.name}
         </p>
-        <p className="text-muted-foreground">February 14, 2025</p>
+        <p className="text-muted-foreground">14 Tháng 2, 2025</p>
         <p className="text-sm text-muted-foreground mt-4">
-          Made with love using WeddingCard
+          Được tạo với tình yêu bằng WeddingCard
         </p>
       </footer>
 
@@ -682,7 +687,7 @@ const Demo = () => {
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-display text-xl font-semibold">
-                  Share Invitation
+                  Chia Sẻ Thiệp Mời
                 </h3>
                 <Button
                   variant="ghost"
@@ -706,13 +711,14 @@ const Demo = () => {
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href);
                     toast({
-                      title: "Link Copied!",
-                      description: "Invitation link copied to clipboard.",
+                      title: "Đã Sao Chép!",
+                      description:
+                        "Liên kết thiệp mời đã được sao chép vào bộ nhớ tạm.",
                     });
                   }}
                 >
                   <LinkIcon className="w-6 h-6 text-primary" />
-                  <span className="text-xs">Copy Link</span>
+                  <span className="text-xs">Sao Chép Liên Kết</span>
                 </button>
               </div>
             </motion.div>

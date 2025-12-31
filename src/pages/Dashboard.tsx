@@ -8,7 +8,6 @@ import { useState } from "react";
 
 const Dashboard = () => {
   const { weddings } = useWeddingStore();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const stats = [
@@ -45,7 +44,6 @@ const Dashboard = () => {
       </header>
 
       <div className="p-6">
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
             <motion.div
@@ -68,7 +66,6 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Weddings List */}
         <div className="bg-card rounded-2xl border border-border shadow-soft">
           <div className="p-6 border-b border-border">
             <h2 className="font-display text-xl font-semibold">Thiệp cưới</h2>
@@ -86,7 +83,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -95,7 +91,7 @@ const Dashboard = () => {
             className="p-6 rounded-2xl bg-gradient-to-br from-secondary to-blush-light border border-border"
           >
             <h3 className="font-display text-lg font-semibold mb-2">
-              Cần hỗ trợ?
+              Bạn cần giúp đỡ?
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
               Xem hướng dẫn và các mẫu thiệp đẹp để tạo thiệp cưới hoàn hảo.
@@ -115,7 +111,7 @@ const Dashboard = () => {
               Nâng cấp Pro
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Mở khóa tất cả mẫu thiệp cao cấp và xóa watermark.
+              Mở khóa toàn bộ mẫu thiệp cao cấp và xóa hình mờ.
             </p>
             <Button variant="gold" size="sm">
               Xem gói dịch vụ
@@ -132,7 +128,7 @@ const Dashboard = () => {
               Liên hệ hỗ trợ
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Bạn có câu hỏi? Đội ngũ của chúng tôi sẵn sàng hỗ trợ.
+              Có câu hỏi? Đội ngũ của chúng tôi sẵn sàng hỗ trợ bạn.
             </p>
             <Button variant="outline" size="sm">
               Liên hệ ngay

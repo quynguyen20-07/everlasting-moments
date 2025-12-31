@@ -1,18 +1,18 @@
-import { Helmet } from "react-helmet-async";
-import Navbar from "@/components/landing/Navbar";
-import Hero from "@/components/landing/Hero";
-import Features from "@/components/landing/Features";
-import Templates from "@/components/landing/Templates";
-import HowItWorks from "@/components/landing/HowItWorks";
 import Testimonials from "@/components/landing/Testimonials";
-import CTA from "@/components/landing/CTA";
+import HowItWorks from "@/components/landing/HowItWorks";
+import Templates from "@/components/landing/Templates";
+import Features from "@/components/landing/Features";
+import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import Hero from "@/components/landing/Hero";
+import { Helmet } from "react-helmet-async";
+import CTA from "@/components/landing/CTA";
 
 const Index = () => {
   return (
     <>
       <Helmet>
-        <title>WeddingCard - Create Beautiful Digital Wedding Invitations</title>
+        <title>True Loves - Tạo Thiệp Cưới Kỹ Thuật Số Đẹp Mắt</title>
         <meta
           name="description"
           content="Create stunning digital wedding invitations that capture the essence of your special day. Share your love story, manage RSVPs, and delight your guests."

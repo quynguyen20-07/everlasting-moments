@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Heart, Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { ArrowLeft, Eye, EyeOff, Heart, Lock, Mail, User } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login, register, isAuthenticated, user } = useAuthStore();
-  
+
   const [mode, setMode] = useState<"signin" | "signup">(
     searchParams.get("mode") === "signup" ? "signup" : "signin"
   );
@@ -35,10 +35,10 @@ const Auth = () => {
     }
   }, [searchParams]);
 
-  // Redirect if already authenticated
+  // Chuyển hướng nếu đã xác thực
   useEffect(() => {
     if (isAuthenticated && user) {
-      const redirectPath = user.role === 'admin' ? '/admin' : '/dashboard';
+      const redirectPath = user.role === "admin" ? "/admin" : "/dashboard";
       navigate(redirectPath, { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
@@ -49,17 +49,27 @@ const Auth = () => {
 
     try {
       if (mode === "signup") {
-        await register({ fullName: formData.name, email: formData.email, password: formData.password });
-        toast({ title: "Tạo tài khoản thành công!", description: "Đang chuyển hướng..." });
+        await register({
+          fullName: formData.name,
+          email: formData.email,
+          password: formData.password,
+        });
+        toast({
+          title: "Tạo tài khoản thành công!",
+          description: "Đang chuyển hướng...",
+        });
       } else {
         await login({ email: formData.email, password: formData.password });
-        toast({ title: "Đăng nhập thành công!", description: "Chào mừng bạn trở lại!" });
+        toast({
+          title: "Đăng nhập thành công!",
+          description: "Chào mừng bạn trở lại!",
+        });
       }
     } catch (error) {
-      toast({ 
-        title: "Lỗi", 
+      toast({
+        title: "Lỗi",
         description: (error as Error).message,
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -68,7 +78,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex invitation-pattern">
-      {/* Left Side - Form */}
+      {/* Phía bên trái - Biểu mẫu */}
       <div className="flex-1 flex items-center justify-center p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -76,13 +86,13 @@ const Auth = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          {/* Back Link */}
+          {/* Liên kết quay lại */}
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to home
+            Quay lại trang chủ
           </Link>
 
           {/* Logo */}
@@ -93,29 +103,31 @@ const Auth = () => {
             </span>
           </div>
 
-          {/* Header */}
+          {/* Tiêu đề */}
           <div className="mb-8">
             <h1 className="font-display text-3xl font-semibold mb-2">
-              {mode === "signup" ? "Create your account" : "Welcome back"}
+              {mode === "signup"
+                ? "Tạo tài khoản của bạn"
+                : "Chào mừng trở lại"}
             </h1>
             <p className="text-muted-foreground">
               {mode === "signup"
-                ? "Start creating your beautiful wedding invitation"
-                : "Sign in to continue to your dashboard"}
+                ? "Bắt đầu tạo lời mời đám cưới xinh đẹp của bạn"
+                : "Đăng nhập để tiếp tục tới bảng điều khiển của bạn"}
             </p>
           </div>
 
-          {/* Form */}
+          {/* Biểu mẫu */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {mode === "signup" && (
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">Họ và tên</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Your name"
+                    placeholder="Tên của bạn"
                     className="pl-10"
                     value={formData.name}
                     onChange={(e) =>
@@ -146,7 +158,7 @@ const Auth = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Mật khẩu</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -180,7 +192,7 @@ const Auth = () => {
                   to="/forgot-password"
                   className="text-sm text-primary hover:underline"
                 >
-                  Forgot password?
+                  Quên mật khẩu?
                 </Link>
               </div>
             )}
@@ -193,29 +205,27 @@ const Auth = () => {
               disabled={isLoading}
             >
               {isLoading
-                ? "Please wait..."
+                ? "Vui lòng chờ..."
                 : mode === "signup"
-                ? "Create Account"
-                : "Sign In"}
+                ? "Tạo tài khoản"
+                : "Đăng nhập"}
             </Button>
           </form>
 
-          {/* Toggle Mode */}
+          {/* Chuyển đổi chế độ */}
           <p className="mt-8 text-center text-muted-foreground">
-            {mode === "signup"
-              ? "Already have an account?"
-              : "Don't have an account?"}{" "}
+            {mode === "signup" ? "Đã có tài khoản?" : "Chưa có tài khoản?"}{" "}
             <button
               onClick={() => setMode(mode === "signup" ? "signin" : "signup")}
               className="text-primary hover:underline font-medium"
             >
-              {mode === "signup" ? "Sign in" : "Sign up"}
+              {mode === "signup" ? "Đăng nhập" : "Đăng ký"}
             </button>
           </p>
         </motion.div>
       </div>
 
-      {/* Right Side - Decorative */}
+      {/* Phía bên phải - Trang trí */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-secondary via-blush-light to-cream-dark items-center justify-center p-12">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -227,11 +237,11 @@ const Auth = () => {
             <Heart className="w-16 h-16 text-primary fill-primary animate-heartbeat" />
           </div>
           <h2 className="font-display text-4xl font-semibold mb-4">
-            Your Love Story Awaits
+            Câu chuyện tình yêu của bạn đang chờ đợi
           </h2>
           <p className="text-muted-foreground font-elegant text-lg">
-            Join thousands of couples who have created beautiful digital
-            invitations to share their special day.
+            Tham gia hàng ngàn cặp đôi đã tạo những lời mời đám cưới kỹ thuật số
+            xinh đẹp để chia sẻ ngày đặc biệt của họ.
           </p>
         </motion.div>
       </div>
