@@ -39,7 +39,7 @@ export const WeddingList = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetchWeddings(user.id);
+      fetchWeddings();
     }
   }, [user?.id, fetchWeddings]);
 

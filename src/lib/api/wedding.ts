@@ -1,218 +1,186 @@
+// Wedding API - GraphQL service for wedding management
+import { graphqlRequest, graphqlPublicRequest } from "../graphql/client";
+import {
+  WEDDINGS_QUERY,
+  WEDDING_QUERY,
+  WEDDING_BY_SLUG_QUERY,
+  PUBLIC_WEDDING_QUERY,
+  WEDDING_DETAIL_QUERY,
+} from "../graphql/queries";
+import {
+  CREATE_WEDDING_MUTATION,
+  UPDATE_WEDDING_MUTATION,
+  DELETE_WEDDING_MUTATION,
+  PUBLISH_WEDDING_MUTATION,
+  UNPUBLISH_WEDDING_MUTATION,
+  UPDATE_BRIDE_MUTATION,
+  UPDATE_GROOM_MUTATION,
+  ADD_LOVE_STORY_MUTATION,
+  UPDATE_LOVE_STORY_MUTATION,
+  DELETE_LOVE_STORY_MUTATION,
+  ADD_WEDDING_EVENT_MUTATION,
+  UPDATE_WEDDING_EVENT_MUTATION,
+  DELETE_WEDDING_EVENT_MUTATION,
+} from "../graphql/mutations";
 import type {
-  BankAccount,
-  CreateWeddingInput,
-  Guest,
-  ListWedding,
-  ListWeddingResponse,
-  Table,
   Wedding,
-  WeddingResponse,
-  WeddingStatus,
-} from "@/types/wedding";
+  WeddingDetail,
+  LoveStoryInput,
+  WeddingEventInput,
+  BrideGroomInput,
+} from "@/types/graphql";
 
-import { CREATE_WEDDING_MUTATION } from "../graphql/mutations";
-import { delay, generateId, mockWeddings } from "./mock-data";
-import { graphqlRequest } from "../graphql/client";
-// Wedding API - Mock wedding service
-import { WEDDINGS_QUERY } from "../graphql";
+// Local types
+export type WeddingStatus = "draft" | "published" | "archived";
 
-export const getWeddingsApi = async (
-  userId: string
-): Promise<ListWedding[]> => {
-  const data = await graphqlRequest<ListWeddingResponse>(WEDDINGS_QUERY);
-  console.log("Fetched weddings data:", data);
+export interface ListWedding {
+  id: string;
+  userId: string;
+  slug: string;
+  title: string;
+  status: string;
+  language: string;
+  viewCount: number;
+  publishedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  themeSettings?: {
+    primaryColor: string;
+    secondaryColor: string;
+    fontHeading: string;
+    fontBody: string;
+    backgroundMusic?: string;
+  };
+  weddingDetail?: {
+    id: string;
+    weddingId: string;
+    bride: { fullName: string; avatar?: string };
+    groom: { fullName: string; avatar?: string };
+  };
+}
+
+// ==================== List Weddings ====================
+export const getWeddingsApi = async (): Promise<ListWedding[]> => {
+  const data = await graphqlRequest<{ weddings: ListWedding[] }>(WEDDINGS_QUERY);
   return data.weddings;
 };
 
-// Get all weddings (admin)
-export const getAllWeddingsApi = async (): Promise<Wedding[]> => {
-  const data = await graphqlRequest<WeddingResponse>(WEDDINGS_QUERY);
-
-  return data.weddings;
-};
-
-// Get wedding by ID
+// ==================== Get Wedding by ID ====================
 export const getWeddingApi = async (id: string): Promise<Wedding | null> => {
-  await delay(300);
-  return mockWeddings.find((w) => w.id === id) || null;
+  const data = await graphqlRequest<{ wedding: Wedding | null }>(WEDDING_QUERY, { id });
+  return data.wedding;
 };
 
-// Get wedding by slug (for public page)
-export const getWeddingBySlugApi = async (
-  slug: string
-): Promise<Wedding | null> => {
-  await delay(300);
-  const wedding = mockWeddings.find(
-    (w) => w.slug === slug && w.status === "published"
-  );
-  if (wedding) {
-    // Increment view count
-    wedding.viewCount += 1;
-  }
-  return wedding || null;
+// ==================== Get Wedding by Slug ====================
+export const getWeddingBySlugApi = async (slug: string): Promise<Wedding | null> => {
+  const data = await graphqlRequest<{ weddingBySlug: Wedding | null }>(WEDDING_BY_SLUG_QUERY, { slug });
+  return data.weddingBySlug;
 };
 
-// Create new wedding
-export const createWeddingApi = async (
-  input: CreateWeddingInput
-): Promise<Wedding> => {
-  await delay(500);
-
-  const slug = input.title
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-
-  const newWedding: CreateWeddingInput = {
-    slug,
-    title: input.title,
-    language: input.language,
-    themeSettings: input.themeSettings
-      ? input.themeSettings
-      : {
-          primaryColor: "#D4A574",
-          secondaryColor: "#F6C1CC",
-          fontBody: "Playfair Display",
-          fontHeading: "Playfair Display",
-          backgroundMusic: "elegant",
-        },
-    weddingDate: input.weddingDate,
-    bride: input.bride,
-    groom: input.groom,
-  };
-
-  const data = await graphqlRequest<Wedding>(CREATE_WEDDING_MUTATION, {
-    ...newWedding,
-  });
-
-  return data;
+// ==================== Get Public Wedding ====================
+export const getPublicWeddingApi = async (slug: string): Promise<Wedding | null> => {
+  const data = await graphqlPublicRequest<{ publicWedding: Wedding | null }>(PUBLIC_WEDDING_QUERY, { slug });
+  return data.publicWedding;
 };
 
-// Update wedding
-export const updateWeddingApi = async (
-  id: string,
-  updates: Partial<Wedding>
-): Promise<Wedding> => {
-  await delay(300);
-
-  const index = mockWeddings.findIndex((w) => w.id === id);
-  if (index === -1) {
-    throw new Error("Wedding not found");
-  }
-
-  mockWeddings[index] = {
-    ...mockWeddings[index],
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-
-  return mockWeddings[index];
+// ==================== Get Wedding Detail ====================
+export const getWeddingDetailApi = async (weddingId: string): Promise<WeddingDetail | null> => {
+  const data = await graphqlRequest<{ weddingDetail: WeddingDetail | null }>(WEDDING_DETAIL_QUERY, { weddingId });
+  return data.weddingDetail;
 };
 
-// Update wedding status
-export const updateWeddingStatusApi = async (
-  id: string,
-  status: WeddingStatus
-): Promise<Wedding> => {
+// ==================== Create Wedding ====================
+interface CreateWeddingInput {
+  title: string;
+  slug?: string;
+  language?: string;
+}
+
+interface CreateWeddingResponse {
+  createWedding: Wedding;
+}
+
+export const createWeddingApi = async (input: CreateWeddingInput): Promise<Wedding> => {
+  const data = await graphqlRequest<CreateWeddingResponse>(CREATE_WEDDING_MUTATION, { ...input });
+  return data.createWedding;
+};
+
+// ==================== Update Wedding ====================
+interface UpdateWeddingInput {
+  title?: string;
+  slug?: string;
+  status?: string;
+}
+
+interface UpdateWeddingResponse {
+  updateWedding: Wedding;
+}
+
+export const updateWeddingApi = async (id: string, updates: UpdateWeddingInput): Promise<Wedding> => {
+  const data = await graphqlRequest<UpdateWeddingResponse>(UPDATE_WEDDING_MUTATION, { id, ...updates });
+  return data.updateWedding;
+};
+
+// ==================== Update Wedding Status ====================
+export const updateWeddingStatusApi = async (id: string, status: WeddingStatus): Promise<Wedding> => {
   return updateWeddingApi(id, { status });
 };
 
-// Delete wedding (soft delete - set status to archived)
+// ==================== Publish/Unpublish Wedding ====================
+export const publishWeddingApi = async (id: string): Promise<Wedding> => {
+  const data = await graphqlRequest<{ publishWedding: Wedding }>(PUBLISH_WEDDING_MUTATION, { id });
+  return data.publishWedding;
+};
+
+export const unpublishWeddingApi = async (id: string): Promise<Wedding> => {
+  const data = await graphqlRequest<{ unpublishWedding: Wedding }>(UNPUBLISH_WEDDING_MUTATION, { id });
+  return data.unpublishWedding;
+};
+
+// ==================== Delete Wedding ====================
 export const deleteWeddingApi = async (id: string): Promise<void> => {
-  await delay(300);
-
-  const index = mockWeddings.findIndex((w) => w.id === id);
-  if (index === -1) {
-    throw new Error("Wedding not found");
-  }
-
-  mockWeddings[index].status = "archived";
+  await graphqlRequest<{ deleteWedding: { id: string } }>(DELETE_WEDDING_MUTATION, { id });
 };
 
-// Guest management
-export const addGuestApi = async (
-  weddingId: string,
-  guest: Omit<Guest, "id" | "weddingId" | "createdAt">
-): Promise<Guest> => {
-  await delay(300);
-
-  const wedding = mockWeddings.find((w) => w.id === weddingId);
-  if (!wedding) {
-    throw new Error("Wedding not found");
-  }
-
-  const newGuest: Guest = {
-    ...guest,
-    id: generateId(),
-    weddingId,
-    createdAt: new Date().toISOString(),
-  };
-
-  wedding.guests.push(newGuest);
-  return newGuest;
+// ==================== Bride & Groom ====================
+export const updateBrideApi = async (weddingId: string, bride: BrideGroomInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ updateBride: WeddingDetail }>(UPDATE_BRIDE_MUTATION, { weddingId, bride });
+  return data.updateBride;
 };
 
-export const updateGuestApi = async (
-  weddingId: string,
-  guestId: string,
-  updates: Partial<Guest>
-): Promise<Guest> => {
-  await delay(200);
-
-  const wedding = mockWeddings.find((w) => w.id === weddingId);
-  if (!wedding) {
-    throw new Error("Wedding not found");
-  }
-
-  const guestIndex = wedding.guests.findIndex((g) => g.id === guestId);
-  if (guestIndex === -1) {
-    throw new Error("Guest not found");
-  }
-
-  wedding.guests[guestIndex] = { ...wedding.guests[guestIndex], ...updates };
-  return wedding.guests[guestIndex];
+export const updateGroomApi = async (weddingId: string, groom: BrideGroomInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ updateGroom: WeddingDetail }>(UPDATE_GROOM_MUTATION, { weddingId, groom });
+  return data.updateGroom;
 };
 
-// Table management
-export const addTableApi = async (
-  weddingId: string,
-  table: Omit<Table, "id" | "weddingId" | "guests">
-): Promise<Table> => {
-  await delay(300);
-
-  const wedding = mockWeddings.find((w) => w.id === weddingId);
-  if (!wedding) {
-    throw new Error("Wedding not found");
-  }
-
-  const newTable: Table = {
-    ...table,
-    id: generateId(),
-    weddingId,
-    guests: [],
-  };
-
-  wedding.tables.push(newTable);
-  return newTable;
+// ==================== Love Story ====================
+export const addLoveStoryApi = async (weddingId: string, story: LoveStoryInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ addLoveStory: WeddingDetail }>(ADD_LOVE_STORY_MUTATION, { weddingId, story });
+  return data.addLoveStory;
 };
 
-// Bank account management
-export const addBankAccountApi = async (
-  weddingId: string,
-  account: Omit<BankAccount, "id">
-): Promise<BankAccount> => {
-  await delay(300);
+export const updateLoveStoryApi = async (weddingId: string, storyId: string, story: LoveStoryInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ updateLoveStory: WeddingDetail }>(UPDATE_LOVE_STORY_MUTATION, { weddingId, storyId, story });
+  return data.updateLoveStory;
+};
 
-  const wedding = mockWeddings.find((w) => w.id === weddingId);
-  if (!wedding) {
-    throw new Error("Wedding not found");
-  }
+export const deleteLoveStoryApi = async (weddingId: string, storyId: string): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ deleteLoveStory: WeddingDetail }>(DELETE_LOVE_STORY_MUTATION, { weddingId, storyId });
+  return data.deleteLoveStory;
+};
 
-  const newAccount: BankAccount = {
-    ...account,
-    id: generateId(),
-  };
+// ==================== Wedding Events ====================
+export const addWeddingEventApi = async (weddingId: string, event: WeddingEventInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ addWeddingEvent: WeddingDetail }>(ADD_WEDDING_EVENT_MUTATION, { weddingId, event });
+  return data.addWeddingEvent;
+};
 
-  wedding.bankAccounts.push(newAccount);
-  return newAccount;
+export const updateWeddingEventApi = async (weddingId: string, eventId: string, event: WeddingEventInput): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ updateWeddingEvent: WeddingDetail }>(UPDATE_WEDDING_EVENT_MUTATION, { weddingId, eventId, event });
+  return data.updateWeddingEvent;
+};
+
+export const deleteWeddingEventApi = async (weddingId: string, eventId: string): Promise<WeddingDetail> => {
+  const data = await graphqlRequest<{ deleteWeddingEvent: WeddingDetail }>(DELETE_WEDDING_EVENT_MUTATION, { weddingId, eventId });
+  return data.deleteWeddingEvent;
 };

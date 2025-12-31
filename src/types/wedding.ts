@@ -97,7 +97,8 @@ export interface BankAccount {
   branch?: string;
 }
 
-export interface ThemeSettings {
+// Legacy ThemeSettings - kept for mock data compatibility
+export interface LegacyThemeSettings {
   primaryColor: string;
   secondaryColor: string;
   fontFamily: string;

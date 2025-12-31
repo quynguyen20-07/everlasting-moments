@@ -16,7 +16,7 @@ import {
   Copy,
   Download,
 } from "lucide-react";
-import type { ListWedding, Wedding } from "@/types/wedding";
+import type { ListWedding } from "@/lib/api/wedding";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDateVN } from "@/lib/utils";
@@ -56,11 +56,11 @@ export const WeddingCard = ({
         </div>
         <div className="min-w-0">
           <h3 className="font-display text-lg font-semibold truncate">
-            {wedding.weddingDetail.bride.fullName || "Cô dâu"} &{" "}
-            {wedding.weddingDetail.groom.fullName || "Chú rể"}
+            {wedding.weddingDetail?.bride?.fullName || "Cô dâu"} &{" "}
+            {wedding.weddingDetail?.groom?.fullName || "Chú rể"}
           </h3>
           <p className="text-sm text-muted-foreground mb-1.5 truncate">
-            {formatDateVN(wedding.weddingDate)}
+            {wedding.title}
           </p>
           <div className="flex items-center gap-2 flex-wrap">
             <Badge
@@ -81,9 +81,12 @@ export const WeddingCard = ({
                 </>
               )}
             </Badge>
-            <span className="text-xs text-muted-foreground">
-              {wedding.themeSettings.template}
-            </span>
+            {wedding.themeSettings?.primaryColor && (
+              <span 
+                className="w-3 h-3 rounded-full border" 
+                style={{ backgroundColor: wedding.themeSettings.primaryColor }}
+              />
+            )}
           </div>
         </div>
       </div>
