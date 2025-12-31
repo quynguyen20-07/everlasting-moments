@@ -1,74 +1,59 @@
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Eye } from "lucide-react";
+import { TEMPLATES_LIST } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-const templates = [
-  {
-    name: "Lãng Mạn Hồng Nhạt",
-    description: "Hồng mềm mại và hoa lá thanh lịch",
-    color: "from-pink-100 to-rose-50",
-    accent: "bg-pink-200",
-  },
-  {
-    name: "Giờ Vàng",
-    description: "Vàng ấm áp và tones champagne",
-    color: "from-amber-50 to-yellow-50",
-    accent: "bg-amber-200",
-  },
-  {
-    name: "Bữa Tiệc Khu Vườn",
-    description: "Xanh mát và cảm giác thiên nhiên",
-    color: "from-emerald-50 to-green-50",
-    accent: "bg-emerald-200",
-  },
-  {
-    name: "Thanh Lịch Cổ Điển",
-    description: "Đen và trắng vượt thời gian",
-    color: "from-gray-50 to-slate-50",
-    accent: "bg-gray-300",
-  },
-];
+const TemplatesPage = () => {
+  const navigate = useNavigate();
 
-const Templates = () => {
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        {/* Tiêu đề Phần */}
+    <main className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+        <div className="container mx-auto px-4 py-4">
+          <Button variant="ghost" size="sm" asChild className="gap-2">
+            <Link to="/">
+              <ArrowLeft className="w-4 h-4" />
+              Quay Lại
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <span className="text-primary font-medium text-sm tracking-wider uppercase mb-4 block">
-            Mẫu Thiết Kế
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-semibold mb-6">
-            Chọn Phong Cách
-            <span className="text-gradient-gold"> Của Bạn</span>
-          </h2>
+          <h1 className="font-display text-5xl md:text-6xl font-semibold mb-6">
+            Tất Cả Mẫu Thiết Kế
+            <span className="text-gradient-gold"> Có Sẵn</span>
+          </h1>
           <p className="text-muted-foreground font-elegant text-lg">
-            Bắt đầu với mẫu thiết kế đẹp mắt và biến nó thành của riêng bạn
+            Khám phá {TEMPLATES_LIST.length} mẫu thiết kế và chọn phong cách yêu
+            thích của bạn
           </p>
         </motion.div>
 
-        {/* Lưới Mẫu Thiết Kế */}
+        {/* Templates Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {templates.map((template, index) => (
+          {TEMPLATES_LIST.map((template, index) => (
             <motion.div
-              key={template.name}
+              key={template.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
               className="group cursor-pointer"
+              onClick={() => navigate(`/templates/${template.id}`)}
             >
               <div
                 className={`relative aspect-[3/4] rounded-2xl bg-gradient-to-b ${template.color} overflow-hidden border border-border group-hover:border-primary/30 transition-all duration-300 group-hover:shadow-elegant`}
               >
-                {/* Nội Dung Xem Trước Mẫu */}
+                {/* Template Preview Content */}
                 <div className="absolute inset-4 flex flex-col items-center justify-center text-center">
                   <div
                     className={`w-20 h-20 rounded-full ${template.accent} mb-6 flex items-center justify-center`}
@@ -83,11 +68,11 @@ const Templates = () => {
                   </div>
                 </div>
 
-                {/* Lớp Phủ Khi Di Chuột */}
+                {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <Button variant="gold" size="sm">
                     <Eye className="w-4 h-4 mr-2" />
-                    Xem Trước
+                    Xem Chi Tiết
                   </Button>
                 </div>
               </div>
@@ -102,25 +87,9 @@ const Templates = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Lời Kêu Gọi Hành Động */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-12"
-        >
-          <Button variant="outline-elegant" size="lg" asChild>
-            <Link to="/templates">
-              Xem Tất Cả Mẫu Thiết Kế
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </Button>
-        </motion.div>
       </div>
-    </section>
+    </main>
   );
 };
 
-export default Templates;
+export default TemplatesPage;

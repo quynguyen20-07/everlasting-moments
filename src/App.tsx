@@ -1,21 +1,24 @@
 import { ProtectedRoute, PublicOnlyRoute } from "@/components/ProtectedRoute";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PageLoading } from "@/components/LoadingSpinner";
+import PublicWedding from "@/pages/PublicWedding";
 import { useAuthStore } from "@/stores/authStore";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import WeddingList from "@/pages/WeddingList";
 import WeddingEdit from "@/pages/WeddingEdit";
-import PublicWedding from "@/pages/PublicWedding";
 import NotFound from "@/pages/NotFound";
 import Index from "@/pages/Index";
 import Admin from "@/pages/Admin";
 import { useEffect } from "react";
 import Demo from "@/pages/Demo";
 import Auth from "@/pages/Auth";
+
+import TemplateDetailPage from "./pages/TemplateDetailPage";
+import TemplatesPage from "./components/landing/Templates";
 import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
@@ -47,6 +50,9 @@ const AppContent = () => {
       />
       <Route path="/demo" element={<Demo />} />
       <Route path="/wedding/:slug" element={<PublicWedding />} />
+
+      <Route path="/templates" element={<TemplatesPage />} />
+      <Route path="/templates/:slug" element={<TemplateDetailPage />} />
 
       {/* Dashboard Routes with Layout */}
       <Route
