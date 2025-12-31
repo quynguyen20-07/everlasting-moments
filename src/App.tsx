@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import WeddingList from "@/pages/WeddingList";
 import WeddingEdit from "@/pages/WeddingEdit";
+import PublicWedding from "@/pages/PublicWedding";
 import NotFound from "@/pages/NotFound";
 import Index from "@/pages/Index";
 import Admin from "@/pages/Admin";
@@ -45,7 +46,7 @@ const AppContent = () => {
         }
       />
       <Route path="/demo" element={<Demo />} />
-      <Route path="/wedding/:slug" element={<div>Public Wedding Page</div>} />
+      <Route path="/wedding/:slug" element={<PublicWedding />} />
 
       {/* Dashboard Routes with Layout */}
       <Route
