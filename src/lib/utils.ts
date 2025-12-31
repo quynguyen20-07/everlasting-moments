@@ -51,18 +51,18 @@ export const TEMPLATES_LIST = [
     accent: "bg-gray-300",
   },
   {
-    id: "burgundy-romance",
-    name: "Tình Yêu Đỏ Đô",
-    description: "Đỏ đô sang trọng và tinh tế",
-    color: "from-red-900 to-red-700",
-    accent: "bg-red-600",
-  },
-  {
     id: "navy-elegance",
     name: "Thanh Lịch Navy",
     description: "Xanh navy sâu và quý phái",
-    color: "from-blue-900 to-blue-700",
-    accent: "bg-blue-600",
+    color: "from-[#07133a] via-[#153e75] to-[#2a69ac]",
+    accent: "bg-[rgba(255,255,255,0.06)]/70 ring-1 ring-white/6",
+  },
+  {
+    id: "burgundy-romance",
+    name: "Tình Yêu Đỏ Đô",
+    description: "Đỏ đô sang trọng và tinh tế",
+    color: "from-[#3b0b0b] via-[#6b1f21] to-[#8b2b2b]",
+    accent: "bg-[rgba(255,255,255,0.06)]/70 ring-1 ring-white/6",
   },
   {
     id: "blush-gold",

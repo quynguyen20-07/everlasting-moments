@@ -181,12 +181,15 @@ const TemplateDetailPage = () => {
       >
         {/* Background Decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* radial glow, subtle */}
           <div
-            className={`absolute top-20 left-10 w-64 h-64 ${template.accent} rounded-full blur-3xl opacity-20`}
+            className={`absolute top-12 left-8 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-20 ${template.accent}`}
           />
           <div
-            className={`absolute bottom-20 right-10 w-80 h-80 ${template.accent} rounded-full blur-3xl opacity-15`}
+            className={`absolute bottom-12 right-8 w-[44rem] h-[44rem] rounded-full blur-3xl opacity-12 ${template.accent}`}
           />
+          {/* subtle vignette for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/6 via-transparent to-black/4 pointer-events-none" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center py-20">
@@ -196,16 +199,20 @@ const TemplateDetailPage = () => {
             transition={{ duration: 0.8 }}
           >
             {/* Template Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border mb-8 shadow-soft">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/60 backdrop-blur-sm border border-border mb-8 shadow-soft">
               <Heart className="w-4 h-4 text-primary fill-primary" />
               <span className="text-sm font-medium">{template.name}</span>
             </div>
 
             {/* Names */}
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold mb-4 text-foreground">
-              <span className="text-primary">{coupleData.bride.name}</span>
-              <span className="text-foreground/50 mx-4">&</span>
-              <span className="text-primary">{coupleData.groom.name}</span>
+              <span className="text-[rgb(255,215,120)]">
+                {coupleData.bride.name}
+              </span>
+              <span className="text-foreground/40 mx-4">&</span>
+              <span className="text-[rgb(255,215,120)]">
+                {coupleData.groom.name}
+              </span>
             </h1>
 
             {/* Date */}
