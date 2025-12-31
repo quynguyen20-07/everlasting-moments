@@ -179,16 +179,13 @@ const TemplateDetailPage = () => {
       <section
         className={`relative min-h-screen flex items-center justify-center overflow-hidden invitation-pattern bg-gradient-to-b ${template.color}`}
       >
-        {/* Background Decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* radial glow, subtle */}
           <div
             className={`absolute top-12 left-8 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-20 ${template.accent}`}
           />
           <div
             className={`absolute bottom-12 right-8 w-[44rem] h-[44rem] rounded-full blur-3xl opacity-12 ${template.accent}`}
           />
-          {/* subtle vignette for depth */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/6 via-transparent to-black/4 pointer-events-none" />
         </div>
 
@@ -322,10 +319,16 @@ const TemplateDetailPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <Heart className="w-12 h-12 text-primary fill-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold mb-6 text-foreground">
+            <h2
+              className="font-display text-4xl md:text-5xl font-semibold mb-6 text-[var(--text-color)]"
+              style={{ "--text-color": template.text } as React.CSSProperties}
+            >
               Câu Chuyện Tình Yêu Của Chúng Tôi
             </h2>
-            <p className="font-elegant text-xl leading-relaxed text-foreground/70">
+            <p
+              className="font-elegant text-xl leading-relaxed text-[var(--text-color)]"
+              style={{ "--text-color": template.color } as React.CSSProperties}
+            >
               {coupleData.story}
             </p>
           </motion.div>
@@ -383,9 +386,7 @@ const TemplateDetailPage = () => {
       </section>
 
       {/* Gallery */}
-      <section
-        className={`py-24 bg-gradient-to-b ${template.color} opacity-50`}
-      >
+      <section className={`py-24 bg-gradient-to-b ${template.color}`}>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -394,7 +395,10 @@ const TemplateDetailPage = () => {
             className="text-center mb-16"
           >
             <Camera className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground">
+            <h2
+              className="font-display text-4xl md:text-5xl font-semibold text-[var(--text-color)]"
+              style={{ "--text-color": template.text } as React.CSSProperties}
+            >
               Những Khoảnh Khắc Của Chúng Tôi
             </h2>
           </motion.div>
