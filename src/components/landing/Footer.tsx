@@ -10,10 +10,13 @@ const Footer = () => {
           <div className="md:col-span-1">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
               <Heart className="w-6 h-6 text-primary fill-primary" />
-              <span className="font-display text-xl font-semibold">WeddingCard</span>
+              <span className="font-display text-xl font-semibold">
+                True loves
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground mb-6">
-              Create beautiful digital wedding invitations that capture your love story.
+              Tạo những thiệp cưới kỹ thuật số đẹp mắt và ghi lại câu chuyện
+              tình yêu của bạn.
             </p>
             <div className="flex items-center gap-4">
               <a
@@ -39,25 +42,37 @@ const Footer = () => {
 
           {/* Links */}
           <div>
-            <h4 className="font-display font-semibold mb-4">Product</h4>
+            <h4 className="font-display font-semibold mb-4">Sản phẩm</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/templates" className="text-muted-foreground hover:text-primary transition-colors">
-                  Templates
+                <Link
+                  to="/templates"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Mẫu thiệp
                 </Link>
               </li>
               <li>
-                <Link to="/features" className="text-muted-foreground hover:text-primary transition-colors">
-                  Features
+                <Link
+                  to="/features"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Tính năng
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">
-                  Pricing
+                <Link
+                  to="/pricing"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Giá cả
                 </Link>
               </li>
               <li>
-                <Link to="/demo" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  to="/demo"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Demo
                 </Link>
               </li>
@@ -65,52 +80,76 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-display font-semibold mb-4">Company</h4>
+            <h4 className="font-display font-semibold mb-4">Công ty</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                  About Us
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Về chúng tôi
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  to="/blog"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Blog
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contact
+                <Link
+                  to="/contact"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Liên hệ
                 </Link>
               </li>
               <li>
-                <Link to="/careers" className="text-muted-foreground hover:text-primary transition-colors">
-                  Careers
+                <Link
+                  to="/careers"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Tuyển dụng
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-display font-semibold mb-4">Support</h4>
+            <h4 className="font-display font-semibold mb-4">Hỗ trợ</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/help" className="text-muted-foreground hover:text-primary transition-colors">
-                  Help Center
+                <Link
+                  to="/help"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Trung tâm trợ giúp
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
+                <Link
+                  to="/privacy"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Chính sách bảo mật
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
+                <Link
+                  to="/terms"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Điều khoản dịch vụ
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
+                <Link
+                  to="/faq"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Câu hỏi thường gặp
                 </Link>
               </li>
             </ul>
@@ -119,7 +158,9 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 WeddingCard. Made with <Heart className="w-3 h-3 inline-block text-primary fill-primary" /> for happy couples.
+            © 2024 True loves. Được tạo ra với{" "}
+            <Heart className="w-3 h-3 inline-block text-primary fill-primary" />{" "}
+            dành cho những cặp đôi hạnh phúc.
           </p>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <span>🇻🇳 Tiếng Việt</span>

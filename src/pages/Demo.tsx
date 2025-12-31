@@ -664,7 +664,7 @@ const Demo = () => {
         </p>
         <p className="text-muted-foreground">14 Tháng 2, 2025</p>
         <p className="text-sm text-muted-foreground mt-4">
-          Được tạo với tình yêu bằng WeddingCard
+          Được tạo với tình yêu bằng True loves
         </p>
       </footer>
 

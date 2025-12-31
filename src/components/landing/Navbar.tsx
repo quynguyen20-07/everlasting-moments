@@ -1,19 +1,18 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Heart, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const navLinks = [
-  { name: "Features", href: "/#features" },
-  { name: "Templates", href: "/templates" },
-  { name: "Pricing", href: "/pricing" },
+  { name: "Tính Năng", href: "/#features" },
+  { name: "Mẫu Thiệp", href: "/templates" },
+  { name: "Giá Cả", href: "/pricing" },
   { name: "Demo", href: "/demo" },
 ];
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -24,7 +23,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-2">
               <Heart className="w-6 h-6 text-primary fill-primary" />
               <span className="font-display text-xl font-semibold">
-                WeddingCard
+                True loves
               </span>
             </Link>
 
@@ -44,10 +43,10 @@ const Navbar = () => {
             {/* CTA Buttons */}
             <div className="hidden md:flex items-center gap-3">
               <Button variant="ghost" asChild>
-                <Link to="/auth">Sign In</Link>
+                <Link to="/auth">Đăng Nhập</Link>
               </Button>
               <Button variant="gold" asChild>
-                <Link to="/auth?mode=signup">Get Started</Link>
+                <Link to="/auth?mode=signup">Bắt Đầu</Link>
               </Button>
             </div>
 
@@ -89,10 +88,10 @@ const Navbar = () => {
                   ))}
                   <div className="flex flex-col gap-2 pt-4 border-t border-border">
                     <Button variant="outline" asChild>
-                      <Link to="/auth">Sign In</Link>
+                      <Link to="/auth">Đăng Nhập</Link>
                     </Button>
                     <Button variant="gold" asChild>
-                      <Link to="/auth?mode=signup">Get Started</Link>
+                      <Link to="/auth?mode=signup">Bắt Đầu</Link>
                     </Button>
                   </div>
                 </div>

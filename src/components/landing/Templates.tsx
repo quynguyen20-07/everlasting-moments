@@ -1,30 +1,30 @@
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const templates = [
   {
-    name: "Romantic Blush",
-    description: "Soft pinks and elegant florals",
+    name: "Lãng Mạn Hồng Nhạt",
+    description: "Hồng mềm mại và hoa lá thanh lịch",
     color: "from-pink-100 to-rose-50",
     accent: "bg-pink-200",
   },
   {
-    name: "Golden Hour",
-    description: "Warm golds and champagne tones",
+    name: "Giờ Vàng",
+    description: "Vàng ấm áp và tones champagne",
     color: "from-amber-50 to-yellow-50",
     accent: "bg-amber-200",
   },
   {
-    name: "Garden Party",
-    description: "Fresh greens and botanical vibes",
+    name: "Bữa Tiệc Khu Vườn",
+    description: "Xanh mát và cảm giác thiên nhiên",
     color: "from-emerald-50 to-green-50",
     accent: "bg-emerald-200",
   },
   {
-    name: "Classic Elegance",
-    description: "Timeless black and white",
+    name: "Thanh Lịch Cổ Điển",
+    description: "Đen và trắng vượt thời gian",
     color: "from-gray-50 to-slate-50",
     accent: "bg-gray-300",
   },
@@ -34,7 +34,7 @@ const Templates = () => {
   return (
     <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
+        {/* Tiêu đề Phần */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,18 +43,18 @@ const Templates = () => {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="text-primary font-medium text-sm tracking-wider uppercase mb-4 block">
-            Templates
+            Mẫu Thiết Kế
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-semibold mb-6">
-            Choose Your
-            <span className="text-gradient-gold"> Style</span>
+            Chọn Phong Cách
+            <span className="text-gradient-gold"> Của Bạn</span>
           </h2>
           <p className="text-muted-foreground font-elegant text-lg">
-            Start with a beautifully designed template and make it uniquely yours
+            Bắt đầu với mẫu thiết kế đẹp mắt và biến nó thành của riêng bạn
           </p>
         </motion.div>
 
-        {/* Templates Grid */}
+        {/* Lưới Mẫu Thiết Kế */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {templates.map((template, index) => (
             <motion.div
@@ -68,9 +68,11 @@ const Templates = () => {
               <div
                 className={`relative aspect-[3/4] rounded-2xl bg-gradient-to-b ${template.color} overflow-hidden border border-border group-hover:border-primary/30 transition-all duration-300 group-hover:shadow-elegant`}
               >
-                {/* Template Preview Content */}
+                {/* Nội Dung Xem Trước Mẫu */}
                 <div className="absolute inset-4 flex flex-col items-center justify-center text-center">
-                  <div className={`w-20 h-20 rounded-full ${template.accent} mb-6 flex items-center justify-center`}>
+                  <div
+                    className={`w-20 h-20 rounded-full ${template.accent} mb-6 flex items-center justify-center`}
+                  >
                     <div className="w-12 h-12 rounded-full bg-card/80 backdrop-blur-sm" />
                   </div>
                   <div className="w-32 h-3 rounded bg-foreground/10 mb-3" />
@@ -81,11 +83,11 @@ const Templates = () => {
                   </div>
                 </div>
 
-                {/* Hover Overlay */}
+                {/* Lớp Phủ Khi Di Chuột */}
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <Button variant="gold" size="sm">
                     <Eye className="w-4 h-4 mr-2" />
-                    Preview
+                    Xem Trước
                   </Button>
                 </div>
               </div>
@@ -101,7 +103,7 @@ const Templates = () => {
           ))}
         </div>
 
-        {/* CTA */}
+        {/* Lời Kêu Gọi Hành Động */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -111,7 +113,7 @@ const Templates = () => {
         >
           <Button variant="outline-elegant" size="lg" asChild>
             <Link to="/templates">
-              View All Templates
+              Xem Tất Cả Mẫu Thiết Kế
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>

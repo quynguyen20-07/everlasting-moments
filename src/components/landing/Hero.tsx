@@ -1,12 +1,12 @@
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Heart, Sparkles, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden invitation-pattern">
-      {/* Decorative Elements */}
+      {/* Các yếu tố trang trí */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
@@ -30,7 +30,7 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
+          {/* Huy hiệu */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -39,34 +39,37 @@ const Hero = () => {
           >
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-secondary-foreground">
-              Create Beautiful Wedding Invitations
+              Tạo Thiệp Cưới Đẹp Mắt
             </span>
           </motion.div>
 
-          {/* Main Heading */}
+          {/* Tiêu đề chính */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold leading-tight mb-6"
           >
-            <span className="text-foreground">Your Love Story,</span>
+            <span className="text-foreground">
+              Câu Chuyện Tình Yêu Của Bạn,
+            </span>
             <br />
-            <span className="text-gradient-gold">Beautifully Told</span>
+            <span className="text-gradient-gold">Kể Một Cách Đẹp Đẽ</span>
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Phụ đề */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-elegant"
           >
-            Create stunning digital wedding invitations that capture the essence of your special day. 
-            Share your love story, manage RSVPs, and delight your guests with an unforgettable experience.
+            Tạo những thiệp cưới kỹ thuật số tuyệt đẹp, nắm bắt được bản chất
+            của ngày đặc biệt của bạn. Chia sẻ câu chuyện tình yêu của bạn, quản
+            lý RSVPs, và làm hài lòng khách mời với một trải nghiệm khó quên.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* Nút kêu gọi hành động */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,19 +78,19 @@ const Hero = () => {
           >
             <Button variant="gold" size="xl" asChild>
               <Link to="/auth">
-                Start Creating
+                Bắt Đầu Tạo
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
             <Button variant="outline-elegant" size="xl" asChild>
               <Link to="/demo">
-                View Demo
+                Xem Demo
                 <Heart className="w-5 h-5" />
               </Link>
             </Button>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Chỉ số tin cậy */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -95,21 +98,18 @@ const Hero = () => {
             className="mt-16 flex flex-col items-center gap-4"
           >
             <p className="text-sm text-muted-foreground">
-              Trusted by 10,000+ couples worldwide
+              Được tin tưởng bởi hơn 10,000 cặp đôi trên toàn thế giới
             </p>
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
-                <Heart
-                  key={i}
-                  className="w-5 h-5 fill-primary text-primary"
-                />
+                <Heart key={i} className="w-5 h-5 fill-primary text-primary" />
               ))}
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Chỉ báo cuộn */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

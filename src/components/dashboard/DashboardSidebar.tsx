@@ -165,7 +165,7 @@ export const DashboardSidebar = ({ isAdmin = false }: SidebarProps) => {
           <Link to="/" className="flex items-center gap-2">
             <Heart className="w-7 h-7 text-primary fill-primary" />
             <span className="font-display text-xl font-semibold">
-              WeddingCard
+              True loves
             </span>
           </Link>
           <Button
@@ -307,9 +307,7 @@ export const DashboardHeader = () => {
         </Button>
         <Link to="/" className="flex items-center gap-2">
           <Heart className="w-6 h-6 text-primary fill-primary" />
-          <span className="font-display text-lg font-semibold">
-            WeddingCard
-          </span>
+          <span className="font-display text-lg font-semibold">True loves</span>
         </Link>
         <div className="w-10" /> {/* Spacer for centering */}
       </div>
