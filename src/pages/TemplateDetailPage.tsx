@@ -17,15 +17,18 @@ import {
   Users,
   X,
   ArrowLeft,
+  Sparkles,
+  Flower2,
+  Gem,
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { TEMPLATES_LIST } from "@/lib/utils";
-import { useEffect, useState } from "react";
 
 const templatesData = Object.fromEntries(
   TEMPLATES_LIST.map((t) => [
@@ -37,43 +40,137 @@ const templatesData = Object.fromEntries(
   ])
 );
 
-// Mock couple data - sẽ được replace bằng API data sau
+// Color schemes based on professional color theory
+const COLOR_SCHEMES = {
+  "soft-pink": {
+    primary: "#E11D48", // Rose 600
+    secondary: "#F472B6", // Pink 400
+    accent: "#FBCFE8", // Pink 200
+    background: "#FFF1F2", // Rose 50
+    text: "#4C0519", // Rose 950
+    muted: "#9D174D", // Rose 800
+  },
+  "golden-hour": {
+    primary: "#D97706", // Amber 600
+    secondary: "#FBBF24", // Amber 400
+    accent: "#FDE68A", // Amber 200
+    background: "#FFFBEB", // Amber 50
+    text: "#451A03", // Amber 950
+    muted: "#92400E", // Amber 800
+  },
+  "garden-party": {
+    primary: "#059669", // Emerald 600
+    secondary: "#10B981", // Emerald 500
+    accent: "#A7F3D0", // Emerald 200
+    background: "#ECFDF5", // Emerald 50
+    text: "#064E3B", // Emerald 950
+    muted: "#047857", // Emerald 700
+  },
+  "classic-elegant": {
+    primary: "#374151", // Gray 700
+    secondary: "#6B7280", // Gray 500
+    accent: "#E5E7EB", // Gray 200
+    background: "#F9FAFB", // Gray 50
+    text: "#111827", // Gray 900
+    muted: "#4B5563", // Gray 600
+  },
+  "navy-elegance": {
+    primary: "#1E40AF", // Blue 700
+    secondary: "#3B82F6", // Blue 500
+    accent: "#BFDBFE", // Blue 200
+    background: "#EFF6FF", // Blue 50
+    text: "#1E3A8A", // Blue 900
+    muted: "#1D4ED8", // Blue 700
+  },
+  "burgundy-romance": {
+    primary: "#9F1239", // Rose 800
+    secondary: "#BE123C", // Rose 700
+    accent: "#FECDD3", // Rose 200
+    background: "#FFF1F2", // Rose 50
+    text: "#4C0519", // Rose 950
+    muted: "#881337", // Rose 900
+  },
+  "blush-gold": {
+    primary: "#DB2777", // Pink 600
+    secondary: "#F472B6", // Pink 400
+    accent: "#FBCFE8", // Pink 200
+    background: "#FDF2F8", // Pink 50
+    text: "#831843", // Pink 900
+    muted: "#BE185D", // Pink 700
+  },
+  "lavender-dream": {
+    primary: "#7C3AED", // Violet 600
+    secondary: "#A78BFA", // Violet 400
+    accent: "#DDD6FE", // Violet 200
+    background: "#F5F3FF", // Violet 50
+    text: "#4C1D95", // Violet 900
+    muted: "#5B21B6", // Violet 800
+  },
+};
+
+// Default color scheme fallback
+const DEFAULT_COLORS = {
+  primary: "#E11D48",
+  secondary: "#F472B6",
+  accent: "#FBCFE8",
+  background: "#FFF1F2",
+  text: "#4C0519",
+  muted: "#9D174D",
+};
+
+// Mock couple data
 const coupleData = {
   bride: { name: "Ngọc Linh", fullName: "Nguyễn Ngọc Linh" },
   groom: { name: "Minh Tuấn", fullName: "Trần Minh Tuấn" },
   weddingDate: new Date("2025-02-14T10:00:00"),
-  story:
-    "Chúng tôi gặp nhau lần đầu tiên tại một quán cà phê ở Đà Nẵng vào một chiều mưa. Điều bắt đầu từ một cuộc gặp gỡ tình cờ đã trở thành một hành trình tuyệt vời đầy yêu thương, tiếng cười và vô vàn kỷ niệm.",
+  story: `Trong một chiều mưa Đà Nẵng, tại quán cà phê nhỏ ven sông Hàn, 
+  chúng tôi đã gặp nhau một cách tình cờ. Một cuốn sách rơi, một ánh mắt giao nhau, 
+  và thế là hành trình yêu thương bắt đầu. 
+  Từ những buổi hoàng hôn trên biển Mỹ Khê đến những đêm trò chuyện dài dưới ánh sao, 
+  mỗi khoảnh khắc đều là một mảnh ghép hoàn hảo cho tình yêu của chúng tôi. 
+  Hôm nay, chúng tôi chính thức bước tiếp hành trình ấy bên nhau, 
+  với lời hứa về một tương lai tràn đầy yêu thương và hạnh phúc.`,
   events: [
     {
       name: "Lễ Vu Quy",
       date: "14/02/2025",
       time: "08:00",
       location: "Nhà Gái - 123 Đường ABC, Quận 1, TP.HCM",
+      description: "Lễ đón dâu truyền thống",
     },
     {
       name: "Lễ Thành Hôn",
       date: "14/02/2025",
       time: "10:00",
       location: "Nhà Trai - 456 Đường XYZ, Quận 7, TP.HCM",
+      description: "Lễ kết hôn chính thức",
     },
     {
       name: "Tiệc Cưới",
       date: "14/02/2025",
       time: "18:00",
       location: "Trung Tâm Hội Nghị White Palace",
+      description: "Tiệc mừng cùng gia đình và bạn bè",
     },
   ],
   wishes: [
     {
       name: "Anh Khoa",
-      message: "Chúc hai bạn trăm năm hạnh phúc! 💕",
+      message:
+        "Chúc hai bạn trăm năm hạnh phúc! Tình yêu luôn nồng ấm như ngày đầu 💕",
       date: "2 ngày trước",
     },
     {
       name: "Hương Giang",
-      message: "Chúc mừng! Hy vọng hai bạn sẽ có một cuộc sống yêu thương!",
+      message:
+        "Mong rằng cuộc sống của hai bạn sẽ tràn ngập tiếng cười và yêu thương!",
       date: "3 ngày trước",
+    },
+    {
+      name: "Minh Đức",
+      message:
+        "Chúc mừng hai bạn! Thật hạnh phúc khi chứng kiến tình yêu của các bạn nở hoa ✨",
+      date: "1 ngày trước",
     },
   ],
   bankInfo: {
@@ -81,11 +178,13 @@ const coupleData = {
       bank: "Vietcombank",
       account: "1234567890",
       name: "NGUYEN NGOC LINH",
+      branch: "Chi nhánh Hồ Chí Minh",
     },
     groom: {
       bank: "Techcombank",
       account: "0987654321",
       name: "TRAN MINH TUAN",
+      branch: "Chi nhánh Hà Nội",
     },
   },
 };
@@ -96,6 +195,8 @@ const TemplateDetailPage = () => {
   const { toast } = useToast();
 
   const template = templatesData[slug as keyof typeof templatesData];
+  const colors =
+    COLOR_SCHEMES[slug as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS;
 
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -112,6 +213,19 @@ const TemplateDetailPage = () => {
     attending: true,
   });
   const [wishData, setWishData] = useState({ name: "", message: "" });
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const galleryImages = useMemo(
+    () => [
+      { id: 1, alt: "Ảnh cưới 1" },
+      { id: 2, alt: "Ảnh cưới 2" },
+      { id: 3, alt: "Ảnh cưới 3" },
+      { id: 4, alt: "Ảnh cưới 4" },
+      { id: 5, alt: "Ảnh cưới 5" },
+      { id: 6, alt: "Ảnh cưới 6" },
+    ],
+    []
+  );
 
   useEffect(() => {
     if (!template) {
@@ -158,15 +272,31 @@ const TemplateDetailPage = () => {
     setWishData({ name: "", message: "" });
   };
 
+  const handleGalleryClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div
+      className="min-h-screen bg-background"
+      style={
+        {
+          "--primary": colors.primary,
+          "--secondary": colors.secondary,
+          "--accent": colors.accent,
+          "--background": colors.background,
+          "--text": colors.text,
+          "--muted": colors.muted,
+        } as React.CSSProperties
+      }
+    >
       {/* Header Back Button */}
-      <div className="sticky top-0 z-40 bg-card/50 backdrop-blur-sm border-b border-border">
+      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container mx-auto px-4 py-4">
           <Button
             variant="ghost"
             size="sm"
-            className="gap-2"
+            className="gap-2 hover:bg-primary/10 transition-colors"
             onClick={() => navigate("/templates")}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -177,16 +307,29 @@ const TemplateDetailPage = () => {
 
       {/* Hero Section */}
       <section
-        className={`relative min-h-screen flex items-center justify-center overflow-hidden invitation-pattern bg-gradient-to-b ${template.color}`}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.accent}20 100%)`,
+        }}
       >
+        {/* Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
-            className={`absolute top-12 left-8 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-20 ${template.accent}`}
+            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
+            style={{ background: colors.primary }}
           />
           <div
-            className={`absolute bottom-12 right-8 w-[44rem] h-[44rem] rounded-full blur-3xl opacity-12 ${template.accent}`}
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
+            style={{ background: colors.secondary }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/6 via-transparent to-black/4 pointer-events-none" />
+
+          {/* Floral Elements */}
+          <div className="absolute top-10 left-10 opacity-10">
+            <Flower2 className="w-32 h-32" style={{ color: colors.primary }} />
+          </div>
+          <div className="absolute bottom-10 right-10 opacity-10">
+            <Gem className="w-32 h-32" style={{ color: colors.secondary }} />
+          </div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center py-20">
@@ -196,83 +339,141 @@ const TemplateDetailPage = () => {
             transition={{ duration: 0.8 }}
           >
             {/* Template Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/60 backdrop-blur-sm border border-border mb-8 shadow-soft">
-              <Heart className="w-4 h-4 text-primary fill-primary" />
-              <span className="text-sm font-medium">{template.name}</span>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-12 shadow-lg"
+            >
+              <Sparkles className="w-4 h-4" style={{ color: colors.primary }} />
+              <span
+                className="text-sm font-semibold tracking-wider"
+                style={{ color: colors.text }}
+              >
+                {template.name}
+              </span>
+            </motion.div>
 
-            {/* Names */}
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold mb-4 text-foreground">
-              <span className="text-[rgb(255,215,120)]">
+            {/* Names - Modern Typography */}
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+              <span className="inline-block" style={{ color: colors.primary }}>
                 {coupleData.bride.name}
               </span>
-              <span className="text-foreground/40 mx-4">&</span>
-              <span className="text-[rgb(255,215,120)]">
+              <span className="mx-4 md:mx-8" style={{ color: colors.muted }}>
+                &
+              </span>
+              <span className="inline-block" style={{ color: colors.primary }}>
                 {coupleData.groom.name}
               </span>
             </h1>
 
-            {/* Date */}
-            <p className="font-elegant text-2xl md:text-3xl text-foreground/70 mb-12">
-              14 Tháng 2, 2025
-            </p>
+            {/* Date with elegant typography */}
+            <div className="mb-12">
+              <p
+                className="font-serif text-xl md:text-2xl tracking-widest mb-2"
+                style={{ color: colors.muted }}
+              >
+                CÙNG BẠN ĐẾN TRỌN ĐỜI
+              </p>
+              <p
+                className="font-display text-3xl md:text-4xl font-semibold"
+                style={{ color: colors.text }}
+              >
+                14 Tháng 2, 2025
+              </p>
+            </div>
 
-            {/* Decorative Element */}
+            {/* Decorative Hearts */}
             <div className="flex items-center justify-center gap-4 md:gap-8 mb-12">
               <div
-                className={`w-28 h-28 md:w-40 md:h-40 rounded-full border-4 border-primary/30 shadow-elegant bg-card`}
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 shadow-xl"
+                style={{
+                  borderColor: `${colors.primary}30`,
+                  background: `linear-gradient(135deg, ${colors.accent} 0%, white 100%)`,
+                }}
               />
-              <Heart className="w-8 h-8 text-primary fill-primary animate-heartbeat" />
+              <Heart
+                className="w-10 h-10 md:w-14 md:h-14 animate-pulse"
+                style={{ color: colors.primary, fill: colors.primary }}
+              />
               <div
-                className={`w-28 h-28 md:w-40 md:h-40 rounded-full border-4 border-primary/30 shadow-elegant bg-card`}
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 shadow-xl"
+                style={{
+                  borderColor: `${colors.primary}30`,
+                  background: `linear-gradient(135deg, white 0%, ${colors.accent} 100%)`,
+                }}
               />
             </div>
 
             {/* Countdown */}
-            <div className="grid grid-cols-4 gap-4 max-w-lg mx-auto mb-12">
+            <div className="grid grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto mb-16">
               {[
-                { value: countdown.days, label: "Ngày" },
-                { value: countdown.hours, label: "Giờ" },
-                { value: countdown.minutes, label: "Phút" },
-                { value: countdown.seconds, label: "Giây" },
+                { value: countdown.days, label: "NGÀY" },
+                { value: countdown.hours, label: "GIỜ" },
+                { value: countdown.minutes, label: "PHÚT" },
+                { value: countdown.seconds, label: "GIÂY" },
               ].map((item, index) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className={`p-4 rounded-xl bg-card border border-border shadow-soft ${template.accent}`}
+                  className="group"
                 >
-                  <div className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                    {item.value.toString().padStart(2, "0")}
-                  </div>
-                  <div className="text-xs md:text-sm text-muted-foreground">
-                    {item.label}
+                  <div
+                    className="p-4 md:p-6 rounded-2xl backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.accent}20 0%, white/10 100%)`,
+                      borderColor: `${colors.primary}20`,
+                    }}
+                  >
+                    <div
+                      className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-2"
+                      style={{ color: colors.text }}
+                    >
+                      {item.value.toString().padStart(2, "0")}
+                    </div>
+                    <div
+                      className="text-xs md:text-sm font-medium tracking-wider"
+                      style={{ color: colors.muted }}
+                    >
+                      {item.label}
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
-                variant="gold"
                 size="lg"
+                className="gap-3 px-8 py-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  color: "white",
+                }}
                 onClick={() =>
                   document
                     .getElementById("rsvp")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
               >
-                <Users className="w-4 h-4" />
+                <Users className="w-5 h-5" />
                 Xác Nhận Tham Dự
               </Button>
               <Button
-                variant="outline-elegant"
+                variant="outline"
                 size="lg"
+                className="gap-3 px-8 py-6 rounded-full font-semibold backdrop-blur-sm hover:shadow-lg transition-all duration-300"
+                style={{
+                  borderColor: colors.primary,
+                  color: colors.primary,
+                  background: `${colors.accent}10`,
+                }}
                 onClick={() => setShowShareModal(true)}
               >
-                <Share2 className="w-4 h-4" />
+                <Share2 className="w-5 h-5" />
                 Chia Sẻ
               </Button>
             </div>
@@ -289,94 +490,160 @@ const TemplateDetailPage = () => {
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <ChevronDown className="w-8 h-8 text-primary/50" />
+              <ChevronDown
+                className="w-8 h-8"
+                style={{ color: colors.primary }}
+              />
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Music Toggle */}
-        <Button
-          variant="outline"
-          size="icon"
-          className="fixed bottom-6 right-6 z-50 rounded-full shadow-elegant"
-          onClick={() => setIsPlaying(!isPlaying)}
-        >
-          {isPlaying ? (
-            <Pause className="w-4 h-4" />
-          ) : (
-            <Play className="w-4 h-4" />
-          )}
-        </Button>
       </section>
 
       {/* Love Story Section */}
-      <section className={`py-24 bg-gradient-to-b ${template.color}`}>
+      <section className="py-20 md:py-28">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="max-w-3xl mx-auto text-center"
           >
-            <Heart className="w-12 h-12 text-primary fill-primary mx-auto mb-6" />
+            <Heart
+              className="w-14 h-14 mx-auto mb-8 animate-pulse"
+              style={{ color: colors.primary, fill: `${colors.primary}20` }}
+            />
             <h2
-              className="font-display text-4xl md:text-5xl font-semibold mb-6 text-[var(--text-color)]"
-              style={{ "--text-color": template.text } as React.CSSProperties}
+              className="font-display text-4xl md:text-5xl font-bold mb-8"
+              style={{ color: colors.text }}
             >
-              Câu Chuyện Tình Yêu Của Chúng Tôi
+              Câu Chuyện Của Chúng Tôi
             </h2>
-            <p
-              className="font-elegant text-xl leading-relaxed text-[var(--text-color)]"
-              style={{ "--text-color": template.color } as React.CSSProperties}
-            >
-              {coupleData.story}
-            </p>
+            <div className="relative">
+              <div
+                className="absolute -top-4 -left-4 w-8 h-8 rounded-full opacity-30"
+                style={{ background: colors.accent }}
+              />
+              <div
+                className="absolute -bottom-4 -right-4 w-8 h-8 rounded-full opacity-30"
+                style={{ background: colors.accent }}
+              />
+              <p
+                className="font-serif text-lg md:text-xl leading-relaxed text-justify p-8 rounded-2xl backdrop-blur-sm"
+                style={{
+                  color: colors.text,
+                  background: `${colors.accent}10`,
+                  border: `1px solid ${colors.primary}20`,
+                }}
+              >
+                {coupleData.story}
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Events Timeline */}
-      <section className="py-24 bg-background">
+      <section
+        className="py-20 md:py-28"
+        style={{ background: `${colors.accent}05` }}
+      >
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-16"
           >
-            <Calendar className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold">
-              Các Sự Kiện Cưới
+            <Calendar
+              className="w-14 h-14 mx-auto mb-6"
+              style={{ color: colors.primary }}
+            />
+            <h2
+              className="font-display text-4xl md:text-5xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              Lịch Trình Ngày Cưới
             </h2>
+            <p className="text-lg" style={{ color: colors.muted }}>
+              Những khoảnh khắc đáng nhớ trong ngày trọng đại
+            </p>
           </motion.div>
 
-          <div className="max-w-2xl mx-auto space-y-6">
+          <div className="relative max-w-4xl mx-auto">
+            {/* Timeline Line */}
+            <div
+              className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 transform -translate-x-1/2"
+              style={{
+                background: `linear-gradient(to bottom, ${colors.primary}, ${colors.secondary})`,
+              }}
+            />
+
             {coupleData.events.map((event, index) => (
               <motion.div
                 key={event.name}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-elegant transition-all`}
+                transition={{ delay: index * 0.2 }}
+                className={`relative mb-12 ${
+                  index % 2 === 0
+                    ? "md:pr-1/2 md:pl-8 md:text-right"
+                    : "md:pl-1/2 md:pr-8 md:text-left"
+                }`}
               >
-                <div className="flex items-start gap-4">
+                {/* Timeline Dot */}
+                <div
+                  className="absolute left-4 md:left-1/2 top-6 w-4 h-4 rounded-full transform -translate-x-1/2 z-10 shadow-lg"
+                  style={{ background: colors.primary }}
+                />
+
+                <div
+                  className={`ml-12 md:ml-0 ${
+                    index % 2 === 0 ? "md:mr-8" : "md:ml-8"
+                  }`}
+                >
                   <div
-                    className={`w-16 h-16 rounded-full ${template.accent} flex items-center justify-center shrink-0`}
+                    className="p-6 rounded-2xl backdrop-blur-md border shadow-lg hover:shadow-xl transition-all duration-300"
+                    style={{
+                      background: `linear-gradient(135deg, white 0%, ${colors.accent}10 100%)`,
+                      borderColor: `${colors.primary}20`,
+                    }}
                   >
-                    <Clock className="w-6 h-6 text-foreground" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-display text-xl font-semibold mb-2">
-                      {event.name}
-                    </h3>
-                    <p className="text-primary font-medium mb-1">
-                      {event.date} - {event.time}
-                    </p>
-                    <p className="text-muted-foreground flex items-start gap-2">
-                      <MapPin className="w-4 h-4 shrink-0 mt-1" />
-                      {event.location}
-                    </p>
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-md"
+                        style={{ background: `${colors.primary}10` }}
+                      >
+                        <Clock
+                          className="w-6 h-6"
+                          style={{ color: colors.primary }}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3
+                          className="font-display text-xl font-semibold mb-2"
+                          style={{ color: colors.text }}
+                        >
+                          {event.name}
+                        </h3>
+                        <p
+                          className="font-medium mb-2"
+                          style={{ color: colors.primary }}
+                        >
+                          ⏰ {event.time} • 📅 {event.date}
+                        </p>
+                        <p className="mb-2" style={{ color: colors.muted }}>
+                          {event.description}
+                        </p>
+                        <p
+                          className="text-sm flex items-start gap-2"
+                          style={{ color: colors.muted }}
+                        >
+                          <MapPin className="w-4 h-4 shrink-0 mt-1" />
+                          {event.location}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -386,53 +653,82 @@ const TemplateDetailPage = () => {
       </section>
 
       {/* Gallery */}
-      <section className={`py-24 bg-gradient-to-b ${template.color}`}>
+      <section className="py-20 md:py-28">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-16"
           >
-            <Camera className="w-12 h-12 text-primary mx-auto mb-6" />
+            <Camera
+              className="w-14 h-14 mx-auto mb-6"
+              style={{ color: colors.primary }}
+            />
             <h2
-              className="font-display text-4xl md:text-5xl font-semibold text-[var(--text-color)]"
-              style={{ "--text-color": template.text } as React.CSSProperties}
+              className="font-display text-4xl md:text-5xl font-bold mb-4"
+              style={{ color: colors.text }}
             >
-              Những Khoảnh Khắc Của Chúng Tôi
+              Khoảnh Khắc Yêu Thương
             </h2>
+            <p className="text-lg" style={{ color: colors.muted }}>
+              Những bức ảnh đẹp nhất trong hành trình của chúng tôi
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            {[1, 2, 3, 4, 5, 6].map((_, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
+            {galleryImages.map((image, index) => (
               <motion.div
-                key={index}
+                key={image.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`aspect-square rounded-2xl bg-card overflow-hidden shadow-soft hover:shadow-elegant transition-all cursor-pointer border border-border`}
-              />
+                className={`aspect-square rounded-2xl overflow-hidden cursor-pointer group relative ${
+                  index === 0 ? "md:col-span-2 md:row-span-2" : ""
+                }`}
+                onClick={() => handleGalleryClick(index)}
+              >
+                <div
+                  className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 group-hover:scale-105 transition-transform duration-500"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.accent} 30%, white 100%)`,
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                  <span className="text-white font-medium">{image.alt}</span>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* RSVP */}
-      <section id="rsvp" className={`py-24 bg-gradient-to-b ${template.color}`}>
+      {/* RSVP Section */}
+      <section
+        id="rsvp"
+        className="py-20 md:py-28"
+        style={{ background: `${colors.accent}05` }}
+      >
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-16"
           >
-            <Users className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4 text-foreground">
+            <Users
+              className="w-14 h-14 mx-auto mb-6"
+              style={{ color: colors.primary }}
+            />
+            <h2
+              className="font-display text-4xl md:text-5xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
               Xác Nhận Tham Dự
             </h2>
-            <p className="text-foreground/70 font-elegant text-lg">
-              Vui lòng cho chúng tôi biết bạn có sẽ tham dự hay không
+            <p className="text-lg" style={{ color: colors.muted }}>
+              Vui lòng cho chúng tôi biết bạn có thể tham dự hay không
             </p>
           </motion.div>
 
@@ -441,25 +737,36 @@ const TemplateDetailPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             onSubmit={handleRSVP}
-            className="max-w-md mx-auto p-8 rounded-2xl bg-card border border-border shadow-elegant"
+            className="max-w-2xl mx-auto"
           >
-            <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Tên của bạn
+                <label
+                  className="block text-sm font-semibold mb-3"
+                  style={{ color: colors.text }}
+                >
+                  Tên của bạn *
                 </label>
                 <Input
-                  placeholder="Nhập tên của bạn"
+                  placeholder="Nhập tên đầy đủ"
                   value={rsvpData.name}
                   onChange={(e) =>
                     setRsvpData({ ...rsvpData, name: e.target.value })
                   }
                   required
+                  className="rounded-xl border-2 p-4"
+                  style={{
+                    borderColor: `${colors.primary}30`,
+                    background: "white",
+                  }}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Số Điện Thoại
+                <label
+                  className="block text-sm font-semibold mb-3"
+                  style={{ color: colors.text }}
+                >
+                  Số điện thoại *
                 </label>
                 <Input
                   placeholder="Nhập số điện thoại"
@@ -468,11 +775,19 @@ const TemplateDetailPage = () => {
                     setRsvpData({ ...rsvpData, phone: e.target.value })
                   }
                   required
+                  className="rounded-xl border-2 p-4"
+                  style={{
+                    borderColor: `${colors.primary}30`,
+                    background: "white",
+                  }}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Số Người Tham Dự
+              <div className="md:col-span-2">
+                <label
+                  className="block text-sm font-semibold mb-3"
+                  style={{ color: colors.text }}
+                >
+                  Số người tham dự *
                 </label>
                 <Input
                   type="number"
@@ -483,112 +798,206 @@ const TemplateDetailPage = () => {
                     setRsvpData({ ...rsvpData, guests: e.target.value })
                   }
                   required
+                  className="rounded-xl border-2 p-4"
+                  style={{
+                    borderColor: `${colors.primary}30`,
+                    background: "white",
+                  }}
                 />
               </div>
-              <div className="flex gap-4">
-                <Button
-                  type="button"
-                  variant={rsvpData.attending ? "gold" : "outline"}
-                  className="flex-1"
-                  onClick={() => setRsvpData({ ...rsvpData, attending: true })}
-                >
-                  Sẽ Tham Dự
-                </Button>
-                <Button
-                  type="button"
-                  variant={!rsvpData.attending ? "gold" : "outline"}
-                  className="flex-1"
-                  onClick={() => setRsvpData({ ...rsvpData, attending: false })}
-                >
-                  Không Tham Dự
-                </Button>
-              </div>
-              <Button type="submit" variant="gold" className="w-full" size="lg">
-                <Send className="w-4 h-4" />
-                Gửi Xác Nhận
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <Button
+                type="button"
+                size="lg"
+                className={`flex-1 rounded-xl py-6 text-lg font-semibold transition-all ${
+                  rsvpData.attending ? "shadow-lg scale-105" : ""
+                }`}
+                style={{
+                  background: rsvpData.attending
+                    ? `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
+                    : `${colors.accent}20`,
+                  color: rsvpData.attending ? "white" : colors.text,
+                  border: `2px solid ${
+                    rsvpData.attending ? colors.primary : `${colors.primary}30`
+                  }`,
+                }}
+                onClick={() => setRsvpData({ ...rsvpData, attending: true })}
+              >
+                💖 Sẽ Tham Dự
+              </Button>
+              <Button
+                type="button"
+                size="lg"
+                className={`flex-1 rounded-xl py-6 text-lg font-semibold transition-all ${
+                  !rsvpData.attending ? "shadow-lg scale-105" : ""
+                }`}
+                style={{
+                  background: !rsvpData.attending
+                    ? `linear-gradient(135deg, ${colors.muted} 0%, ${colors.text}80 100%)`
+                    : `${colors.accent}20`,
+                  color: !rsvpData.attending ? "white" : colors.text,
+                  border: `2px solid ${
+                    !rsvpData.attending ? colors.muted : `${colors.primary}30`
+                  }`,
+                }}
+                onClick={() => setRsvpData({ ...rsvpData, attending: false })}
+              >
+                😔 Không Tham Dự
               </Button>
             </div>
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                color: "white",
+              }}
+            >
+              <Send className="w-5 h-5 mr-2" />
+              Gửi Xác Nhận
+            </Button>
           </motion.form>
         </div>
       </section>
 
       {/* Guest Wishes */}
-      <section className="py-24 bg-background">
+      <section className="py-20 md:py-28">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-16"
           >
-            <MessageCircle className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-              Lời Chúc & Phước Lành
+            <MessageCircle
+              className="w-14 h-14 mx-auto mb-6"
+              style={{ color: colors.primary }}
+            />
+            <h2
+              className="font-display text-4xl md:text-5xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              Lời Chúc Từ Trái Tim
             </h2>
-            <p className="text-muted-foreground font-elegant text-lg">
-              Hãy để lại những lời chúc tốt đẹp
+            <p className="text-lg" style={{ color: colors.muted }}>
+              Chia sẻ tình yêu và những lời chúc tốt đẹp nhất
             </p>
           </motion.div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             {/* Wish Form */}
             <motion.form
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               onSubmit={handleWish}
-              className="p-6 rounded-2xl bg-card border border-border shadow-soft mb-8"
+              className="mb-12"
             >
-              <div className="space-y-4">
-                <Input
-                  placeholder="Tên của bạn"
-                  value={wishData.name}
-                  onChange={(e) =>
-                    setWishData({ ...wishData, name: e.target.value })
-                  }
-                  required
-                />
-                <Textarea
-                  placeholder="Viết lời chúc của bạn..."
-                  rows={3}
-                  value={wishData.message}
-                  onChange={(e) =>
-                    setWishData({ ...wishData, message: e.target.value })
-                  }
-                  required
-                />
-                <Button type="submit" variant="gold">
-                  <Send className="w-4 h-4" />
-                  Gửi Lời Chúc
-                </Button>
+              <div
+                className="p-8 rounded-2xl shadow-lg"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.accent}10 0%, white 100%)`,
+                  border: `1px solid ${colors.primary}20`,
+                }}
+              >
+                <h3
+                  className="font-display text-2xl font-semibold mb-6"
+                  style={{ color: colors.text }}
+                >
+                  Gửi lời chúc của bạn
+                </h3>
+                <div className="space-y-6">
+                  <Input
+                    placeholder="Tên của bạn"
+                    value={wishData.name}
+                    onChange={(e) =>
+                      setWishData({ ...wishData, name: e.target.value })
+                    }
+                    required
+                    className="rounded-xl border-2 p-4"
+                    style={{
+                      borderColor: `${colors.primary}30`,
+                      background: "white",
+                    }}
+                  />
+                  <Textarea
+                    placeholder="Viết lời chúc từ trái tim của bạn..."
+                    rows={4}
+                    value={wishData.message}
+                    onChange={(e) =>
+                      setWishData({ ...wishData, message: e.target.value })
+                    }
+                    required
+                    className="rounded-xl border-2 p-4 resize-none"
+                    style={{
+                      borderColor: `${colors.primary}30`,
+                      background: "white",
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="rounded-xl px-8"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                      color: "white",
+                    }}
+                  >
+                    <Send className="w-5 h-5 mr-2" />
+                    Gửi Lời Chúc
+                  </Button>
+                </div>
               </div>
             </motion.form>
 
             {/* Wishes List */}
-            <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-6">
               {coupleData.wishes.map((wish, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="p-4 rounded-xl bg-card border border-border"
+                  className="group"
                 >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div
-                      className={`w-10 h-10 rounded-full ${template.accent} flex items-center justify-center font-display font-semibold text-foreground`}
-                    >
-                      {wish.name[0]}
+                  <div
+                    className="p-6 rounded-2xl backdrop-blur-sm border shadow-md hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.accent}05 0%, white 100%)`,
+                      borderColor: `${colors.primary}20`,
+                    }}
+                  >
+                    <div className="flex items-start gap-4 mb-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+                        style={{
+                          background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                          color: "white",
+                        }}
+                      >
+                        <span className="font-bold">{wish.name[0]}</span>
+                      </div>
+                      <div>
+                        <p
+                          className="font-semibold"
+                          style={{ color: colors.text }}
+                        >
+                          {wish.name}
+                        </p>
+                        <p className="text-sm" style={{ color: colors.muted }}>
+                          {wish.date}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">{wish.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {wish.date}
-                      </p>
-                    </div>
+                    <p className="italic" style={{ color: colors.text }}>
+                      "{wish.message}"
+                    </p>
                   </div>
-                  <p className="text-muted-foreground">{wish.message}</p>
                 </motion.div>
               ))}
             </div>
@@ -596,96 +1005,33 @@ const TemplateDetailPage = () => {
         </div>
       </section>
 
-      {/* Gift / Bank Info */}
-      <section className={`py-24 bg-gradient-to-b ${template.color}`}>
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Gift className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-semibold mb-4 text-foreground">
-              Quà Cưới
-            </h2>
-            <p className="text-foreground/70 font-elegant text-lg">
-              Sự hiện diện của bạn là món quà lớn nhất
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {/* Bride's Bank */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-card border border-border shadow-soft text-center"
-            >
-              <div
-                className={`w-20 h-20 rounded-full ${template.accent} mx-auto mb-4 flex items-center justify-center`}
-              >
-                <Heart className="w-8 h-8 text-foreground" />
-              </div>
-              <h3 className="font-display text-xl font-semibold mb-4">
-                {coupleData.bride.name}
-              </h3>
-              <div className="space-y-2 text-sm">
-                <p className="text-muted-foreground">
-                  {coupleData.bankInfo.bride.bank}
-                </p>
-                <p className="font-mono text-lg font-medium">
-                  {coupleData.bankInfo.bride.account}
-                </p>
-                <p className="text-muted-foreground">
-                  {coupleData.bankInfo.bride.name}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Groom's Bank */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-card border border-border shadow-soft text-center"
-            >
-              <div
-                className={`w-20 h-20 rounded-full ${template.accent} mx-auto mb-4 flex items-center justify-center`}
-              >
-                <Heart className="w-8 h-8 text-foreground" />
-              </div>
-              <h3 className="font-display text-xl font-semibold mb-4">
-                {coupleData.groom.name}
-              </h3>
-              <div className="space-y-2 text-sm">
-                <p className="text-muted-foreground">
-                  {coupleData.bankInfo.groom.bank}
-                </p>
-                <p className="font-mono text-lg font-medium">
-                  {coupleData.bankInfo.groom.account}
-                </p>
-                <p className="text-muted-foreground">
-                  {coupleData.bankInfo.groom.name}
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer
-        className={`py-12 bg-gradient-to-b ${template.color} border-t border-border text-center`}
+        className="py-12 border-t"
+        style={{ borderColor: `${colors.primary}20` }}
       >
-        <Heart className="w-8 h-8 text-primary fill-primary mx-auto mb-4" />
-        <p className="font-display text-2xl text-foreground mb-2">
-          {coupleData.bride.name} & {coupleData.groom.name}
-        </p>
-        <p className="text-foreground/70">14 Tháng 2, 2025</p>
-        <p className="text-sm text-foreground/50 mt-4">
-          Được tạo với tình yêu bằng True loves
-        </p>
+        <div className="container mx-auto px-4 text-center">
+          <Heart
+            className="w-12 h-12 mx-auto mb-4 animate-pulse"
+            style={{ color: colors.primary, fill: `${colors.primary}20` }}
+          />
+          <h3
+            className="font-display text-3xl font-bold mb-2"
+            style={{ color: colors.text }}
+          >
+            {coupleData.bride.name} & {coupleData.groom.name}
+          </h3>
+          <p className="text-lg mb-2" style={{ color: colors.muted }}>
+            14 Tháng 2, 2025
+          </p>
+          <p className="text-sm" style={{ color: colors.muted }}>
+            "Trong tình yêu và trong cuộc sống, những điều nhỏ bé tạo nên điều
+            lớn lao nhất"
+          </p>
+          <p className="text-xs mt-6" style={{ color: colors.muted }}>
+            Được tạo với tình yêu bằng True Loves ❤️
+          </p>
+        </div>
       </footer>
 
       {/* Share Modal */}
@@ -695,7 +1041,7 @@ const TemplateDetailPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-foreground/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setShowShareModal(false)}
           >
             <motion.div
@@ -703,48 +1049,89 @@ const TemplateDetailPage = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-elegant"
+              className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-display text-xl font-semibold">
+              <div className="flex items-center justify-between mb-8">
+                <h3
+                  className="font-display text-2xl font-semibold"
+                  style={{ color: colors.text }}
+                >
                   Chia Sẻ Thiệp Mời
                 </h3>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowShareModal(false)}
+                  className="hover:bg-red-50"
+                  style={{ color: colors.primary }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </Button>
               </div>
+
               <div className="grid grid-cols-3 gap-4">
-                <button className="p-4 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors flex flex-col items-center gap-2">
-                  <Facebook className="w-6 h-6 text-blue-600" />
-                  <span className="text-xs">Facebook</span>
-                </button>
-                <button className="p-4 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors flex flex-col items-center gap-2">
-                  <Instagram className="w-6 h-6 text-pink-600" />
-                  <span className="text-xs">Instagram</span>
-                </button>
-                <button
-                  className="p-4 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors flex flex-col items-center gap-2"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    toast({
-                      title: "Đã Sao Chép!",
-                      description:
-                        "Liên kết thiệp mời đã được sao chép vào bộ nhớ tạm.",
-                    });
-                  }}
-                >
-                  <LinkIcon className="w-6 h-6 text-primary" />
-                  <span className="text-xs">Sao Chép Liên Kết</span>
-                </button>
+                {[
+                  { icon: Facebook, label: "Facebook", color: "#1877F2" },
+                  { icon: Instagram, label: "Instagram", color: "#E4405F" },
+                  {
+                    icon: LinkIcon,
+                    label: "Sao Chép",
+                    color: colors.primary,
+                    action: () => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast({
+                        title: "Đã Sao Chép!",
+                        description:
+                          "Liên kết đã được sao chép vào bộ nhớ tạm.",
+                      });
+                    },
+                  },
+                ].map((item, index) => (
+                  <button
+                    key={item.label}
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                    style={{
+                      background: `${item.color}10`,
+                      border: `1px solid ${item.color}30`,
+                    }}
+                    onClick={item.action}
+                  >
+                    <item.icon
+                      className="w-8 h-8"
+                      style={{ color: item.color }}
+                    />
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: item.color }}
+                    >
+                      {item.label}
+                    </span>
+                  </button>
+                ))}
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Music Toggle */}
+      <Button
+        variant="outline"
+        size="icon"
+        className="fixed bottom-6 right-6 z-40 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+        style={{
+          borderColor: colors.primary,
+          background: "white",
+          color: colors.primary,
+        }}
+        onClick={() => setIsPlaying(!isPlaying)}
+      >
+        {isPlaying ? (
+          <Pause className="w-5 h-5" />
+        ) : (
+          <Play className="w-5 h-5" />
+        )}
+      </Button>
     </div>
   );
 };
