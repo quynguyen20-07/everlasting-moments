@@ -41,7 +41,9 @@ export const mockWeddings: Wedding[] = [
     id: 'wedding-1',
     userId: 'user-1',
     slug: 'minh-anh-wedding',
-    name: 'Đám cưới Minh & Anh',
+    title: 'Đám cưới Minh & Anh',
+    weddingDate: '2025-02-14',
+    language: 'vi',
     status: 'published',
     bride: {
       id: 'bride-1',
@@ -157,8 +159,9 @@ export const mockWeddings: Wedding[] = [
     theme: {
       primaryColor: '#D4A574',
       secondaryColor: '#F6C1CC',
-      fontFamily: 'Playfair Display',
-      template: 'elegant',
+      fontHeading: 'Playfair Display',
+      fontBody: 'Lora',
+      backgroundMusic: '/music/wedding-song.mp3',
     },
     settings: {
       showGallery: true,

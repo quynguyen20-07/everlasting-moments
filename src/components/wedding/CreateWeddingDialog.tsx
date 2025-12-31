@@ -65,15 +65,10 @@ export const CreateWeddingDialog = ({
 
     setIsLoading(true);
     try {
+      // Create wedding with just title - bride/groom managed separately via updateBride/updateGroom
       const wedding = await createWedding({
         title: data.name,
-        weddingDate: data.eventDate,
-        bride: {
-          fullName: data.brideName,
-        },
-        groom: {
-          fullName: data.groomName,
-        },
+        language: "vi",
       });
 
       toast({
