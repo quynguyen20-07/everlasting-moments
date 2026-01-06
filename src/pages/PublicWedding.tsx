@@ -8,6 +8,7 @@ import {
   BankAccountSection,
   WishesSection,
   FooterSection,
+  MusicPlayer,
 } from "@/components/public-wedding";
 import type { Wedding, BankAccount, Wish } from "@/types/graphql";
 import { PageLoading } from "@/components/LoadingSpinner";
@@ -143,6 +144,9 @@ export default function PublicWedding() {
         <meta property="og:description" content={wedding.title} />
         <meta property="og:type" content="website" />
       </Helmet>
+
+      {/* Background Music Player */}
+      <MusicPlayer musicUrl={wedding.themeSettings?.backgroundMusic} />
 
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
