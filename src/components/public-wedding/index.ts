@@ -7,3 +7,4 @@ export { RSVPSection } from "./RSVPSection";
 export { BankAccountSection } from "./BankAccountSection";
 export { WishesSection } from "./WishesSection";
 export { FooterSection } from "./FooterSection";
+export { MusicPlayer } from "./MusicPlayer";
