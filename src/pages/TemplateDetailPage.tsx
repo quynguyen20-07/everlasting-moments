@@ -40,82 +40,66 @@ const templatesData = Object.fromEntries(
   ])
 );
 
-// Color schemes based on professional color theory
+// Color schemes for the 6 premium templates
 const COLOR_SCHEMES = {
-  "soft-pink": {
-    primary: "#E11D48", // Rose 600
-    secondary: "#F472B6", // Pink 400
-    accent: "#FBCFE8", // Pink 200
-    background: "#FFF1F2", // Rose 50
-    text: "#4C0519", // Rose 950
-    muted: "#9D174D", // Rose 800
+  "golden-elegance": {
+    primary: "#B8860B", // Dark golden rod
+    secondary: "#D4AF37", // Gold
+    accent: "#F5DEB3", // Wheat
+    background: "#FFFEF7", // Cream
+    text: "#3D2914", // Dark brown
+    muted: "#8B7355", // Tan
   },
-  "golden-hour": {
-    primary: "#D97706", // Amber 600
-    secondary: "#FBBF24", // Amber 400
-    accent: "#FDE68A", // Amber 200
-    background: "#FFFBEB", // Amber 50
-    text: "#451A03", // Amber 950
-    muted: "#92400E", // Amber 800
+  "blush-romance": {
+    primary: "#DB7093", // Pale violet red
+    secondary: "#FFB6C1", // Light pink
+    accent: "#FFF0F5", // Lavender blush
+    background: "#FFF8FA", // Very light pink
+    text: "#4A0E2B", // Dark pink
+    muted: "#C08497", // Dusty rose
   },
-  "garden-party": {
-    primary: "#059669", // Emerald 600
-    secondary: "#10B981", // Emerald 500
-    accent: "#A7F3D0", // Emerald 200
-    background: "#ECFDF5", // Emerald 50
-    text: "#064E3B", // Emerald 950
-    muted: "#047857", // Emerald 700
+  "sage-garden": {
+    primary: "#6B8E6B", // Sage green
+    secondary: "#8FBC8F", // Dark sea green
+    accent: "#F0FFF0", // Honeydew
+    background: "#F5FAF5", // Light green tint
+    text: "#2D4A2D", // Forest green
+    muted: "#698B69", // Olive drab
   },
-  "classic-elegant": {
-    primary: "#374151", // Gray 700
-    secondary: "#6B7280", // Gray 500
-    accent: "#E5E7EB", // Gray 200
-    background: "#F9FAFB", // Gray 50
-    text: "#111827", // Gray 900
-    muted: "#4B5563", // Gray 600
+  "midnight-luxe": {
+    primary: "#D4AF37", // Gold
+    secondary: "#1E3A5F", // Dark navy
+    accent: "#C9B037", // Metallic gold
+    background: "#0F172A", // Dark navy
+    text: "#F1E5D1", // Cream
+    muted: "#94A3B8", // Slate
   },
-  "navy-elegance": {
-    primary: "#1E40AF", // Blue 700
-    secondary: "#3B82F6", // Blue 500
-    accent: "#BFDBFE", // Blue 200
-    background: "#EFF6FF", // Blue 50
-    text: "#1E3A8A", // Blue 900
-    muted: "#1D4ED8", // Blue 700
-  },
-  "burgundy-romance": {
-    primary: "#9F1239", // Rose 800
-    secondary: "#BE123C", // Rose 700
-    accent: "#FECDD3", // Rose 200
-    background: "#FFF1F2", // Rose 50
-    text: "#4C0519", // Rose 950
-    muted: "#881337", // Rose 900
-  },
-  "blush-gold": {
-    primary: "#DB2777", // Pink 600
-    secondary: "#F472B6", // Pink 400
-    accent: "#FBCFE8", // Pink 200
-    background: "#FDF2F8", // Pink 50
-    text: "#831843", // Pink 900
-    muted: "#BE185D", // Pink 700
+  "pure-minimal": {
+    primary: "#1A1A1A", // Near black
+    secondary: "#4A4A4A", // Dark gray
+    accent: "#F5F5F5", // White smoke
+    background: "#FFFFFF", // White
+    text: "#1A1A1A", // Near black
+    muted: "#6B6B6B", // Gray
   },
   "lavender-dream": {
-    primary: "#7C3AED", // Violet 600
-    secondary: "#A78BFA", // Violet 400
-    accent: "#DDD6FE", // Violet 200
-    background: "#F5F3FF", // Violet 50
-    text: "#4C1D95", // Violet 900
-    muted: "#5B21B6", // Violet 800
+    primary: "#9370DB", // Medium purple
+    secondary: "#B19CD9", // Light purple
+    accent: "#E6E6FA", // Lavender
+    background: "#FAF8FF", // Very light purple
+    text: "#4A3A6A", // Dark purple
+    muted: "#8B7CB8", // Medium lavender
   },
 };
 
-// Default color scheme fallback
+// Default color scheme fallback (golden elegance)
 const DEFAULT_COLORS = {
-  primary: "#E11D48",
-  secondary: "#F472B6",
-  accent: "#FBCFE8",
-  background: "#FFF1F2",
-  text: "#4C0519",
-  muted: "#9D174D",
+  primary: "#B8860B",
+  secondary: "#D4AF37",
+  accent: "#F5DEB3",
+  background: "#FFFEF7",
+  text: "#3D2914",
+  muted: "#8B7355",
 };
 
 // Mock couple data

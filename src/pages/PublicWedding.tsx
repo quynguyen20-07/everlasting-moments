@@ -9,7 +9,9 @@ import {
   WishesSection,
   FooterSection,
   MusicPlayer,
+  TemplateProvider,
 } from "@/components/public-wedding";
+import { getPatternSVG } from "@/lib/templates/wedding-templates";
 import type { Wedding, BankAccount, Wish } from "@/types/graphql";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { getPublicWeddingApi } from "@/lib/api/wedding";
@@ -117,8 +119,19 @@ export default function PublicWedding() {
     (e) => e.type === "ceremony" || e.type === "reception"
   );
 
+  // Determine pattern based on theme
+  const getPatternClass = () => {
+    const primaryColor = wedding.themeSettings?.primaryColor?.toLowerCase() || '';
+    if (primaryColor.includes('pink') || primaryColor.includes('rose')) return 'template-pattern-roses';
+    if (primaryColor.includes('green') || primaryColor.includes('sage')) return 'template-pattern-botanical';
+    if (primaryColor.includes('navy') || primaryColor.includes('dark')) return 'template-pattern-stars';
+    if (primaryColor.includes('white') || primaryColor.includes('black') || primaryColor.includes('minimal')) return 'template-pattern-geometric';
+    if (primaryColor.includes('purple') || primaryColor.includes('lavender')) return 'template-pattern-lavender';
+    return 'template-pattern-gold';
+  };
+
   return (
-    <>
+    <TemplateProvider themeSettings={wedding.themeSettings}>
       <Helmet>
         <title>{`${groom?.fullName || "Chú Rể"} & ${
           bride?.fullName || "Cô Dâu"
@@ -148,7 +161,7 @@ export default function PublicWedding() {
       {/* Background Music Player */}
       <MusicPlayer musicUrl={wedding.themeSettings?.backgroundMusic} />
 
-      <main className="min-h-screen bg-background">
+      <main className={`template-wrapper min-h-screen bg-background ${getPatternClass()}`}>
         {/* Hero Section */}
         <HeroSection wedding={wedding} />
 
@@ -180,6 +193,6 @@ export default function PublicWedding() {
         {/* Footer Section */}
         <FooterSection wedding={wedding} />
       </main>
-    </>
+    </TemplateProvider>
   );
 }
