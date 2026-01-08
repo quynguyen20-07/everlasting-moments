@@ -11,8 +11,8 @@ import {
   MusicPlayer,
   TemplateProvider,
 } from "@/components/public-wedding";
-import { getPatternSVG } from "@/lib/templates/wedding-templates";
 import type { Wedding, BankAccount, Wish } from "@/types/graphql";
+import { getPatternSVG } from "@/lib/templates/wedding-templates";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { getPublicWeddingApi } from "@/lib/api/wedding";
 import { useParams } from "react-router-dom";
@@ -121,13 +121,23 @@ export default function PublicWedding() {
 
   // Determine pattern based on theme
   const getPatternClass = () => {
-    const primaryColor = wedding.themeSettings?.primaryColor?.toLowerCase() || '';
-    if (primaryColor.includes('pink') || primaryColor.includes('rose')) return 'template-pattern-roses';
-    if (primaryColor.includes('green') || primaryColor.includes('sage')) return 'template-pattern-botanical';
-    if (primaryColor.includes('navy') || primaryColor.includes('dark')) return 'template-pattern-stars';
-    if (primaryColor.includes('white') || primaryColor.includes('black') || primaryColor.includes('minimal')) return 'template-pattern-geometric';
-    if (primaryColor.includes('purple') || primaryColor.includes('lavender')) return 'template-pattern-lavender';
-    return 'template-pattern-gold';
+    const primaryColor =
+      wedding.themeSettings?.primaryColor?.toLowerCase() || "";
+    if (primaryColor.includes("pink") || primaryColor.includes("rose"))
+      return "template-pattern-roses";
+    if (primaryColor.includes("green") || primaryColor.includes("sage"))
+      return "template-pattern-botanical";
+    if (primaryColor.includes("navy") || primaryColor.includes("dark"))
+      return "template-pattern-stars";
+    if (
+      primaryColor.includes("white") ||
+      primaryColor.includes("black") ||
+      primaryColor.includes("minimal")
+    )
+      return "template-pattern-geometric";
+    if (primaryColor.includes("purple") || primaryColor.includes("lavender"))
+      return "template-pattern-lavender";
+    return "template-pattern-gold";
   };
 
   return (
@@ -161,7 +171,9 @@ export default function PublicWedding() {
       {/* Background Music Player */}
       <MusicPlayer musicUrl={wedding.themeSettings?.backgroundMusic} />
 
-      <main className={`template-wrapper min-h-screen bg-background ${getPatternClass()}`}>
+      <main
+        className={`template-wrapper min-h-screen bg-background ${getPatternClass()}`}
+      >
         {/* Hero Section */}
         <HeroSection wedding={wedding} />
 

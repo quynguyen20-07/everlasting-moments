@@ -73,11 +73,10 @@ export interface LoveStoryInput {
 
 export interface WeddingEvent {
   id: string;
-  title: string;
+  name: string;
   type: string;
-  eventDate: string;
-  startTime?: string;
-  endTime?: string;
+  time: string;
+  date?: string;
   address: string;
   locationLat?: number;
   locationLng?: number;
