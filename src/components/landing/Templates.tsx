@@ -1,17 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Eye, Heart, Sparkles } from "lucide-react";
+import { styleLabels, TEMPLATES_LIST } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { TEMPLATES_LIST } from "@/lib/utils";
 import { motion } from "framer-motion";
-
-const styleLabels: Record<string, string> = {
-  classic: "Cổ điển",
-  modern: "Hiện đại",
-  rustic: "Mộc mạc",
-  romantic: "Lãng mạn",
-  minimalist: "Tối giản",
-  luxury: "Xa hoa",
-};
 
 const TemplatesPage = () => {
   const navigate = useNavigate();
@@ -93,7 +84,8 @@ const TemplatesPage = () => {
                   {/* Mock Names */}
                   <p
                     className={`font-display text-xl mb-2 ${
-                      template.isDark ? "text-white" : "text-foreground"
+                      // template.isDark ? "text-white" : "text-foreground"
+                      "text-foreground"
                     }`}
                   >
                     Minh & Hương
@@ -104,7 +96,8 @@ const TemplatesPage = () => {
                   />
                   <p
                     className={`text-sm opacity-70 font-elegant ${
-                      template.isDark ? "text-white" : "text-foreground"
+                      // template.isDark ? "text-white" : "text-foreground"
+                      "text-foreground"
                     }`}
                   >
                     20.12.2024
@@ -114,11 +107,17 @@ const TemplatesPage = () => {
                   <div
                     className={`absolute bottom-8 px-4 py-2 rounded-full text-xs font-medium ${
                       template.accent
-                    } ${template.isDark ? "text-white" : ""}`}
+                    } ${
+                      // template.isDark ? "text-white" : ""
+                      "text-white"
+                    }`}
                     style={{
-                      color: template.isDark
-                        ? "white"
-                        : `hsl(${template.primaryHsl})`,
+                      color:
+                        // template.isDark
+                        //   ? "white"
+                        //   : `hsl(${template.primaryHsl})`,
+
+                        "white",
                     }}
                   >
                     {styleLabels[template.style] || template.style}
