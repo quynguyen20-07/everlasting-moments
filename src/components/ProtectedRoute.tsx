@@ -1,36 +1,39 @@
-// Protected Route Component
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from '@/stores/authStore';
-import { PageLoading } from '@/components/LoadingSpinner';
+import { PageLoading } from "@/components/LoadingSpinner";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuthStore } from "@/stores/authStore";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireAdmin?: boolean;
 }
 
-export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  children,
+  requireAdmin = false,
+}: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading, user } = useAuthStore();
   const location = useLocation();
 
-  // Don't show loading here since App already handles initial auth check
   if (isLoading) {
     return <PageLoading text="Đang xác thực..." />;
   }
 
   if (!isAuthenticated || !user) {
-    // Save the attempted URL for redirecting after login
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (requireAdmin && user.role !== 'admin') {
-    return <Navigate to="/dashboard" replace />;
+  if (requireAdmin && user.role !== "admin") {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
 };
 
-// Redirect if already authenticated
-export const PublicOnlyRoute = ({ children }: { children: React.ReactNode }) => {
+export const PublicOnlyRoute = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { isAuthenticated, isLoading, user } = useAuthStore();
 
   if (isLoading) {
@@ -38,9 +41,7 @@ export const PublicOnlyRoute = ({ children }: { children: React.ReactNode }) => 
   }
 
   if (isAuthenticated && user) {
-    // Redirect based on role
-    const redirectPath = user.role === 'admin' ? '/admin' : '/dashboard';
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={user.role === "admin" ? "/dashboard" : "/"} replace />;
   }
 
   return <>{children}</>;

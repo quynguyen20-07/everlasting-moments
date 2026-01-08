@@ -1,9 +1,3 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Heart, Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useAuthStore } from "@/stores/authStore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +5,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Heart, Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const navLinks = [
   { name: "Tính Năng", href: "/#features" },
   { name: "Mẫu Thiệp", href: "/templates" },
   { name: "Giá Cả", href: "/pricing" },
-  { name: "Demo", href: "/demo" },
+  { name: "Demo", href: "/demo/blush-romance" },
 ];
 
 const Navbar = () => {
@@ -70,15 +70,21 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-3">
               {isAuthenticated ? (
                 <>
-                  <Button variant="outline" asChild>
-                    <Link to="/dashboard">
-                      <LayoutDashboard className="w-4 h-4 mr-2" />
-                      Dashboard
-                    </Link>
-                  </Button>
+                  {user.role === "admin" && (
+                    <Button variant="outline" asChild>
+                      <Link to="/dashboard">
+                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                        Bảng Điều Khiển
+                      </Link>
+                    </Button>
+                  )}
+
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Button
+                        variant="ghost"
+                        className="relative h-10 w-10 rounded-full"
+                      >
                         <Avatar className="h-10 w-10">
                           <AvatarFallback className="bg-primary text-primary-foreground">
                             {getInitials(user?.fullName)}
@@ -86,18 +92,27 @@ const Navbar = () => {
                         </Avatar>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuContent
+                      className="w-56"
+                      align="end"
+                      forceMount
+                    >
                       <div className="flex flex-col space-y-1 px-2 py-1.5">
                         <p className="text-sm font-medium">{user?.fullName}</p>
-                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {user?.email}
+                        </p>
                       </div>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to="/dashboard">
-                          <LayoutDashboard className="w-4 h-4 mr-2" />
-                          Dashboard
-                        </Link>
-                      </DropdownMenuItem>
+                      {user.role === "admin" && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/dashboard">
+                            <LayoutDashboard className="w-4 h-4 mr-2" />
+                            Bảng Điều Khiển
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+
                       <DropdownMenuItem asChild>
                         <Link to="/dashboard/profile">
                           <User className="w-4 h-4 mr-2" />
@@ -105,7 +120,10 @@ const Navbar = () => {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                      <DropdownMenuItem
+                        onClick={handleLogout}
+                        className="text-destructive focus:text-destructive"
+                      >
                         <LogOut className="w-4 h-4 mr-2" />
                         Đăng xuất
                       </DropdownMenuItem>
@@ -170,27 +188,49 @@ const Navbar = () => {
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="text-sm font-medium">{user?.fullName}</p>
-                            <p className="text-xs text-muted-foreground">{user?.email}</p>
+                            <p className="text-sm font-medium">
+                              {user?.fullName}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {user?.email}
+                            </p>
                           </div>
                         </div>
-                        <Button variant="outline" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="outline"
+                          asChild
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
                           <Link to="/dashboard">
                             <LayoutDashboard className="w-4 h-4 mr-2" />
                             Dashboard
                           </Link>
                         </Button>
-                        <Button variant="ghost" onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>
+                        <Button
+                          variant="ghost"
+                          onClick={() => {
+                            handleLogout();
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
                           <LogOut className="w-4 h-4 mr-2" />
                           Đăng xuất
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button variant="outline" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="outline"
+                          asChild
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
                           <Link to="/auth">Đăng Nhập</Link>
                         </Button>
-                        <Button variant="gold" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="gold"
+                          asChild
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
                           <Link to="/auth?mode=signup">Bắt Đầu</Link>
                         </Button>
                       </>

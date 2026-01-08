@@ -82,8 +82,8 @@ export const WeddingCard = ({
               )}
             </Badge>
             {wedding.themeSettings?.primaryColor && (
-              <span 
-                className="w-3 h-3 rounded-full border" 
+              <span
+                className="w-3 h-3 rounded-full border"
                 style={{ backgroundColor: wedding.themeSettings.primaryColor }}
               />
             )}
@@ -111,7 +111,7 @@ export const WeddingCard = ({
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link to={`/dashboard/wedding/${wedding.id}/edit`}>
+            <Link to={`/dashboard/weddings/${wedding.id}/edit`}>
               <Edit className="w-4 h-4" />
             </Link>
           </Button>

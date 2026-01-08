@@ -200,44 +200,59 @@ export const SEARCH_WEDDINGS_QUERY = `
 `;
 
 export const WEDDING_DETAIL_QUERY = `
-  query WeddingDetail($weddingId: ID!) {
-    weddingDetail(weddingId: $weddingId) {
+  query WeddingDetail($id: ID!) {
+    wedding(id: $id) {
       id
-      weddingId
-      bride {
-        fullName
-        avatar
-        shortBio
-        familyInfo
-        socialLinks
-      }
-      groom {
-        fullName
-        avatar
-        shortBio
-        familyInfo
-        socialLinks
-      }
-      loveStories {
+      title
+      slug
+      status
+      weddingDetail {
         id
-        title
-        content
-        storyDate
-        imageUrl
+        weddingId
+        bride {
+          fullName
+        }
+        groom {
+          fullName
+          avatar
+          shortBio
+          familyInfo
+          socialLinks
+        }
+        loveStories {
+          id
+          title
+          content
+          storyDate
+          imageUrl
+        }
+        weddingEvents {
+          id
+          title
+          type
+          eventDate
+          startTime
+          endTime
+          address
+          locationLat
+          locationLng
+          mapEmbedUrl
+          description
+        }
       }
-      weddingEvents {
-        id
-        title
-        type
-        eventDate
-        startTime
-        endTime
-        address
-        locationLat
-        locationLng
-        mapEmbedUrl
-        description
+      themeSettings {
+        primaryColor
+        secondaryColor
+        fontHeading
+        fontBody
+        backgroundMusic
       }
+      viewCount
+      publishedAt
+      createdAt
+      updatedAt
+      weddingDate
+      language
     }
   }
 `;

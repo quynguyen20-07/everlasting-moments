@@ -85,7 +85,7 @@ export const CreateWeddingDialog = ({
 
       onOpenChange(false);
       form.reset();
-      navigate(`/dashboard/wedding/${wedding.id}/edit`);
+      navigate(`/dashboard/weddings/${wedding.id}/edit`);
     } catch (error) {
       toast({
         title: "Lỗi",

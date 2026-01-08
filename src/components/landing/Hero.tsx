@@ -83,7 +83,7 @@ const Hero = () => {
               </Link>
             </Button>
             <Button variant="outline-elegant" size="xl" asChild>
-              <Link to="/demo">
+              <Link to="/demo/blush-romance">
                 Xem Demo
                 <Heart className="w-5 h-5" />
               </Link>
