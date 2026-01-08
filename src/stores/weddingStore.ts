@@ -11,10 +11,13 @@ import {
   getPublicWeddingApi,
   updateBrideApi,
   updateGroomApi,
+  addLoveStoryApi,
+  updateLoveStoryApi,
+  deleteLoveStoryApi,
   type ListWedding,
   type CreateWeddingInput,
 } from "@/lib/api/wedding";
-import type { Wedding, BrideGroomInput, WeddingDetail } from "@/types/graphql";
+import type { Wedding, BrideGroomInput, WeddingDetail, LoveStoryInput } from "@/types/graphql";
 
 interface WeddingStore {
   // State
@@ -33,6 +36,9 @@ interface WeddingStore {
   updateWedding: (id: string, updates: { title?: string; slug?: string; status?: string }) => Promise<void>;
   updateBride: (weddingId: string, bride: BrideGroomInput) => Promise<WeddingDetail>;
   updateGroom: (weddingId: string, groom: BrideGroomInput) => Promise<WeddingDetail>;
+  addLoveStory: (weddingId: string, story: LoveStoryInput) => Promise<WeddingDetail>;
+  updateLoveStory: (weddingId: string, storyId: string, story: LoveStoryInput) => Promise<WeddingDetail>;
+  deleteLoveStory: (weddingId: string, storyId: string) => Promise<WeddingDetail>;
   updateStatus: (id: string, status: string) => Promise<void>;
   publishWedding: (id: string) => Promise<void>;
   unpublishWedding: (id: string) => Promise<void>;
@@ -41,6 +47,23 @@ interface WeddingStore {
   clearError: () => void;
   clearPublicWedding: () => void;
 }
+
+// Helper to update currentWedding with new weddingDetail
+const updateCurrentWeddingDetail = (
+  state: Pick<WeddingStore, 'currentWedding'>,
+  weddingId: string,
+  updatedDetail: WeddingDetail
+) => {
+  if (state.currentWedding?.id === weddingId) {
+    return {
+      currentWedding: {
+        ...state.currentWedding,
+        weddingDetail: updatedDetail,
+      },
+    };
+  }
+  return {};
+};
 
 export const useWeddingStore = create<WeddingStore>((set, get) => ({
   // Initial state
@@ -160,38 +183,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const updatedDetail = await updateBrideApi(weddingId, bride);
-
-      // Update currentWedding's weddingDetail
-      const { currentWedding } = get();
-      if (currentWedding?.id === weddingId) {
-        set({
-          currentWedding: {
-            ...currentWedding,
-            weddingDetail: updatedDetail,
-          },
-          isLoading: false,
-        });
-      } else {
-        set({ isLoading: false });
-      }
-
-      // Update weddings list
       set((state) => ({
-        weddings: state.weddings.map((w) =>
-          w.id === weddingId
-            ? {
-                ...w,
-                weddingDetail: {
-                  id: updatedDetail.id,
-                  weddingId: updatedDetail.weddingId,
-                  bride: updatedDetail.bride,
-                  groom: updatedDetail.groom,
-                },
-              }
-            : w
-        ),
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
       }));
-
       return updatedDetail;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin cô dâu";
@@ -205,41 +200,64 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const updatedDetail = await updateGroomApi(weddingId, groom);
-
-      // Update currentWedding's weddingDetail
-      const { currentWedding } = get();
-      if (currentWedding?.id === weddingId) {
-        set({
-          currentWedding: {
-            ...currentWedding,
-            weddingDetail: updatedDetail,
-          },
-          isLoading: false,
-        });
-      } else {
-        set({ isLoading: false });
-      }
-
-      // Update weddings list
       set((state) => ({
-        weddings: state.weddings.map((w) =>
-          w.id === weddingId
-            ? {
-                ...w,
-                weddingDetail: {
-                  id: updatedDetail.id,
-                  weddingId: updatedDetail.weddingId,
-                  bride: updatedDetail.bride,
-                  groom: updatedDetail.groom,
-                },
-              }
-            : w
-        ),
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
       }));
-
       return updatedDetail;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin chú rể";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== ADD LOVE STORY =====
+  addLoveStory: async (weddingId, story) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await addLoveStoryApi(weddingId, story);
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể thêm câu chuyện tình yêu";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== UPDATE LOVE STORY =====
+  updateLoveStory: async (weddingId, storyId, story) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await updateLoveStoryApi(weddingId, storyId, story);
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể cập nhật câu chuyện";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== DELETE LOVE STORY =====
+  deleteLoveStory: async (weddingId, storyId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await deleteLoveStoryApi(weddingId, storyId);
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể xóa câu chuyện";
       set({ error: message, isLoading: false });
       throw error;
     }
