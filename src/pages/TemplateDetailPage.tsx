@@ -21,9 +21,10 @@ import {
   Flower2,
   Gem,
 } from "lucide-react";
+import { useEffect, useState, useMemo, useRef, useId } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { MusicPlayer } from "@/components/public-wedding";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -178,6 +179,8 @@ const TemplateDetailPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const divId = useId();
+
   const template = templatesData[slug as keyof typeof templatesData];
   const colors =
     COLOR_SCHEMES[slug as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS;
@@ -198,15 +201,21 @@ const TemplateDetailPage = () => {
   });
   const [wishData, setWishData] = useState({ name: "", message: "" });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const galleryImages = useMemo(
     () => [
-      { id: 1, alt: "Ảnh cưới 1" },
-      { id: 2, alt: "Ảnh cưới 2" },
-      { id: 3, alt: "Ảnh cưới 3" },
-      { id: 4, alt: "Ảnh cưới 4" },
-      { id: 5, alt: "Ảnh cưới 5" },
-      { id: 6, alt: "Ảnh cưới 6" },
+      {
+        id: 1,
+        alt: "Ảnh cưới 1",
+        src: "/src/assets/images/wedding06.webp",
+      },
+      { id: 2, alt: "Ảnh cưới 2", src: "/src/assets/images/wedding01.jpg" },
+      { id: 3, alt: "Ảnh cưới 3", src: "/src/assets/images/wedding02.jpg" },
+      { id: 4, alt: "Ảnh cưới 4", src: "/src/assets/images/wedding03.jpg" },
+      { id: 5, alt: "Ảnh cưới 5", src: "/src/assets/images/wedding04.jpg" },
+      { id: 6, alt: "Ảnh cưới 6", src: "/src/assets/images/wedding05.jpg" },
     ],
     []
   );
@@ -236,7 +245,22 @@ const TemplateDetailPage = () => {
     return () => clearInterval(interval);
   }, [template, navigate]);
 
-  if (!template) return null;
+  useEffect(() => {
+    // const audio = new Audio("/public/music/beautiful-in-white.mp3");
+    const audio = new Audio("/public/music/i-do.mp3");
+    audio.loop = true;
+    audio.volume = 0.6;
+
+    audio.onplay = () => setIsPlaying(true);
+    audio.onpause = () => setIsPlaying(false);
+
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
 
   const handleRSVP = (e: React.FormEvent) => {
     e.preventDefault();
@@ -258,6 +282,23 @@ const TemplateDetailPage = () => {
 
   const handleGalleryClick = (index: number) => {
     setCurrentImageIndex(index);
+  };
+
+  const toggleMusic = async () => {
+    if (!audioRef.current) return;
+
+    try {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        setHasInteracted(true);
+      }
+    } catch (err) {
+      console.error("Audio play bị chặn:", err);
+    }
   };
 
   return (
@@ -369,24 +410,108 @@ const TemplateDetailPage = () => {
 
             {/* Decorative Hearts */}
             <div className="flex items-center justify-center gap-4 md:gap-8 mb-12">
-              <div
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 shadow-xl"
-                style={{
-                  borderColor: `${colors.primary}30`,
-                  background: `linear-gradient(135deg, ${colors.accent} 0%, white 100%)`,
+              {/* Bride */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                whileHover={{ scale: 1.08 }}
+                className="
+      relative
+      w-32 h-32
+      md:w-48 md:h-48
+      rounded-full
+      border-4
+      shadow-xl
+      overflow-hidden
+      flex-shrink-0
+    "
+                style={{ borderColor: `${colors.primary}30` }}
+              >
+                {/* Gradient UNDER image */}
+                <div
+                  className="absolute inset-0 z-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.accent}25 0%, white 60%)`,
+                  }}
+                />
+
+                {/* Image */}
+                <motion.img
+                  src="/src/assets/images/co-dau.webp"
+                  alt="Cô dâu"
+                  className="absolute inset-0 w-full h-full object-cover z-10"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden",
+                  }}
+                />
+              </motion.div>
+
+              {/* Heart */}
+              <motion.div
+                animate={{ scale: [1, 1.25, 1] }}
+                transition={{
+                  duration: 1.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
-              />
-              <Heart
-                className="w-10 h-10 md:w-14 md:h-14 animate-pulse"
-                style={{ color: colors.primary, fill: colors.primary }}
-              />
-              <div
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 shadow-xl"
-                style={{
-                  borderColor: `${colors.primary}30`,
-                  background: `linear-gradient(135deg, white 0%, ${colors.accent} 100%)`,
-                }}
-              />
+              >
+                <Heart
+                  className="w-10 h-10 md:w-14 md:h-14"
+                  style={{ color: colors.primary, fill: colors.primary }}
+                />
+              </motion.div>
+
+              {/* Groom */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+                whileHover={{ scale: 1.08 }}
+                className="
+      relative
+      w-32 h-32
+      md:w-48 md:h-48
+      rounded-full
+      border-4
+      shadow-xl
+      overflow-hidden
+      flex-shrink-0
+    "
+                style={{ borderColor: `${colors.primary}30` }}
+              >
+                {/* Gradient UNDER image */}
+                <div
+                  className="absolute inset-0 z-0"
+                  style={{
+                    background: `linear-gradient(135deg, white 0%, ${colors.accent}25 100%)`,
+                  }}
+                />
+
+                {/* Image */}
+                <motion.img
+                  src="/src/assets/images/chu-re.webp"
+                  alt="Chú Rể"
+                  className="absolute inset-0 w-full h-full object-cover z-10"
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden",
+                  }}
+                />
+              </motion.div>
             </div>
 
             {/* Countdown */}
@@ -556,7 +681,7 @@ const TemplateDetailPage = () => {
           <div className="relative max-w-4xl mx-auto">
             {/* Timeline Line */}
             <div
-              className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 transform -translate-x-1/2"
+              className="absolute left-2 top-0 bottom-0 w-0.5"
               style={{
                 background: `linear-gradient(to bottom, ${colors.primary}, ${colors.secondary})`,
               }}
@@ -577,7 +702,7 @@ const TemplateDetailPage = () => {
               >
                 {/* Timeline Dot */}
                 <div
-                  className="absolute left-4 md:left-1/2 top-6 w-4 h-4 rounded-full transform -translate-x-1/2 z-10 shadow-lg"
+                  className="absolute left-[1px] top-1/2 w-4 h-4 rounded-full z-10 shadow-lg"
                   style={{ background: colors.primary }}
                 />
 
@@ -663,25 +788,61 @@ const TemplateDetailPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
             {galleryImages.map((image, index) => (
               <motion.div
-                key={image.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                key={divId}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`aspect-square rounded-2xl overflow-hidden cursor-pointer group relative ${
-                  index === 0 ? "md:col-span-2 md:row-span-2" : ""
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut",
+                  delay: index * 0.08,
+                }}
+                className={`relative rounded-2xl overflow-hidden cursor-pointer group ${
+                  index === 0 ? "md:col-span-2 md:row-span-2" : "aspect-square"
                 }`}
                 onClick={() => handleGalleryClick(index)}
               >
-                <div
-                  className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 group-hover:scale-105 transition-transform duration-500"
+                {/* IMAGE WRAPPER (chống bể) */}
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.12 }}
+                  transition={{ duration: 0.9, ease: "easeOut" }}
+                >
+                  <motion.img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover"
+                    style={{
+                      transform: "translateZ(0)",
+                      backfaceVisibility: "hidden",
+                    }}
+                  />
+                </motion.div>
+
+                {/* Gradient overlay (sống động hơn) */}
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.4 }}
                   style={{
-                    background: `linear-gradient(135deg, ${colors.accent} 30%, white 100%)`,
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 40%, transparent 70%)",
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <span className="text-white font-medium">{image.alt}</span>
-                </div>
+
+                {/* Caption */}
+                <motion.div
+                  className="absolute inset-0 flex items-end p-5 md:p-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileHover={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                >
+                  <span className="text-white text-sm md:text-base font-medium tracking-wide drop-shadow-xl">
+                    {image.alt}
+                  </span>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -1108,7 +1269,7 @@ const TemplateDetailPage = () => {
           background: "white",
           color: colors.primary,
         }}
-        onClick={() => setIsPlaying(!isPlaying)}
+        onClick={toggleMusic}
       >
         {isPlaying ? (
           <Pause className="w-5 h-5" />

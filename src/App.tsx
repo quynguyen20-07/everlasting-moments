@@ -1,10 +1,10 @@
 import { ProtectedRoute, PublicOnlyRoute } from "@/components/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PageLoading } from "@/components/LoadingSpinner";
+import { DashboardLayout } from "@/layouts/MainLayout";
 import PublicWedding from "@/pages/PublicWedding";
 import { useAuthStore } from "@/stores/authStore";
 import { Toaster } from "@/components/ui/toaster";
@@ -48,7 +48,7 @@ const AppContent = () => {
           </PublicOnlyRoute>
         }
       />
-      <Route path="/demo" element={<Demo />} />
+      <Route path="/demo/:slug" element={<Demo />} />
       <Route path="/wedding/:slug" element={<PublicWedding />} />
 
       <Route path="/templates" element={<TemplatesPage />} />

@@ -70,7 +70,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/demo"
+                  to="/demo/blush-romance"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Demo

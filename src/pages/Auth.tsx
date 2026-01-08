@@ -35,11 +35,9 @@ const Auth = () => {
     }
   }, [searchParams]);
 
-  // Chuyển hướng nếu đã xác thực
   useEffect(() => {
     if (isAuthenticated && user) {
-      const redirectPath = user.role === "admin" ? "/admin" : "/dashboard";
-      navigate(redirectPath, { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
 

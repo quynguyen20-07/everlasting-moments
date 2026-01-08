@@ -1,321 +1,283 @@
 import {
-  BarChart3,
-  Bell,
-  Calendar,
-  CreditCard,
-  Gift,
-  Globe,
   Heart,
-  Image,
   LayoutDashboard,
-  LogOut,
-  MessageCircle,
-  Music,
-  Palette,
+  Plus,
   Settings,
   Users,
+  Image,
+  Calendar,
+  Gift,
+  MessageSquare,
+  LogOut,
+  ChevronDown,
+  Menu,
   X,
+  Eye,
+  Music,
+  Palette,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { useUIStore } from "@/stores/uiStore";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-interface SidebarItem {
+interface NavItem {
+  title: string;
   icon: React.ElementType;
-  label: string;
-  href: string;
-  badge?: number;
-  children?: SidebarItem[];
+  href?: string;
+  children?: { title: string; href: string }[];
 }
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const userNavItems: NavItem[] = [
+  {
+    title: "Tổng quan",
+    icon: LayoutDashboard,
+    href: "/dashboard",
+  },
+  {
+    title: "Tiệc cưới",
+    icon: Heart,
+    href: "/dashboard/weddings",
+  },
+  {
+    title: "Khách mời",
+    icon: Users,
+    href: "/dashboard/guests",
+  },
+  {
+    title: "Thư viện ảnh",
+    icon: Image,
+    href: "/dashboard/gallery",
+  },
+  {
+    title: "Sự kiện",
+    icon: Calendar,
+    href: "/dashboard/events",
+  },
+  {
+    title: "Mừng cưới",
+    icon: Gift,
+    href: "/dashboard/gifts",
+  },
+  {
+    title: "Lời chúc",
+    icon: MessageSquare,
+    href: "/dashboard/wishes",
+  },
+  {
+    title: "Giao diện",
+    icon: Palette,
+    href: "/dashboard/theme",
+  },
+  {
+    title: "Cài đặt",
+    icon: Settings,
+    href: "/dashboard/settings",
+  },
+];
 
-export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+const adminNavItems: NavItem[] = [
+  {
+    title: "Tổng quan",
+    icon: LayoutDashboard,
+    href: "/admin",
+  },
+  {
+    title: "Người dùng",
+    icon: Users,
+    href: "/admin/users",
+  },
+  {
+    title: "Tiệc cưới",
+    icon: Heart,
+    href: "/admin/weddings",
+  },
+  {
+    title: "Cài đặt hệ thống",
+    icon: Settings,
+    href: "/admin/settings",
+  },
+];
+
+export const Sidebar = () => {
   const location = useLocation();
-  const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
+  const { logout, user } = useAuthStore();
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  // Main navigation items
-  const navItems: SidebarItem[] = [
-    {
-      icon: LayoutDashboard,
-      label: "Dashboard",
-      href: "/dashboard",
-    },
-    {
-      icon: Calendar,
-      label: "My Weddings",
-      href: "/dashboard/weddings",
-      badge: 3,
-    },
-    {
-      icon: Users,
-      label: "Guest Management",
-      href: "/dashboard/guests",
-      children: [
-        { icon: Users, label: "Guest List", href: "/dashboard/guests/list" },
-        { icon: Calendar, label: "RSVPs", href: "/dashboard/guests/rsvps" },
-        { icon: Gift, label: "Gifts", href: "/dashboard/guests/gifts" },
-      ],
-    },
-    {
-      icon: Image,
-      label: "Media Gallery",
-      href: "/dashboard/media",
-    },
-    {
-      icon: MessageCircle,
-      label: "Wishes & Messages",
-      href: "/dashboard/wishes",
-      badge: 12,
-    },
-    {
-      icon: BarChart3,
-      label: "Analytics",
-      href: "/dashboard/analytics",
-    },
-    {
-      icon: Palette,
-      label: "Theme & Design",
-      href: "/dashboard/design",
-      children: [
-        { icon: Palette, label: "Colors", href: "/dashboard/design/colors" },
-        { icon: Music, label: "Music", href: "/dashboard/design/music" },
-        {
-          icon: Globe,
-          label: "Languages",
-          href: "/dashboard/design/languages",
-        },
-      ],
-    },
-    {
-      icon: Settings,
-      label: "Settings",
-      href: "/dashboard/settings",
-      children: [
-        {
-          icon: CreditCard,
-          label: "Subscription",
-          href: "/dashboard/settings/subscription",
-        },
-        {
-          icon: Bell,
-          label: "Notifications",
-          href: "/dashboard/settings/notifications",
-        },
-        { icon: Users, label: "Team", href: "/dashboard/settings/team" },
-      ],
-    },
-  ];
+  const navItems = user.phone === "admin" ? adminNavItems : userNavItems;
 
-  const isActive = (href: string) => {
-    return (
-      location.pathname === href || location.pathname.startsWith(`${href}/`)
+  const toggleExpanded = (title: string) => {
+    setExpandedItems((prev) =>
+      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
     );
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+  const isActive = (href: string) => location.pathname === href;
+  const isChildActive = (children?: { href: string }[]) =>
+    children?.some((child) => location.pathname === child.href);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
     <>
-      {/* Mobile Sidebar */}
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Sidebar */}
       <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: isOpen ? 0 : -300 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        initial={false}
+        animate={{ x: sidebarOpen ? 0 : -280 }}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col",
-          "lg:static lg:translate-x-0 lg:z-0"
+          "fixed lg:static inset-y-0 left-0 z-50 w-[280px] bg-card border-r border-border",
+          "flex flex-col h-screen lg:h-auto",
+          "lg:translate-x-0"
         )}
       >
-        {/* Logo */}
-        <div className="p-6 border-b border-border">
-          <Link to="/" className="flex items-center gap-3" onClick={onClose}>
-            <div className="relative">
-              <Heart className="w-7 h-7 text-primary fill-primary" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-wedding-gold rounded-full border-2 border-card" />
-            </div>
-            <div>
-              <span className="font-display text-xl font-semibold bg-gradient-to-r from-primary to-wedding-gold bg-clip-text text-transparent">
-                WeddingElegance
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <Link to="/" className="flex items-center gap-2">
+            <Heart className="w-7 h-7 text-primary fill-primary" />
+            <span className="font-display text-xl font-semibold">
+              True loves
+            </span>
+          </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X className="w-5 h-5" />
+          </Button>
+        </div>
+
+        {/* User Info */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-primary font-medium">
+                {user?.fullName?.charAt(0).toUpperCase()}
               </span>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Premium Invitations
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium truncate">{user?.fullName}</p>
+              <p className="text-sm text-muted-foreground truncate">
+                {user?.email}
               </p>
             </div>
-          </Link>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3">
-          <div className="space-y-1">
-            {navItems.map((item) => {
-              const active = isActive(item.href);
-              const Icon = item.icon;
-
-              return (
-                <div key={item.href}>
+        <nav className="flex-1 overflow-y-auto p-4">
+          <ul className="space-y-1">
+            {navItems.map((item) => (
+              <li key={item.title}>
+                {item.children ? (
+                  <div>
+                    <button
+                      onClick={() => toggleExpanded(item.title)}
+                      className={cn(
+                        "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm",
+                        "hover:bg-muted transition-colors",
+                        isChildActive(item.children) && "bg-muted"
+                      )}
+                    >
+                      <span className="flex items-center gap-3">
+                        <item.icon className="w-5 h-5" />
+                        {item.title}
+                      </span>
+                      <ChevronDown
+                        className={cn(
+                          "w-4 h-4 transition-transform",
+                          expandedItems.includes(item.title) && "rotate-180"
+                        )}
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {expandedItems.includes(item.title) && (
+                        <motion.ul
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden ml-8 mt-1 space-y-1"
+                        >
+                          {item.children.map((child) => (
+                            <li key={child.href}>
+                              <Link
+                                to={child.href}
+                                className={cn(
+                                  "block px-3 py-2 rounded-lg text-sm",
+                                  "hover:bg-muted transition-colors",
+                                  isActive(child.href) &&
+                                    "bg-primary/10 text-primary font-medium"
+                                )}
+                              >
+                                {child.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
                   <Link
-                    to={item.href}
-                    onClick={onClose}
+                    to={item.href!}
                     className={cn(
-                      "flex items-center justify-between px-3 py-2.5 rounded-lg transition-all",
-                      "hover:bg-secondary hover:text-foreground",
-                      active
-                        ? "bg-secondary text-foreground font-medium"
-                        : "text-muted-foreground"
+                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm",
+                      "hover:bg-muted transition-colors",
+                      isActive(item.href!) &&
+                        "bg-primary/10 text-primary font-medium"
                     )}
                   >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-5 h-5" />
-                      <span>{item.label}</span>
-                    </div>
-                    {item.badge && (
-                      <Badge
-                        variant="secondary"
-                        className="h-5 px-1.5 text-xs min-w-5 justify-center"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+                    <item.icon className="w-5 h-5" />
+                    {item.title}
                   </Link>
-
-                  {/* Sub-items */}
-                  {item.children && active && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="ml-9 mt-1 space-y-1 border-l border-border pl-3"
-                    >
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          to={child.href}
-                          onClick={onClose}
-                          className={cn(
-                            "flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg",
-                            "hover:bg-secondary/50 hover:text-foreground",
-                            isActive(child.href)
-                              ? "text-primary"
-                              : "text-muted-foreground"
-                          )}
-                        >
-                          <child.icon className="w-4 h-4" />
-                          <span>{child.label}</span>
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Pro Upgrade Banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-8 mx-3 p-3 rounded-lg bg-gradient-to-r from-wedding-gold/10 to-primary/10 border border-wedding-gold/20"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-md bg-wedding-gold flex items-center justify-center">
-                <Heart className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm font-medium">Upgrade to Pro</span>
-            </div>
-            <p className="text-xs text-muted-foreground mb-3">
-              Unlock premium features and templates
-            </p>
-            <Button
-              size="sm"
-              className="w-full bg-gradient-to-r from-wedding-gold to-primary hover:opacity-90"
-              asChild
-            >
-              <Link to="/dashboard/settings/subscription" onClick={onClose}>
-                Upgrade Now
-              </Link>
-            </Button>
-          </motion.div>
+                )}
+              </li>
+            ))}
+          </ul>
         </nav>
 
-        {/* User Section */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-3">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={user?.avatar} alt={user?.fullName} />
-              <AvatarFallback className="bg-primary/10 text-primary">
-                {user?.fullName ? getInitials(user.fullName) : "U"}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">
-                {user?.fullName || "User Name"}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                {user?.email || "user@example.com"}
-              </p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => {
-                logout();
-                onClose();
-              }}
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 text-xs"
-              asChild
-            >
-              <Link to="/dashboard/settings" onClick={onClose}>
-                Settings
+        {/* Footer */}
+        <div className="p-4 border-t border-border space-y-2">
+          {user.role !== "admin" && (
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <Link to="/demo/blush-romance">
+                <Eye className="w-4 h-4 mr-2" />
+                Xem thiệp mẫu
               </Link>
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 text-xs"
-              asChild
-            >
-              <Link to="/help" onClick={onClose}>
-                Help
-              </Link>
-            </Button>
-          </div>
+          )}
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground hover:text-destructive"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Đăng xuất
+          </Button>
         </div>
       </motion.aside>
-
-      {/* Close Button (Mobile only) */}
-      {isOpen && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="fixed top-4 left-64 z-50 lg:hidden"
-          onClick={onClose}
-        >
-          <X className="h-5 w-5" />
-        </Button>
-      )}
     </>
   );
 };

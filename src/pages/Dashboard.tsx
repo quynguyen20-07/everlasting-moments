@@ -1,6 +1,7 @@
 import { Eye, Heart, Menu, MessageCircle, Plus, Users } from "lucide-react";
 import { WeddingCard } from "@/components/wedding/WeddingCard";
 import { useWeddingStore } from "@/stores/weddingStore";
+import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";

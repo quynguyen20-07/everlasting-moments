@@ -43,6 +43,7 @@ export async function graphqlRequest<T>(
     const response = await fetch(GRAPHQL_ENDPOINT, {
       method: "POST",
       headers,
+      credentials: "include",
       body: JSON.stringify({
         query,
         variables,

@@ -1,70 +1,46 @@
-import { DashboardHeader } from "@/components/dashboard/DashboardSidebar";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Heart } from "lucide-react";
-import { ReactNode, useState } from "react";
-import { Link } from "react-router-dom";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useUIStore } from "@/stores/uiStore";
+import { Outlet } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 import { Sidebar } from "./Sidebar";
+import { Header } from "./Header";
 
-interface MainLayoutProps {
-  children: ReactNode;
+interface DashboardLayoutProps {
+  isAdmin?: boolean;
   title?: string;
   description?: string;
-  headerActions?: ReactNode;
-  showStats?: boolean;
-  fullWidth?: boolean;
+  showCreateButton?: boolean;
+  showSearch?: boolean;
 }
 
-export const MainLayout = ({
-  children,
-  title = "Dashboard",
+export const DashboardLayout = ({
+  isAdmin = false,
+  title,
   description,
-  headerActions,
-  showStats = false,
-  fullWidth = false,
-}: MainLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  showCreateButton = false,
+  showSearch = false,
+}: DashboardLayoutProps) => {
+  const { sidebarOpen } = useUIStore();
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Mobile Sidebar Overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-foreground/50 backdrop-blur-sm z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      {/* Main Content */}
-      <main className="flex-1 lg:ml-64">
-        {/* Top Header */}
-        <DashboardHeader />
-
-        {/* Content Container */}
-        <div className="p-4 md:p-6 lg:p-8">
-          {/* Stats Section (optional) */}
-          {showStats && (
-            <div className="mb-8">
-              {/* Stats grid sẽ được thêm sau nếu cần */}
-            </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="flex">
+        <Sidebar />
+        <main
+          className={cn(
+            "flex-1 min-h-[calc(100vh-3.5rem)] lg:min-h-screen",
+            "transition-all duration-300"
           )}
-
-          {/* Main Content */}
-          <div className={cn("space-y-6", !fullWidth && "max-w-7xl mx-auto")}>
-            {children}
-          </div>
-        </div>
-      </main>
+        >
+          <ErrorBoundary>
+            <div className="container max-w-7xl py-6 px-4 lg:px-8">
+              <Outlet />
+            </div>
+          </ErrorBoundary>
+        </main>
+      </div>
     </div>
   );
 };
