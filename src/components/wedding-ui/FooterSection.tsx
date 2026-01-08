@@ -16,8 +16,21 @@ const FooterSection: React.FC<FooterSectionProps> = ({
 }) => {
   return (
     <footer
-      className="py-12 border-t"
-      style={{ borderColor: `${colors.primary}20` }}
+      className="py-12 border-t-[0.4px]"
+      style={{
+        borderTop: "1px solid transparent",
+        background: `
+        linear-gradient(
+          to bottom,
+          ${colors.accent}CC 0%,   
+          ${colors.accent}80 40%,   
+          ${colors.accent}00 75%,   
+          ${colors.accent}CC 100%
+        )
+      `,
+        backgroundClip: "padding-box, border-box",
+        borderImage: `linear-gradient(to right, ${colors.primary}33, ${colors.primary}33) 1`,
+      }}
     >
       <div className="container mx-auto px-4 text-center">
         <Heart

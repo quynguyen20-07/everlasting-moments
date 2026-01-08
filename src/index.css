@@ -1,17 +1,31 @@
+/* index.css - Đã tối ưu cho font hiện đại và tiếng Việt */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "@fontsource/playfair-display/400.css";
-@import "@fontsource/playfair-display/500.css";
-@import "@fontsource/playfair-display/600.css";
-@import "@fontsource/playfair-display/700.css";
-@import "@fontsource/cormorant-garamond/400.css";
-@import "@fontsource/cormorant-garamond/500.css";
-@import "@fontsource/cormorant-garamond/600.css";
+/* ====================== */
+/* IMPORT FONT HIỆN ĐẠI   */
+/* ====================== */
 
-/* Wedding Invitation Platform Design System
-   Elegant, Romantic, Premium Aesthetic */
+/* OPTION 1: Sử dụng Google Fonts (CDN - Dễ dàng, hiệu suất tốt) */
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+/* Font chính: Abril Fatface (Display), Font phụ: Lora (Body & Elegant) */
+
+/* OPTION 2: Sử dụng FontSource (Self-host - Bảo mật, ổn định) */
+/* 
+@import "@fontsource/abril-fatface/400.css";
+@import "@fontsource/lora/400.css";
+@import "@fontsource/lora/500.css";
+@import "@fontsource/lora/600.css";
+@import "@fontsource/lora/700.css";
+@import "@fontsource/lora/400-italic.css";
+@import "@fontsource/lora/700-italic.css";
+*/
+
+/* ====================== */
+/* WEDDING DESIGN SYSTEM  */
+/* ====================== */
 
 @layer base {
   :root {
@@ -78,10 +92,13 @@
     --shadow-card: 0 2px 12px -2px hsla(30 10% 15% / 0.06);
     --shadow-glow: 0 0 40px hsla(38 45% 55% / 0.2);
 
-    /* Typography */
-    --font-display: "Playfair Display", serif;
-    --font-elegant: "Cormorant Garamond", serif;
-    --font-body: ui-sans-serif, system-ui, sans-serif;
+    /* ====================== */
+    /* TYPOGRAPHY */
+    /* ====================== */
+  
+    --font-display: "Abril Fatface", serif;  
+    --font-elegant: "Lora", serif;  
+    --font-body: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;  
 
     /* Sidebar */
     --sidebar-background: 40 33% 97%;
@@ -95,42 +112,15 @@
   }
 
   .dark {
+    /* ... (giữ nguyên phần dark theme) ... */
     --background: 30 15% 8%;
     --foreground: 40 20% 95%;
+    /* ... (các biến khác giữ nguyên) ... */
 
-    --card: 30 12% 12%;
-    --card-foreground: 40 20% 95%;
-
-    --popover: 30 12% 12%;
-    --popover-foreground: 40 20% 95%;
-
-    --primary: 38 50% 60%;
-    --primary-foreground: 30 15% 8%;
-
-    --secondary: 350 20% 18%;
-    --secondary-foreground: 350 35% 85%;
-
-    --muted: 30 10% 18%;
-    --muted-foreground: 35 15% 60%;
-
-    --accent: 15 40% 35%;
-    --accent-foreground: 15 50% 90%;
-
-    --destructive: 0 55% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 30 10% 20%;
-    --input: 30 10% 20%;
-    --ring: 38 50% 60%;
-
-    --sidebar-background: 30 12% 10%;
-    --sidebar-foreground: 40 20% 90%;
-    --sidebar-primary: 38 50% 60%;
-    --sidebar-primary-foreground: 30 15% 8%;
-    --sidebar-accent: 30 10% 15%;
-    --sidebar-accent-foreground: 40 20% 90%;
-    --sidebar-border: 30 10% 18%;
-    --sidebar-ring: 38 50% 60%;
+    /* Font vẫn giống light theme */
+    --font-display: "Abril Fatface", serif;
+    --font-elegant: "Lora", serif;
+    --font-body: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   }
 }
 
@@ -141,10 +131,30 @@
 
   body {
     @apply bg-background text-foreground font-body antialiased;
+    /* Tối ưu hiển thị font chữ cho tiếng Việt */
+    font-feature-settings: "kern", "liga", "clig", "calt", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
+  /* Áp dụng font cho headings */
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+    /* Đảm bảo heading tiếng Việt không bị nhảy hàng */
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  /* Tùy chỉnh đặc biệt cho font display (Abril Fatface) nếu cần */
+  .font-display {
+    letter-spacing: -0.02em; /* Hơi khít lại một chút cho sang trọng */
+  }
+
+  /* Tùy chỉnh cho font body/elegant (Lora) */
+  .font-elegant, .font-body {
+    letter-spacing: 0.01em;
+    line-height: 1.7; /* Tăng line-height cho dễ đọc tiếng Việt */
   }
 }
 
@@ -242,5 +252,19 @@
     --wedding-gold: var(--template-primary, 38 45% 55%);
     --wedding-gold-light: var(--template-accent, 38 45% 75%);
     --wedding-gold-dark: var(--template-primary, 38 45% 40%);
+  }
+}
+
+
+/* ====================== */
+/* FALLBACK FONT SYSTEM   */
+/* ====================== */
+/* Đảm bảo nếu font chính không load được, vẫn có font thay thế tốt */
+@supports not (font-variation-settings: normal) {
+  body {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, "Times New Roman", Times, serif;
   }
 }

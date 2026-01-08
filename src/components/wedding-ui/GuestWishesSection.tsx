@@ -1,5 +1,7 @@
 import { MessageCircle, Send } from "lucide-react";
+import { formatDateStr } from "@/lib/utils";
 import { ColorScheme, Wish } from "@/types";
+// import { formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 import { Textarea } from "../ui/textarea";
@@ -27,7 +29,18 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
   onSubmit,
 }) => {
   return (
-    <section className="py-20 md:py-28">
+    <section
+      className="py-20 md:py-28"
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${colors.accent}CC 0%,   
+          ${colors.accent}80 40%,   
+          ${colors.accent}00 75%,   
+          ${colors.accent}CC 100%   
+        )`,
+      }}
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -152,7 +165,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                         {wish.guestName}
                       </p>
                       <p className="text-sm" style={{ color: colors.muted }}>
-                        {wish.createdAt}
+                        {formatDateStr(wish.createdAt)}
                       </p>
                     </div>
                   </div>

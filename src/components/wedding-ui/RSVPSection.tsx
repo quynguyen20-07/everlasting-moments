@@ -29,7 +29,15 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
     <section
       id="rsvp"
       className="py-20 md:py-28"
-      style={{ background: `${colors.accent}05` }}
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${colors.accent}CC 0%,   
+          ${colors.accent}80 40%,   
+          ${colors.accent}00 75%,   
+          ${colors.accent}CC 100%   
+        )`,
+      }}
     >
       <div className="container mx-auto px-4">
         <motion.div
@@ -61,7 +69,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
           className="max-w-2xl mx-auto"
         >
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <div>
+            <div className="md:col-span-2">
               <label
                 className="block text-sm font-semibold mb-3"
                 style={{ color: colors.text }}
@@ -82,7 +90,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 }}
               />
             </div>
-            <div>
+            {/* <div>
               <label
                 className="block text-sm font-semibold mb-3"
                 style={{ color: colors.text }}
@@ -125,7 +133,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                   background: "white",
                 }}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">

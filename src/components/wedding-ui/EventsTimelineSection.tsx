@@ -14,7 +14,15 @@ const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({
   return (
     <section
       className="py-20 md:py-28"
-      style={{ background: `${colors.accent}05` }}
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${colors.accent}CC 0%,   
+          ${colors.accent}80 40%,   
+          ${colors.accent}00 75%,   
+          ${colors.accent}CC 100%   
+        )`,
+      }}
     >
       <div className="container mx-auto px-4">
         <motion.div

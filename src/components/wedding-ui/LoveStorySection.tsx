@@ -12,7 +12,17 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   story,
 }) => {
   return (
-    <section className="py-20 md:py-28">
+    <section
+      className="py-20 md:py-28"
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${colors.accent}00 0%,
+          ${colors.accent}80 40%,
+          ${colors.accent}CC 75%
+        )`,
+      }}
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

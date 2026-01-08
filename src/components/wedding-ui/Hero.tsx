@@ -1,45 +1,23 @@
 import {
-  ArrowLeft,
-  Calendar,
-  Camera,
   ChevronDown,
-  Clock,
-  Facebook,
   Flower2,
   Gem,
   Heart,
-  Instagram,
-  Link as LinkIcon,
-  MapPin,
-  MessageCircle,
-  Pause,
-  Play,
-  Send,
   Share2,
   Sparkles,
   Users,
-  X,
 } from "lucide-react";
-import {
-  COLOR_SCHEMES,
-  coupleData,
-  DEFAULT_COLORS,
-  TEMPLATES_LIST,
-} from "@/lib/utils";
-import { ColorScheme, TemplateInfo, CoupleData, Countdown } from "@/types";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-import { Textarea } from "@/components/ui/textarea";
+import { ColorScheme, Countdown, CoupleData, TemplateInfo } from "@/types";
+import { formatDateStr, formatLunarVietnamese } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
 
 export type HeroProps = {
   colors: ColorScheme;
   template: TemplateInfo;
   coupleData: CoupleData;
   countdown: Countdown;
+  date: string;
   setShowShareModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -49,6 +27,7 @@ const Hero: React.FC<HeroProps> = ({
   coupleData,
   countdown,
   setShowShareModal,
+  date,
 }) => {
   return (
     <section
@@ -69,11 +48,17 @@ const Hero: React.FC<HeroProps> = ({
         />
 
         {/* Floral Elements */}
-        <div className="absolute top-10 left-10 opacity-10">
-          <Flower2 className="w-32 h-32" style={{ color: colors.primary }} />
+        <div className="absolute top-5 left-5 md:top-10 md:left-10 opacity-10">
+          <Flower2
+            className="w-20 h-20 md:w-32 md:h-32"
+            style={{ color: colors.primary }}
+          />
         </div>
-        <div className="absolute bottom-10 right-10 opacity-10">
-          <Gem className="w-32 h-32" style={{ color: colors.secondary }} />
+        <div className="absolute bottom-5 md:bottom-10 right-5 md:right-10 opacity-10">
+          <Gem
+            className="w-20 h-20 md:w-32 md:h-32"
+            style={{ color: colors.secondary }}
+          />
         </div>
       </div>
 
@@ -124,7 +109,14 @@ const Hero: React.FC<HeroProps> = ({
               className="font-display text-3xl md:text-4xl font-semibold"
               style={{ color: colors.text }}
             >
-              14 Tháng 2, 2025
+              {formatDateStr(date)}
+            </p>
+            <p
+              className="font-display text-base md:text-lg font-normal italic"
+              style={{ color: colors.text }}
+            >
+              {`Tức Ngày ${formatLunarVietnamese(date)}`}
+              {/* (Tức Ngày 25 Tháng 10 Năm Ất Tỵ) */}
             </p>
           </div>
 

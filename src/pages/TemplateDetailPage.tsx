@@ -1,23 +1,10 @@
 import {
   ArrowLeft,
-  Calendar,
-  Camera,
-  ChevronDown,
-  Clock,
   Facebook,
-  Flower2,
-  Gem,
-  Heart,
   Instagram,
   Link as LinkIcon,
-  MapPin,
-  MessageCircle,
   Pause,
   Play,
-  Send,
-  Share2,
-  Sparkles,
-  Users,
   X,
 } from "lucide-react";
 import {
@@ -26,21 +13,17 @@ import {
   DEFAULT_COLORS,
   TEMPLATES_LIST,
 } from "@/lib/utils";
-import GuestWishesSection, {
-  WishFormData,
-} from "@/components/wedding-ui/GuestWishesSection";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
-import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import RSVPSection, { RSVPData } from "@/components/wedding-ui/RSVPSection";
+import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
+import RSVPSection from "@/components/wedding-ui/RSVPSection";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Textarea } from "@/components/ui/textarea";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 const templatesData = Object.fromEntries(
@@ -89,7 +72,7 @@ const TemplateDetailPage = () => {
       },
       { id: 2, alt: "Ảnh cưới 2", src: "/images/wedding01.jpg" },
       { id: 3, alt: "Ảnh cưới 3", src: "/images/wedding02.jpg" },
-      { id: 4, alt: "Ảnh cưới 4", src: "/images/wedding03.jpg" },
+      { id: 4, alt: "Ảnh cưới 4", src: "/images/wedding004.webp" },
       { id: 5, alt: "Ảnh cưới 5", src: "/images/wedding04.jpg" },
       { id: 6, alt: "Ảnh cưới 6", src: "/images/wedding05.jpg" },
     ],
@@ -263,6 +246,7 @@ const TemplateDetailPage = () => {
         template={template}
         coupleData={coupleData}
         countdown={countdown}
+        date={"2026-01-08T10:00:00Z"}
         setShowShareModal={() => setShowShareModal(true)}
       />
 
