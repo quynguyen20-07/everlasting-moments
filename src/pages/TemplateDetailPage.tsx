@@ -1,10 +1,12 @@
 import {
+  ArrowLeft,
   Calendar,
   Camera,
   ChevronDown,
   Clock,
   Facebook,
-  Gift,
+  Flower2,
+  Gem,
   Heart,
   Instagram,
   Link as LinkIcon,
@@ -14,22 +16,23 @@ import {
   Play,
   Send,
   Share2,
+  Sparkles,
   Users,
   X,
-  ArrowLeft,
-  Sparkles,
-  Flower2,
-  Gem,
 } from "lucide-react";
-import { useEffect, useState, useMemo, useRef, useId } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { MusicPlayer } from "@/components/public-wedding";
+import {
+  COLOR_SCHEMES,
+  coupleData,
+  DEFAULT_COLORS,
+  TEMPLATES_LIST,
+} from "@/lib/utils";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { TEMPLATES_LIST } from "@/lib/utils";
 
 const templatesData = Object.fromEntries(
   TEMPLATES_LIST.map((t) => [
@@ -41,145 +44,10 @@ const templatesData = Object.fromEntries(
   ])
 );
 
-// Color schemes for the 6 premium templates
-const COLOR_SCHEMES = {
-  "golden-elegance": {
-    primary: "#B8860B", // Dark golden rod
-    secondary: "#D4AF37", // Gold
-    accent: "#F5DEB3", // Wheat
-    background: "#FFFEF7", // Cream
-    text: "#3D2914", // Dark brown
-    muted: "#8B7355", // Tan
-  },
-  "blush-romance": {
-    primary: "#DB7093", // Pale violet red
-    secondary: "#FFB6C1", // Light pink
-    accent: "#FFF0F5", // Lavender blush
-    background: "#FFF8FA", // Very light pink
-    text: "#4A0E2B", // Dark pink
-    muted: "#C08497", // Dusty rose
-  },
-  "sage-garden": {
-    primary: "#6B8E6B", // Sage green
-    secondary: "#8FBC8F", // Dark sea green
-    accent: "#F0FFF0", // Honeydew
-    background: "#F5FAF5", // Light green tint
-    text: "#2D4A2D", // Forest green
-    muted: "#698B69", // Olive drab
-  },
-  "midnight-luxe": {
-    primary: "#D4AF37", // Gold
-    secondary: "#1E3A5F", // Dark navy
-    accent: "#C9B037", // Metallic gold
-    background: "#0F172A", // Dark navy
-    text: "#F1E5D1", // Cream
-    muted: "#94A3B8", // Slate
-  },
-  "pure-minimal": {
-    primary: "#1A1A1A", // Near black
-    secondary: "#4A4A4A", // Dark gray
-    accent: "#F5F5F5", // White smoke
-    background: "#FFFFFF", // White
-    text: "#1A1A1A", // Near black
-    muted: "#6B6B6B", // Gray
-  },
-  "lavender-dream": {
-    primary: "#9370DB", // Medium purple
-    secondary: "#B19CD9", // Light purple
-    accent: "#E6E6FA", // Lavender
-    background: "#FAF8FF", // Very light purple
-    text: "#4A3A6A", // Dark purple
-    muted: "#8B7CB8", // Medium lavender
-  },
-};
-
-// Default color scheme fallback (golden elegance)
-const DEFAULT_COLORS = {
-  primary: "#B8860B",
-  secondary: "#D4AF37",
-  accent: "#F5DEB3",
-  background: "#FFFEF7",
-  text: "#3D2914",
-  muted: "#8B7355",
-};
-
-// Mock couple data
-const coupleData = {
-  bride: { name: "Ngọc Linh", fullName: "Nguyễn Ngọc Linh" },
-  groom: { name: "Minh Tuấn", fullName: "Trần Minh Tuấn" },
-  weddingDate: new Date("2025-02-14T10:00:00"),
-  story: `Trong một chiều mưa Đà Nẵng, tại quán cà phê nhỏ ven sông Hàn, 
-  chúng tôi đã gặp nhau một cách tình cờ. Một cuốn sách rơi, một ánh mắt giao nhau, 
-  và thế là hành trình yêu thương bắt đầu. 
-  Từ những buổi hoàng hôn trên biển Mỹ Khê đến những đêm trò chuyện dài dưới ánh sao, 
-  mỗi khoảnh khắc đều là một mảnh ghép hoàn hảo cho tình yêu của chúng tôi. 
-  Hôm nay, chúng tôi chính thức bước tiếp hành trình ấy bên nhau, 
-  với lời hứa về một tương lai tràn đầy yêu thương và hạnh phúc.`,
-  events: [
-    {
-      name: "Lễ Vu Quy",
-      date: "14/02/2025",
-      time: "08:00",
-      location: "Nhà Gái - 123 Đường ABC, Quận 1, TP.HCM",
-      description: "Lễ đón dâu truyền thống",
-    },
-    {
-      name: "Lễ Thành Hôn",
-      date: "14/02/2025",
-      time: "10:00",
-      location: "Nhà Trai - 456 Đường XYZ, Quận 7, TP.HCM",
-      description: "Lễ kết hôn chính thức",
-    },
-    {
-      name: "Tiệc Cưới",
-      date: "14/02/2025",
-      time: "18:00",
-      location: "Trung Tâm Hội Nghị White Palace",
-      description: "Tiệc mừng cùng gia đình và bạn bè",
-    },
-  ],
-  wishes: [
-    {
-      name: "Anh Khoa",
-      message:
-        "Chúc hai bạn trăm năm hạnh phúc! Tình yêu luôn nồng ấm như ngày đầu 💕",
-      date: "2 ngày trước",
-    },
-    {
-      name: "Hương Giang",
-      message:
-        "Mong rằng cuộc sống của hai bạn sẽ tràn ngập tiếng cười và yêu thương!",
-      date: "3 ngày trước",
-    },
-    {
-      name: "Minh Đức",
-      message:
-        "Chúc mừng hai bạn! Thật hạnh phúc khi chứng kiến tình yêu của các bạn nở hoa ✨",
-      date: "1 ngày trước",
-    },
-  ],
-  bankInfo: {
-    bride: {
-      bank: "Vietcombank",
-      account: "1234567890",
-      name: "NGUYEN NGOC LINH",
-      branch: "Chi nhánh Hồ Chí Minh",
-    },
-    groom: {
-      bank: "Techcombank",
-      account: "0987654321",
-      name: "TRAN MINH TUAN",
-      branch: "Chi nhánh Hà Nội",
-    },
-  },
-};
-
 const TemplateDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  const divId = useId();
 
   const template = templatesData[slug as keyof typeof templatesData];
   const colors =
@@ -191,7 +59,7 @@ const TemplateDetailPage = () => {
     minutes: 0,
     seconds: 0,
   });
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [rsvpData, setRsvpData] = useState({
     name: "",
@@ -202,7 +70,6 @@ const TemplateDetailPage = () => {
   const [wishData, setWishData] = useState({ name: "", message: "" });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [hasInteracted, setHasInteracted] = useState(false);
 
   const galleryImages = useMemo(
     () => [
@@ -246,7 +113,6 @@ const TemplateDetailPage = () => {
   }, [template, navigate]);
 
   useEffect(() => {
-    // const audio = new Audio("/public/music/beautiful-in-white.mp3");
     const audio = new Audio("/music/i-do.mp3");
     audio.loop = true;
     audio.volume = 0.6;
@@ -254,13 +120,61 @@ const TemplateDetailPage = () => {
     audio.onplay = () => setIsPlaying(true);
     audio.onpause = () => setIsPlaying(false);
 
-    audioRef.current = audio;
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        console.log("Audio started successfully");
+      } catch (error) {
+        console.log("Autoplay was prevented, user interaction required");
+        // Nếu bị chặn, chờ user tương tác
+        const handleUserInteraction = () => {
+          audio.play().catch((e) => console.log("Still cannot play:", e));
+          // Xóa event listeners sau khi user tương tác
+          document.removeEventListener("click", handleUserInteraction);
+          document.removeEventListener("touchstart", handleUserInteraction);
+          document.removeEventListener("keydown", handleUserInteraction);
+        };
 
+        // Thêm event listeners cho các interaction
+        document.addEventListener("click", handleUserInteraction, {
+          once: true,
+        });
+        document.addEventListener("touchstart", handleUserInteraction, {
+          once: true,
+        });
+        document.addEventListener("keydown", handleUserInteraction, {
+          once: true,
+        });
+      }
+    };
+
+    audioRef.current = audio;
+    playAudio();
+
+    // Cleanup
     return () => {
       audio.pause();
       audioRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    try {
+      if (isPlaying) {
+        audioRef.current.play().catch((error) => {
+          console.error("Play failed:", error);
+          setIsPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    } catch (err) {
+      console.error("Audio error:", err);
+      setIsPlaying(false);
+    }
+  }, [isPlaying]);
 
   const handleRSVP = (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,20 +198,24 @@ const TemplateDetailPage = () => {
     setCurrentImageIndex(index);
   };
 
-  const toggleMusic = async () => {
+  const toggleMusic = () => {
     if (!audioRef.current) return;
 
-    try {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        await audioRef.current.play();
-        setIsPlaying(true);
-        setHasInteracted(true);
-      }
-    } catch (err) {
-      console.error("Audio play bị chặn:", err);
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((error) => {
+          console.error("Failed to play:", error);
+          toast({
+            title: "Không thể phát nhạc",
+            description: "Vui lòng bấm vào trang để bật nhạc",
+            variant: "destructive",
+          });
+        });
     }
   };
 
@@ -476,15 +394,15 @@ const TemplateDetailPage = () => {
                 transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
                 whileHover={{ scale: 1.08 }}
                 className="
-      relative
-      w-32 h-32
-      md:w-48 md:h-48
-      rounded-full
-      border-4
-      shadow-xl
-      overflow-hidden
-      flex-shrink-0
-    "
+                relative
+                w-32 h-32
+                md:w-48 md:h-48
+                rounded-full
+                border-4
+                shadow-xl
+                overflow-hidden
+                flex-shrink-0
+              "
                 style={{ borderColor: `${colors.primary}30` }}
               >
                 {/* Gradient UNDER image */}
@@ -788,7 +706,7 @@ const TemplateDetailPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
             {galleryImages.map((image, index) => (
               <motion.div
-                key={divId}
+                key={image.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

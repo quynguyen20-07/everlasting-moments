@@ -87,3 +87,134 @@ export const getTemplateById = (id: string) => {
 export const getAllTemplates = () => {
   return TEMPLATES_LIST;
 };
+
+export const COLOR_SCHEMES = {
+  "blush-romance": {
+    primary: "#DB7093", // Pale violet red
+    secondary: "#FFB6C1", // Light pink
+    accent: "#FFF0F5", // Lavender blush
+    background: "#FFF8FA", // Very light pink
+    text: "#4A0E2B", // Dark pink
+    muted: "#C08497", // Dusty rose
+  },
+  "golden-elegance": {
+    primary: "#B8860B", // Dark golden rod
+    secondary: "#D4AF37", // Gold
+    accent: "#F5DEB3", // Wheat
+    background: "#FFFEF7", // Cream
+    text: "#3D2914", // Dark brown
+    muted: "#8B7355", // Tan
+  },
+  "sage-garden": {
+    primary: "#6B8E6B", // Sage green
+    secondary: "#8FBC8F", // Dark sea green
+    accent: "#F0FFF0", // Honeydew
+    background: "#F5FAF5", // Light green tint
+    text: "#2D4A2D", // Forest green
+    muted: "#698B69", // Olive drab
+  },
+  "midnight-luxe": {
+    primary: "#D4AF37", // Gold
+    secondary: "#1E3A5F", // Dark navy
+    accent: "#C9B037", // Metallic gold
+    background: "#0F172A", // Dark navy
+    text: "#F1E5D1", // Cream
+    muted: "#94A3B8", // Slate
+  },
+  "pure-minimal": {
+    primary: "#1A1A1A", // Near black
+    secondary: "#4A4A4A", // Dark gray
+    accent: "#F5F5F5", // White smoke
+    background: "#FFFFFF", // White
+    text: "#1A1A1A", // Near black
+    muted: "#6B6B6B", // Gray
+  },
+  "lavender-dream": {
+    primary: "#9370DB", // Medium purple
+    secondary: "#B19CD9", // Light purple
+    accent: "#E6E6FA", // Lavender
+    background: "#FAF8FF", // Very light purple
+    text: "#4A3A6A", // Dark purple
+    muted: "#8B7CB8", // Medium lavender
+  },
+};
+
+// Default color scheme fallback (golden elegance)
+export const DEFAULT_COLORS = {
+  primary: "#B8860B",
+  secondary: "#D4AF37",
+  accent: "#F5DEB3",
+  background: "#FFFEF7",
+  text: "#3D2914",
+  muted: "#8B7355",
+};
+
+export const coupleData = {
+  bride: { name: "Ngọc Linh", fullName: "Nguyễn Ngọc Linh" },
+  groom: { name: "Minh Tuấn", fullName: "Trần Minh Tuấn" },
+  weddingDate: new Date("2025-02-14T10:00:00"),
+  story: `Trong một chiều mưa Đà Nẵng, tại quán cà phê nhỏ ven sông Hàn, 
+  chúng tôi đã gặp nhau một cách tình cờ. Một cuốn sách rơi, một ánh mắt giao nhau, 
+  và thế là hành trình yêu thương bắt đầu. 
+  Từ những buổi hoàng hôn trên biển Mỹ Khê đến những đêm trò chuyện dài dưới ánh sao, 
+  mỗi khoảnh khắc đều là một mảnh ghép hoàn hảo cho tình yêu của chúng tôi. 
+  Hôm nay, chúng tôi chính thức bước tiếp hành trình ấy bên nhau, 
+  với lời hứa về một tương lai tràn đầy yêu thương và hạnh phúc.`,
+  events: [
+    {
+      name: "Lễ Vu Quy",
+      date: "14/02/2025",
+      time: "08:00",
+      location: "Nhà Gái - 123 Đường ABC, Quận 1, TP.HCM",
+      description: "Lễ đón dâu truyền thống",
+    },
+    {
+      name: "Lễ Thành Hôn",
+      date: "14/02/2025",
+      time: "10:00",
+      location: "Nhà Trai - 456 Đường XYZ, Quận 7, TP.HCM",
+      description: "Lễ kết hôn chính thức",
+    },
+    {
+      name: "Tiệc Cưới",
+      date: "14/02/2025",
+      time: "18:00",
+      location: "Trung Tâm Hội Nghị White Palace",
+      description: "Tiệc mừng cùng gia đình và bạn bè",
+    },
+  ],
+  wishes: [
+    {
+      name: "Anh Khoa",
+      message:
+        "Chúc hai bạn trăm năm hạnh phúc! Tình yêu luôn nồng ấm như ngày đầu 💕",
+      date: "2 ngày trước",
+    },
+    {
+      name: "Hương Giang",
+      message:
+        "Mong rằng cuộc sống của hai bạn sẽ tràn ngập tiếng cười và yêu thương!",
+      date: "3 ngày trước",
+    },
+    {
+      name: "Minh Đức",
+      message:
+        "Chúc mừng hai bạn! Thật hạnh phúc khi chứng kiến tình yêu của các bạn nở hoa ✨",
+      date: "1 ngày trước",
+    },
+  ],
+  bankInfo: {
+    bride: {
+      bank: "Vietcombank",
+      account: "1234567890",
+      name: "NGUYEN NGOC LINH",
+      branch: "Chi nhánh Hồ Chí Minh",
+    },
+    groom: {
+      bank: "Techcombank",
+      account: "0987654321",
+      name: "TRAN MINH TUAN",
+      branch: "Chi nhánh Hà Nội",
+    },
+  },
+};
