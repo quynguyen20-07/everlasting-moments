@@ -30,7 +30,7 @@ const createWeddingSchema = z.object({
   name: z.string().min(1, "Vui lòng nhập tên thiệp cưới").max(100),
   brideName: z.string().min(1, "Vui lòng nhập tên cô dâu").max(50),
   groomName: z.string().min(1, "Vui lòng nhập tên chú rể").max(50),
-  eventDate: z.string().optional(),
+  eventDate: z.string().min(1, "Vui lòng chọn ngày cưới"),
 });
 
 type CreateWeddingFormData = z.infer<typeof createWeddingSchema>;
@@ -65,10 +65,17 @@ export const CreateWeddingDialog = ({
 
     setIsLoading(true);
     try {
-      // Create wedding with just title - bride/groom managed separately via updateBride/updateGroom
+      // Create wedding with all required fields
       const wedding = await createWedding({
         title: data.name,
         language: "vi",
+        weddingDate: data.eventDate,
+        bride: {
+          fullName: data.brideName,
+        },
+        groom: {
+          fullName: data.groomName,
+        },
       });
 
       toast({
@@ -78,7 +85,7 @@ export const CreateWeddingDialog = ({
 
       onOpenChange(false);
       form.reset();
-      navigate(`/dashboard/weddings`);
+      navigate(`/dashboard/wedding/${wedding.id}/edit`);
     } catch (error) {
       toast({
         title: "Lỗi",
@@ -159,7 +166,7 @@ export const CreateWeddingDialog = ({
               name="eventDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ngày cưới (tùy chọn)</FormLabel>
+                  <FormLabel>Ngày cưới</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>

@@ -58,7 +58,16 @@ const WeddingEdit = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { currentWedding, isLoading, fetchWedding, updateWedding, publishWedding, unpublishWedding } = useWeddingStore();
+  const { 
+    currentWedding, 
+    isLoading, 
+    fetchWedding, 
+    updateWedding, 
+    updateBride, 
+    updateGroom,
+    publishWedding, 
+    unpublishWedding 
+  } = useWeddingStore();
   
   const [activeTab, setActiveTab] = useState("couple");
   const [isSaving, setIsSaving] = useState(false);
@@ -96,11 +105,49 @@ const WeddingEdit = () => {
     }
   }, [currentWedding, brideGroomForm]);
 
-  const handleManualSave = async () => {
+  const handleSaveBrideGroom = async (data: BrideGroomFormData) => {
     if (!id || !currentWedding) return;
+    
     setIsSaving(true);
     try {
-      // For now, just update title - bride/groom updates need separate API calls
+      // Update bride and groom in parallel
+      await Promise.all([
+        updateBride(id, {
+          fullName: data.bride.fullName,
+          shortBio: data.bride.shortBio,
+          familyInfo: data.bride.familyInfo,
+        }),
+        updateGroom(id, {
+          fullName: data.groom.fullName,
+          shortBio: data.groom.shortBio,
+          familyInfo: data.groom.familyInfo,
+        }),
+      ]);
+      
+      setLastSaved(new Date());
+      toast({ title: "Đã lưu", description: "Thông tin cô dâu & chú rể đã được cập nhật." });
+    } catch (error) {
+      toast({ title: "Lỗi", description: "Không thể lưu thông tin.", variant: "destructive" });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleManualSave = async () => {
+    if (!id || !currentWedding) return;
+    
+    // If on couple tab, save bride/groom form
+    if (activeTab === "couple") {
+      const isValid = await brideGroomForm.trigger();
+      if (isValid) {
+        await handleSaveBrideGroom(brideGroomForm.getValues());
+      }
+      return;
+    }
+    
+    // Otherwise save general wedding info
+    setIsSaving(true);
+    try {
       await updateWedding(id, { title: currentWedding.title });
       setLastSaved(new Date());
       toast({ title: "Đã lưu", description: "Thay đổi đã được lưu thành công." });
@@ -150,7 +197,7 @@ const WeddingEdit = () => {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
+            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/weddings")}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
@@ -200,7 +247,7 @@ const WeddingEdit = () => {
 
           <TabsContent value="couple">
             <Form {...brideGroomForm}>
-              <form className="grid gap-6 md:grid-cols-2">
+              <form onSubmit={brideGroomForm.handleSubmit(handleSaveBrideGroom)} className="grid gap-6 md:grid-cols-2">
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -238,6 +285,13 @@ const WeddingEdit = () => {
                     )} />
                   </CardContent>
                 </Card>
+
+                <div className="md:col-span-2">
+                  <Button type="submit" variant="gold" disabled={isSaving} className="w-full sm:w-auto">
+                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                    Lưu thông tin cô dâu & chú rể
+                  </Button>
+                </div>
               </form>
             </Form>
           </TabsContent>

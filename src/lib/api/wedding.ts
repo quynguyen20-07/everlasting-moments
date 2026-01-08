@@ -90,10 +90,13 @@ export const getWeddingDetailApi = async (weddingId: string): Promise<WeddingDet
 };
 
 // ==================== Create Wedding ====================
-interface CreateWeddingInput {
+export interface CreateWeddingInput {
   title: string;
   slug?: string;
   language?: string;
+  weddingDate: string;
+  bride: BrideGroomInput;
+  groom: BrideGroomInput;
 }
 
 interface CreateWeddingResponse {

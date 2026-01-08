@@ -9,9 +9,12 @@ import {
   publishWeddingApi,
   unpublishWeddingApi,
   getPublicWeddingApi,
+  updateBrideApi,
+  updateGroomApi,
   type ListWedding,
+  type CreateWeddingInput,
 } from "@/lib/api/wedding";
-import type { Wedding } from "@/types/graphql";
+import type { Wedding, BrideGroomInput, WeddingDetail } from "@/types/graphql";
 
 interface WeddingStore {
   // State
@@ -26,8 +29,10 @@ interface WeddingStore {
   fetchWeddings: () => Promise<void>;
   fetchWedding: (id: string) => Promise<void>;
   fetchPublicWedding: (slug: string) => Promise<void>;
-  createWedding: (input: { title: string; slug?: string; language?: string }) => Promise<Wedding>;
+  createWedding: (input: CreateWeddingInput) => Promise<Wedding>;
   updateWedding: (id: string, updates: { title?: string; slug?: string; status?: string }) => Promise<void>;
+  updateBride: (weddingId: string, bride: BrideGroomInput) => Promise<WeddingDetail>;
+  updateGroom: (weddingId: string, groom: BrideGroomInput) => Promise<WeddingDetail>;
   updateStatus: (id: string, status: string) => Promise<void>;
   publishWedding: (id: string) => Promise<void>;
   unpublishWedding: (id: string) => Promise<void>;
@@ -37,7 +42,7 @@ interface WeddingStore {
   clearPublicWedding: () => void;
 }
 
-export const useWeddingStore = create<WeddingStore>((set) => ({
+export const useWeddingStore = create<WeddingStore>((set, get) => ({
   // Initial state
   weddings: [],
   currentWedding: null,
@@ -145,6 +150,96 @@ export const useWeddingStore = create<WeddingStore>((set) => ({
       }));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Không thể cập nhật thiệp cưới";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== UPDATE BRIDE =====
+  updateBride: async (weddingId, bride) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await updateBrideApi(weddingId, bride);
+
+      // Update currentWedding's weddingDetail
+      const { currentWedding } = get();
+      if (currentWedding?.id === weddingId) {
+        set({
+          currentWedding: {
+            ...currentWedding,
+            weddingDetail: updatedDetail,
+          },
+          isLoading: false,
+        });
+      } else {
+        set({ isLoading: false });
+      }
+
+      // Update weddings list
+      set((state) => ({
+        weddings: state.weddings.map((w) =>
+          w.id === weddingId
+            ? {
+                ...w,
+                weddingDetail: {
+                  id: updatedDetail.id,
+                  weddingId: updatedDetail.weddingId,
+                  bride: updatedDetail.bride,
+                  groom: updatedDetail.groom,
+                },
+              }
+            : w
+        ),
+      }));
+
+      return updatedDetail;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin cô dâu";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== UPDATE GROOM =====
+  updateGroom: async (weddingId, groom) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await updateGroomApi(weddingId, groom);
+
+      // Update currentWedding's weddingDetail
+      const { currentWedding } = get();
+      if (currentWedding?.id === weddingId) {
+        set({
+          currentWedding: {
+            ...currentWedding,
+            weddingDetail: updatedDetail,
+          },
+          isLoading: false,
+        });
+      } else {
+        set({ isLoading: false });
+      }
+
+      // Update weddings list
+      set((state) => ({
+        weddings: state.weddings.map((w) =>
+          w.id === weddingId
+            ? {
+                ...w,
+                weddingDetail: {
+                  id: updatedDetail.id,
+                  weddingId: updatedDetail.weddingId,
+                  bride: updatedDetail.bride,
+                  groom: updatedDetail.groom,
+                },
+              }
+            : w
+        ),
+      }));
+
+      return updatedDetail;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin chú rể";
       set({ error: message, isLoading: false });
       throw error;
     }
