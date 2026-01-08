@@ -4,7 +4,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Save,
@@ -20,6 +19,7 @@ import {
   Settings,
   Loader2,
   Check,
+  BookHeart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +37,7 @@ import {
 import { useWeddingStore } from "@/stores/weddingStore";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { LoveStoryManager } from "@/components/wedding/LoveStoryManager";
 
 // Form schemas
 const brideGroomSchema = z.object({
@@ -183,6 +184,7 @@ const WeddingEdit = () => {
 
   const tabItems = [
     { value: "couple", label: "Cô dâu & Chú rể", icon: Heart },
+    { value: "lovestory", label: "Câu chuyện", icon: BookHeart },
     { value: "events", label: "Sự kiện", icon: Calendar },
     { value: "gallery", label: "Thư viện ảnh", icon: Image },
     { value: "guests", label: "Khách mời", icon: Users },
@@ -245,6 +247,7 @@ const WeddingEdit = () => {
             ))}
           </TabsList>
 
+          {/* Couple Tab */}
           <TabsContent value="couple">
             <Form {...brideGroomForm}>
               <form onSubmit={brideGroomForm.handleSubmit(handleSaveBrideGroom)} className="grid gap-6 md:grid-cols-2">
@@ -296,6 +299,15 @@ const WeddingEdit = () => {
             </Form>
           </TabsContent>
 
+          {/* Love Story Tab */}
+          <TabsContent value="lovestory">
+            <LoveStoryManager
+              weddingId={currentWedding.id}
+              stories={currentWedding.weddingDetail?.loveStories || []}
+            />
+          </TabsContent>
+
+          {/* Other tabs - coming soon */}
           {["events", "gallery", "guests", "gifts", "theme", "settings"].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <Card><CardContent className="py-12 text-center text-muted-foreground">Tính năng đang được phát triển...</CardContent></Card>
