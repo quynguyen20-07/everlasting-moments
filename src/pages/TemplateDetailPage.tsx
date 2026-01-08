@@ -209,13 +209,13 @@ const TemplateDetailPage = () => {
       {
         id: 1,
         alt: "Ảnh cưới 1",
-        src: "/src/assets/images/wedding06.webp",
+        src: "/images/wedding06.webp",
       },
-      { id: 2, alt: "Ảnh cưới 2", src: "/src/assets/images/wedding01.jpg" },
-      { id: 3, alt: "Ảnh cưới 3", src: "/src/assets/images/wedding02.jpg" },
-      { id: 4, alt: "Ảnh cưới 4", src: "/src/assets/images/wedding03.jpg" },
-      { id: 5, alt: "Ảnh cưới 5", src: "/src/assets/images/wedding04.jpg" },
-      { id: 6, alt: "Ảnh cưới 6", src: "/src/assets/images/wedding05.jpg" },
+      { id: 2, alt: "Ảnh cưới 2", src: "/images/wedding01.jpg" },
+      { id: 3, alt: "Ảnh cưới 3", src: "/images/wedding02.jpg" },
+      { id: 4, alt: "Ảnh cưới 4", src: "/images/wedding03.jpg" },
+      { id: 5, alt: "Ảnh cưới 5", src: "/images/wedding04.jpg" },
+      { id: 6, alt: "Ảnh cưới 6", src: "/images/wedding05.jpg" },
     ],
     []
   );
@@ -247,7 +247,7 @@ const TemplateDetailPage = () => {
 
   useEffect(() => {
     // const audio = new Audio("/public/music/beautiful-in-white.mp3");
-    const audio = new Audio("/public/music/i-do.mp3");
+    const audio = new Audio("/music/i-do.mp3");
     audio.loop = true;
     audio.volume = 0.6;
 
@@ -438,7 +438,7 @@ const TemplateDetailPage = () => {
 
                 {/* Image */}
                 <motion.img
-                  src="/src/assets/images/co-dau.webp"
+                  src="/images/co-dau.webp"
                   alt="Cô dâu"
                   className="absolute inset-0 w-full h-full object-cover z-10"
                   animate={{ y: [0, -6, 0] }}
@@ -497,7 +497,7 @@ const TemplateDetailPage = () => {
 
                 {/* Image */}
                 <motion.img
-                  src="/src/assets/images/chu-re.webp"
+                  src="/images/chu-re.webp"
                   alt="Chú Rể"
                   className="absolute inset-0 w-full h-full object-cover z-10"
                   animate={{ y: [0, 6, 0] }}
