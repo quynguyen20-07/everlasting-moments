@@ -33,7 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
-import { weddingTemplates } from "@/lib/templates/wedding-templates";
+import { TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
 
 const createWeddingSchema = z.object({
   // Basic info
@@ -78,7 +78,7 @@ const FONT_OPTIONS = [
 const MUSIC_OPTIONS = [
   { value: "/music/beautiful-in-white.mp3", label: "Beautiful in White" },
   { value: "/music/i-do.mp3", label: "I Do" },
-  { value: "", label: "Không có nhạc" },
+  { value: "none", label: "Không có nhạc" },
 ];
 
 export const CreateWeddingDialog = ({
@@ -133,11 +133,12 @@ export const CreateWeddingDialog = ({
           familyInfo: data.groomFamilyInfo,
         },
         themeSettings: {
+          template: data.template,
           primaryColor: data.primaryColor,
           secondaryColor: data.secondaryColor,
           fontHeading: data.fontHeading,
           fontBody: data.fontBody,
-          backgroundMusic: data.backgroundMusic,
+          backgroundMusic: data.backgroundMusic === "none" ? undefined : data.backgroundMusic,
         },
       });
 
@@ -413,9 +414,9 @@ export const CreateWeddingDialog = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {weddingTemplates.map((template) => (
+                          {TEMPLATES_LIST.map((template) => (
                             <SelectItem key={template.id} value={template.id}>
-                              {template.nameVi}
+                              {template.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
