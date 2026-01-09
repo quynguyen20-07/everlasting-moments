@@ -42,12 +42,15 @@ export interface LoveStoryEvent {
 
 export interface WeddingEvent {
   id: string;
-  type: "ceremony" | "reception" | "other";
-  name: string;
-  date: string;
-  time: string;
+  title: string;
+  type: "ceremony" | "reception" | "party" | string;
+  eventDate: number | string;
+  startTime?: string;
+  endTime?: string;
   address: string;
-  mapUrl?: string;
+  locationLat?: number;
+  locationLng?: number;
+  mapEmbedUrl?: string;
   description?: string;
 }
 

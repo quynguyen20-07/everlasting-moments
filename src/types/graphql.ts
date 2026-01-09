@@ -75,18 +75,18 @@ export interface LoveStoryInput {
 export interface WeddingEvent {
   id: string;
   title: string;
-  type: "ceremony" | "reception" | string;
+  type: "ceremony" | "reception" | "party" | string;
 
-  eventDate: string;
+  eventDate: string | number;
 
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
 
   address: string;
 
-  locationLat: number | null;
-  locationLng: number | null;
-  mapEmbedUrl: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
+  mapEmbedUrl?: string | null;
 
   description?: string;
 }
