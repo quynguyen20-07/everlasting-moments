@@ -17,9 +17,9 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
       style={{
         background: `linear-gradient(
           to bottom,
-          ${colors.accent}00 0%,
-          ${colors.accent}80 40%,
-          ${colors.accent}CC 75%
+          ${colors?.accent}00 0%,
+          ${colors?.accent}80 40%,
+          ${colors?.accent}CC 75%
         )`,
       }}
     >
@@ -32,29 +32,29 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
         >
           <Heart
             className="w-14 h-14 mx-auto mb-8 animate-pulse"
-            style={{ color: colors.primary, fill: `${colors.primary}20` }}
+            style={{ color: colors?.primary, fill: `${colors?.primary}20` }}
           />
           <h2
             className="font-display text-4xl md:text-5xl font-bold mb-8"
-            style={{ color: colors.text }}
+            style={{ color: colors?.text }}
           >
             Câu Chuyện Của Chúng Tôi
           </h2>
           <div className="relative">
             <div
               className="absolute -top-4 -left-4 w-8 h-8 rounded-full opacity-30"
-              style={{ background: colors.accent }}
+              style={{ background: colors?.accent }}
             />
             <div
               className="absolute -bottom-4 -right-4 w-8 h-8 rounded-full opacity-30"
-              style={{ background: colors.accent }}
+              style={{ background: colors?.accent }}
             />
             <p
               className="font-serif text-lg md:text-xl leading-relaxed text-justify p-8 rounded-2xl backdrop-blur-sm"
               style={{
-                color: colors.text,
-                background: `${colors.accent}10`,
-                border: `1px solid ${colors.primary}20`,
+                color: colors?.text,
+                background: `${colors?.accent}10`,
+                border: `1px solid ${colors?.primary}20`,
               }}
             >
               {story}

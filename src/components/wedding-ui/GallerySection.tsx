@@ -19,10 +19,10 @@ const GallerySection: React.FC<GallerySectionProps> = ({
       style={{
         background: `linear-gradient(
           to bottom,
-          ${colors.accent}CC 0%,   
-          ${colors.accent}80 40%,   
-          ${colors.accent}00 75%,   
-          ${colors.accent}CC 100%   
+          ${colors?.accent}CC 0%,   
+          ${colors?.accent}80 40%,   
+          ${colors?.accent}00 75%,   
+          ${colors?.accent}CC 100%   
         )`,
       }}
     >
@@ -35,15 +35,15 @@ const GallerySection: React.FC<GallerySectionProps> = ({
         >
           <Camera
             className="w-14 h-14 mx-auto mb-6"
-            style={{ color: colors.primary }}
+            style={{ color: colors?.primary }}
           />
           <h2
             className="font-display text-4xl md:text-5xl font-bold mb-4"
-            style={{ color: colors.text }}
+            style={{ color: colors?.text }}
           >
             Khoảnh Khắc Yêu Thương
           </h2>
-          <p className="text-lg" style={{ color: colors.muted }}>
+          <p className="text-lg" style={{ color: colors?.muted }}>
             Những bức ảnh đẹp nhất trong hành trình của chúng tôi
           </p>
         </motion.div>

@@ -136,6 +136,7 @@ export const WEDDING_BY_SLUG_QUERY = `
         fontHeading
         fontBody
         backgroundMusic
+        template
       }
       viewCount
       publishedAt

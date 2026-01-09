@@ -27,6 +27,25 @@ export type Countdown = {
   seconds: number;
 };
 
+export type TemplateType = {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  accent: string;
+  primaryHsl: string;
+  style: string;
+};
+
+export type ColorType = {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  text: string;
+  muted: string;
+};
+
 export type GalleryImage = {
   id: string | number;
   src: string;

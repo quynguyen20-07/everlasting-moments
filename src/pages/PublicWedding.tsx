@@ -1,34 +1,82 @@
 import {
-  HeroSection,
-  CountdownSection,
-  BrideGroomSection,
-  LoveStorySection,
-  EventsSection,
-  RSVPSection,
-  BankAccountSection,
-  WishesSection,
-  FooterSection,
-  MusicPlayer,
-  TemplateProvider,
-} from "@/components/public-wedding";
-import type { Wedding, BankAccount, Wish } from "@/types/graphql";
-import { getPatternSVG } from "@/lib/templates/wedding-templates";
+  COLOR_SCHEMES,
+  DEFAULT_COLORS,
+  getWeddingCountdown,
+  mapWeddingToCoupleData,
+  TEMPLATES_LIST,
+} from "@/lib/utils";
+import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
+import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
+import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
+import GallerySection from "@/components/wedding-ui/GallerySection";
+import FooterSection from "@/components/wedding-ui/FooterSection";
+import FogRevealHero from "@/components/wedding-ui/FogRevealHero";
+import RSVPSection from "@/components/wedding-ui/RSVPSection";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
-import { getPublicWeddingApi } from "@/lib/api/wedding";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import ShareModal from "@/components/wedding/ShareModal";
+import { getWeddingBySlugApi } from "@/lib/api/wedding";
+import { TemplateProvider } from "@/components/public";
+import { ColorType, TemplateType } from "@/types";
+import Hero from "@/components/wedding-ui/Hero";
+import type { Wedding } from "@/types/graphql";
+import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 
-// Mock bank accounts and wishes for demo (in real app, these would come from API)
-const mockBankAccounts: BankAccount[] = [];
-const mockWishes: Wish[] = [];
+const templatesData = Object.fromEntries(
+  TEMPLATES_LIST.map((t) => [
+    t.id,
+    {
+      ...t,
+      colorName: t.name.toLowerCase(),
+    },
+  ])
+);
 
 export default function PublicWedding() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const { slug } = useParams<{ slug: string }>();
+
   const [wedding, setWedding] = useState<Wedding | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [template, setTemplate] = useState<TemplateType>();
+  const [colors, setColors] = useState<ColorType>();
   const [error, setError] = useState<string | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [rsvpData, setRsvpData] = useState({
+    name: "",
+    attending: true,
+  });
+  const [wishData, setWishData] = useState({ name: "", message: "" });
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const images = useMemo(
+    () => [
+      {
+        id: 1,
+        alt: "Ảnh cưới 1",
+        src: "/images/wedding06.webp",
+      },
+      { id: 2, alt: "Ảnh cưới 2", src: "/images/wedding01.jpg" },
+      { id: 3, alt: "Ảnh cưới 3", src: "/images/wedding02.jpg" },
+      { id: 4, alt: "Ảnh cưới 4", src: "/images/wedding004.webp" },
+      { id: 5, alt: "Ảnh cưới 5", src: "/images/wedding04.jpg" },
+      { id: 6, alt: "Ảnh cưới 6", src: "/images/wedding05.jpg" },
+    ],
+    []
+  );
 
   useEffect(() => {
     async function fetchWedding() {
@@ -39,7 +87,7 @@ export default function PublicWedding() {
       }
 
       try {
-        const data = await getPublicWeddingApi(slug);
+        const data = await getWeddingBySlugApi(slug);
         if (data) {
           setWedding(data);
         } else {
@@ -55,6 +103,103 @@ export default function PublicWedding() {
 
     fetchWedding();
   }, [slug]);
+
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const now = new Date();
+      const diff =
+        mapWeddingToCoupleData(wedding)?.weddingDate?.getTime() - now.getTime();
+
+      if (diff > 0) {
+        setCountdown({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((diff % (1000 * 60)) / 1000),
+        });
+      }
+    };
+
+    calculateCountdown();
+    const interval = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [wedding, navigate, template]);
+
+  useEffect(() => {
+    if (wedding) {
+      const template =
+        templatesData[
+          wedding.themeSettings.template as keyof typeof templatesData
+        ];
+      const colors =
+        COLOR_SCHEMES[
+          wedding.themeSettings.template as keyof typeof COLOR_SCHEMES
+        ] || DEFAULT_COLORS;
+
+      setTemplate(template);
+      setColors(colors);
+    }
+  }, [wedding]);
+
+  useEffect(() => {
+    const audio = new Audio("/music/i-do.mp3");
+    audio.loop = true;
+    audio.volume = 0.6;
+
+    audio.onplay = () => setIsPlaying(true);
+    audio.onpause = () => setIsPlaying(false);
+
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        console.log("Audio started successfully");
+      } catch (error) {
+        const handleUserInteraction = () => {
+          audio.play().catch((e) => console.log("Still cannot play:", e));
+          document.removeEventListener("click", handleUserInteraction);
+          document.removeEventListener("touchstart", handleUserInteraction);
+          document.removeEventListener("keydown", handleUserInteraction);
+        };
+
+        document.addEventListener("click", handleUserInteraction, {
+          once: true,
+        });
+        document.addEventListener("touchstart", handleUserInteraction, {
+          once: true,
+        });
+        document.addEventListener("keydown", handleUserInteraction, {
+          once: true,
+        });
+      }
+    };
+
+    audioRef.current = audio;
+    playAudio();
+
+    // Cleanup
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    try {
+      if (isPlaying) {
+        audioRef.current.play().catch((error) => {
+          console.error("Play failed:", error);
+          setIsPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    } catch (err) {
+      console.error("Audio error:", err);
+      setIsPlaying(false);
+    }
+  }, [isPlaying]);
 
   if (isLoading) {
     return <PageLoading text="Đang tải thiệp mời..." />;
@@ -119,25 +264,47 @@ export default function PublicWedding() {
     (e) => e.type === "ceremony" || e.type === "reception"
   );
 
-  // Determine pattern based on theme
-  const getPatternClass = () => {
-    const primaryColor =
-      wedding.themeSettings?.primaryColor?.toLowerCase() || "";
-    if (primaryColor.includes("pink") || primaryColor.includes("rose"))
-      return "template-pattern-roses";
-    if (primaryColor.includes("green") || primaryColor.includes("sage"))
-      return "template-pattern-botanical";
-    if (primaryColor.includes("navy") || primaryColor.includes("dark"))
-      return "template-pattern-stars";
-    if (
-      primaryColor.includes("white") ||
-      primaryColor.includes("black") ||
-      primaryColor.includes("minimal")
-    )
-      return "template-pattern-geometric";
-    if (primaryColor.includes("purple") || primaryColor.includes("lavender"))
-      return "template-pattern-lavender";
-    return "template-pattern-gold";
+  const handleRSVP = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Đã Xác Nhận!",
+      description: "Cảm ơn bạn đã xác nhận sẽ tham dự.",
+    });
+    setRsvpData({ name: "", attending: true });
+  };
+
+  const handleWish = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    toast({
+      title: "Đã Gửi Lời Chúc!",
+      description: "Cảm ơn bạn đã gửi lời chúc tuyệt vời!",
+    });
+    setWishData({ name: "", message: "" });
+  };
+
+  const handleGalleryClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((error) => {
+          console.error("Failed to play:", error);
+          toast({
+            title: "Không thể phát nhạc",
+            description: "Vui lòng bấm vào trang để bật nhạc",
+            variant: "destructive",
+          });
+        });
+    }
   };
 
   return (
@@ -168,42 +335,68 @@ export default function PublicWedding() {
         <meta property="og:type" content="website" />
       </Helmet>
 
-      {/* Background Music Player */}
-      <MusicPlayer musicUrl={wedding.themeSettings?.backgroundMusic} />
-
-      <main
-        className={`template-wrapper min-h-screen bg-background ${getPatternClass()}`}
-      >
+      <main className={`template-wrapper min-h-screen bg-background ${""}`}>
         {/* Hero Section */}
-        <HeroSection wedding={wedding} />
-
-        {/* Countdown Section */}
-        <CountdownSection wedding={wedding} />
-
-        {/* Bride & Groom Section */}
-        <BrideGroomSection wedding={wedding} />
-
+        <Hero
+          colors={colors}
+          template={template}
+          coupleData={mapWeddingToCoupleData(wedding)}
+          countdown={getWeddingCountdown(wedding.weddingDate)}
+          date={"2026-01-08T10:00:00Z"}
+          setShowShareModal={() => setShowShareModal(true)}
+        />
         {/* Love Story Section */}
-        <LoveStorySection wedding={wedding} />
-
-        {/* Events Section */}
-        <EventsSection wedding={wedding} />
-
-        {/* RSVP Section */}
-        <RSVPSection wedding={wedding} />
-
-        {/* Bank Account Section */}
-        <BankAccountSection
-          bankAccounts={mockBankAccounts}
-          brideFullName={bride?.fullName}
-          groomFullName={groom?.fullName}
+        <LoveStorySection
+          colors={colors}
+          story={mapWeddingToCoupleData(wedding).story}
         />
 
-        {/* Wishes Section */}
-        <WishesSection wedding={wedding} wishes={mockWishes} />
+        {/* Events Timeline */}
+        <EventsTimelineSection
+          colors={colors}
+          events={mapWeddingToCoupleData(wedding).events}
+        />
 
-        {/* Footer Section */}
-        <FooterSection wedding={wedding} />
+        {/* Gallery */}
+        <GallerySection
+          colors={colors}
+          images={images}
+          onImageClick={(index) => handleGalleryClick(index)}
+        />
+
+        {/* RSVP Section */}
+        <RSVPSection
+          colors={colors}
+          rsvpData={rsvpData}
+          setRsvpData={setRsvpData}
+          onSubmit={handleRSVP}
+        />
+
+        {/* Guest Wishes */}
+        <GuestWishesSection
+          colors={colors}
+          wishes={mapWeddingToCoupleData(wedding).wishes}
+          wishData={wishData}
+          onSubmit={handleWish}
+          setWishData={setWishData}
+        />
+
+        {/* Footer */}
+        <FooterSection
+          colors={colors}
+          brideName={mapWeddingToCoupleData(wedding).bride.name}
+          groomName={mapWeddingToCoupleData(wedding).groom.name}
+          weddingDate={"14 Tháng 2, 2025"}
+        />
+
+        {/* Share Modal */}
+        <ShareModal
+          title={"Đã Sao Chép!"}
+          colorsText={colors?.text}
+          colorsPrimary={colors?.primary}
+          open={showShareModal}
+          setOpen={setShowShareModal}
+        />
       </main>
     </TemplateProvider>
   );

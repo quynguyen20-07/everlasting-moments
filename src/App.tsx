@@ -49,7 +49,7 @@ const AppContent = () => {
         }
       />
       <Route path="/demo/:slug" element={<Demo />} />
-      <Route path="/wedding/:slug" element={<PublicWedding />} />
+      <Route path="/weddings/:slug" element={<PublicWedding />} />
 
       <Route path="/templates" element={<TemplatesPage />} />
       <Route path="/templates/:slug" element={<TemplateDetailPage />} />

@@ -31,6 +31,7 @@ export interface ThemeSettings {
   secondaryColor: string;
   fontHeading: string;
   fontBody: string;
+  template: string;
   backgroundMusic?: string;
 }
 
@@ -73,14 +74,20 @@ export interface LoveStoryInput {
 
 export interface WeddingEvent {
   id: string;
-  name: string;
-  type: string;
-  time: string;
-  date?: string;
+  title: string;
+  type: "ceremony" | "reception" | string;
+
+  eventDate: string;
+
+  startTime: string;
+  endTime: string;
+
   address: string;
-  locationLat?: number;
-  locationLng?: number;
-  mapEmbedUrl?: string;
+
+  locationLat: number | null;
+  locationLng: number | null;
+  mapEmbedUrl: string | null;
+
   description?: string;
 }
 
@@ -116,6 +123,7 @@ export interface Wedding {
   slug: string;
   title: string;
   status: string;
+  weddingDate: string;
   language: string;
   themeSettings: ThemeSettings;
   viewCount: number;

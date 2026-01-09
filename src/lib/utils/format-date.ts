@@ -1,6 +1,7 @@
 import { DATE_FORMAT } from "@/constants";
 import { Lunar } from "lunar-javascript";
 import { vi } from "date-fns/locale";
+import { Countdown } from "@/types";
 import { format } from "date-fns";
 
 export function formatDateVN(
@@ -33,6 +34,21 @@ export function formatDateStr(
       : date;
 
   return format(parsedDate, DATE_FORMAT[formatKey], {
+    locale: vi,
+  });
+}
+
+export function formatDateFromTimestamp(
+  timestamp: string | number,
+  formatKey: keyof typeof DATE_FORMAT = "DD_VI_MONTH_YYYY"
+): string {
+  if (!timestamp) return "";
+
+  const ms = typeof timestamp === "string" ? Number(timestamp) : timestamp;
+
+  if (Number.isNaN(ms)) return "";
+
+  return format(new Date(ms), DATE_FORMAT[formatKey], {
     locale: vi,
   });
 }
@@ -109,3 +125,28 @@ export function formatLunarVietnamese(date: Date | string): string {
 
   return `${day} Tháng ${month} Năm ${canVN} ${chiVN}`;
 }
+
+export const getWeddingCountdown = (
+  weddingDate: string | number | Date
+): Countdown => {
+  const target =
+    weddingDate instanceof Date
+      ? weddingDate.getTime()
+      : typeof weddingDate === "string"
+      ? Number(weddingDate)
+      : weddingDate;
+
+  const now = Date.now();
+  const diff = target - now;
+
+  if (diff <= 0 || Number.isNaN(diff)) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+
+  const seconds = Math.floor((diff / 1000) % 60);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  return { days, hours, minutes, seconds };
+};

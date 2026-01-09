@@ -7,8 +7,7 @@ import { Input } from "../ui/input";
 
 export type RSVPData = {
   name: string;
-  phone: string;
-  guests: number | string;
+
   attending: boolean;
 };
 
@@ -32,10 +31,10 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
       style={{
         background: `linear-gradient(
           to bottom,
-          ${colors.accent}CC 0%,   
-          ${colors.accent}80 40%,   
-          ${colors.accent}00 75%,   
-          ${colors.accent}CC 100%   
+          ${colors?.accent}CC 0%,   
+          ${colors?.accent}80 40%,   
+          ${colors?.accent}00 75%,   
+          ${colors?.accent}CC 100%   
         )`,
       }}
     >
@@ -48,15 +47,15 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
         >
           <Users
             className="w-14 h-14 mx-auto mb-6"
-            style={{ color: colors.primary }}
+            style={{ color: colors?.primary }}
           />
           <h2
             className="font-display text-4xl md:text-5xl font-bold mb-4"
-            style={{ color: colors.text }}
+            style={{ color: colors?.text }}
           >
             Xác Nhận Tham Dự
           </h2>
-          <p className="text-lg" style={{ color: colors.muted }}>
+          <p className="text-lg" style={{ color: colors?.muted }}>
             Vui lòng cho chúng tôi biết bạn có thể tham dự hay không
           </p>
         </motion.div>
@@ -72,7 +71,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
             <div className="md:col-span-2">
               <label
                 className="block text-sm font-semibold mb-3"
-                style={{ color: colors.text }}
+                style={{ color: colors?.text }}
               >
                 Tên của bạn *
               </label>
@@ -85,7 +84,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 required
                 className="rounded-xl border-2 p-4"
                 style={{
-                  borderColor: `${colors.primary}30`,
+                  borderColor: `${colors?.primary}30`,
                   background: "white",
                 }}
               />
@@ -93,7 +92,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
             {/* <div>
               <label
                 className="block text-sm font-semibold mb-3"
-                style={{ color: colors.text }}
+                style={{ color: colors?.text }}
               >
                 Số điện thoại *
               </label>
@@ -106,7 +105,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 required
                 className="rounded-xl border-2 p-4"
                 style={{
-                  borderColor: `${colors.primary}30`,
+                  borderColor: `${colors?.primary}30`,
                   background: "white",
                 }}
               />
@@ -114,7 +113,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
             <div className="md:col-span-2">
               <label
                 className="block text-sm font-semibold mb-3"
-                style={{ color: colors.text }}
+                style={{ color: colors?.text }}
               >
                 Số người tham dự *
               </label>
@@ -129,7 +128,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 required
                 className="rounded-xl border-2 p-4"
                 style={{
-                  borderColor: `${colors.primary}30`,
+                  borderColor: `${colors?.primary}30`,
                   background: "white",
                 }}
               />
@@ -145,11 +144,11 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               }`}
               style={{
                 background: rsvpData.attending
-                  ? `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
-                  : `${colors.accent}20`,
-                color: rsvpData.attending ? "white" : colors.text,
+                  ? `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`
+                  : `${colors?.accent}20`,
+                color: rsvpData.attending ? "white" : colors?.text,
                 border: `2px solid ${
-                  rsvpData.attending ? colors.primary : `${colors.primary}30`
+                  rsvpData.attending ? colors?.primary : `${colors?.primary}30`
                 }`,
               }}
               onClick={() => setRsvpData({ ...rsvpData, attending: true })}
@@ -164,11 +163,11 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               }`}
               style={{
                 background: !rsvpData.attending
-                  ? `linear-gradient(135deg, ${colors.muted} 0%, ${colors.text}80 100%)`
-                  : `${colors.accent}20`,
-                color: !rsvpData.attending ? "white" : colors.text,
+                  ? `linear-gradient(135deg, ${colors?.muted} 0%, ${colors?.text}80 100%)`
+                  : `${colors?.accent}20`,
+                color: !rsvpData.attending ? "white" : colors?.text,
                 border: `2px solid ${
-                  !rsvpData.attending ? colors.muted : `${colors.primary}30`
+                  !rsvpData.attending ? colors?.muted : `${colors?.primary}30`
                 }`,
               }}
               onClick={() => setRsvpData({ ...rsvpData, attending: false })}
@@ -182,7 +181,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
             size="lg"
             className="w-full rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             style={{
-              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+              background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
               color: "white",
             }}
           >

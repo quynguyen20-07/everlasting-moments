@@ -14,13 +14,14 @@ import {
   TEMPLATES_LIST,
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
+import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
 import RSVPSection from "@/components/wedding-ui/RSVPSection";
-import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ShareModal from "@/components/wedding/ShareModal";
 import { AnimatePresence, motion } from "framer-motion";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
@@ -55,8 +56,6 @@ const TemplateDetailPage = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [rsvpData, setRsvpData] = useState({
     name: "",
-    phone: "",
-    guests: "1",
     attending: true,
   });
   const [wishData, setWishData] = useState({ name: "", message: "" });
@@ -117,17 +116,13 @@ const TemplateDetailPage = () => {
         await audio.play();
         console.log("Audio started successfully");
       } catch (error) {
-        console.log("Autoplay was prevented, user interaction required");
-        // Nếu bị chặn, chờ user tương tác
         const handleUserInteraction = () => {
           audio.play().catch((e) => console.log("Still cannot play:", e));
-          // Xóa event listeners sau khi user tương tác
           document.removeEventListener("click", handleUserInteraction);
           document.removeEventListener("touchstart", handleUserInteraction);
           document.removeEventListener("keydown", handleUserInteraction);
         };
 
-        // Thêm event listeners cho các interaction
         document.addEventListener("click", handleUserInteraction, {
           once: true,
         });
@@ -174,7 +169,7 @@ const TemplateDetailPage = () => {
       title: "Đã Xác Nhận!",
       description: "Cảm ơn bạn đã xác nhận sẽ tham dự.",
     });
-    setRsvpData({ name: "", phone: "", guests: "1", attending: true });
+    setRsvpData({ name: "", attending: true });
   };
 
   const handleWish = (e: React.FormEvent<HTMLFormElement>) => {
@@ -289,84 +284,13 @@ const TemplateDetailPage = () => {
       />
 
       {/* Share Modal */}
-      <AnimatePresence>
-        {showShareModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowShareModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h3
-                  className="font-display text-2xl font-semibold"
-                  style={{ color: colors.text }}
-                >
-                  Chia Sẻ Thiệp Mời
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowShareModal(false)}
-                  className="hover:bg-red-50"
-                  style={{ color: colors.primary }}
-                >
-                  <X className="w-5 h-5" />
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                {[
-                  { icon: Facebook, label: "Facebook", color: "#1877F2" },
-                  { icon: Instagram, label: "Instagram", color: "#E4405F" },
-                  {
-                    icon: LinkIcon,
-                    label: "Sao Chép",
-                    color: colors.primary,
-                    action: () => {
-                      navigator.clipboard.writeText(window.location.href);
-                      toast({
-                        title: "Đã Sao Chép!",
-                        description:
-                          "Liên kết đã được sao chép vào bộ nhớ tạm.",
-                      });
-                    },
-                  },
-                ].map((item, index) => (
-                  <button
-                    key={item.label}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    style={{
-                      background: `${item.color}10`,
-                      border: `1px solid ${item.color}30`,
-                    }}
-                    onClick={item.action}
-                  >
-                    <item.icon
-                      className="w-8 h-8"
-                      style={{ color: item.color }}
-                    />
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: item.color }}
-                    >
-                      {item.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ShareModal
+        title={"Đã Sao Chép!"}
+        colorsText={colors.text}
+        colorsPrimary={colors.primary}
+        open={showShareModal}
+        setOpen={setShowShareModal}
+      />
 
       {/* Music Toggle */}
       <Button

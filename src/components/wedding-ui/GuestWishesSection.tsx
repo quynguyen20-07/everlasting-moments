@@ -34,10 +34,10 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
       style={{
         background: `linear-gradient(
           to bottom,
-          ${colors.accent}CC 0%,   
-          ${colors.accent}80 40%,   
-          ${colors.accent}00 75%,   
-          ${colors.accent}CC 100%   
+          ${colors?.accent}CC 0%,   
+          ${colors?.accent}80 40%,   
+          ${colors?.accent}00 75%,   
+          ${colors?.accent}CC 100%   
         )`,
       }}
     >
@@ -50,15 +50,15 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
         >
           <MessageCircle
             className="w-14 h-14 mx-auto mb-6"
-            style={{ color: colors.primary }}
+            style={{ color: colors?.primary }}
           />
           <h2
             className="font-display text-4xl md:text-5xl font-bold mb-4"
-            style={{ color: colors.text }}
+            style={{ color: colors?.text }}
           >
             Lời Chúc Từ Trái Tim
           </h2>
-          <p className="text-lg" style={{ color: colors.muted }}>
+          <p className="text-lg" style={{ color: colors?.muted }}>
             Chia sẻ tình yêu và những lời chúc tốt đẹp nhất
           </p>
         </motion.div>
@@ -75,13 +75,13 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
             <div
               className="p-8 rounded-2xl shadow-lg"
               style={{
-                background: `linear-gradient(135deg, ${colors.accent}10 0%, white 100%)`,
-                border: `1px solid ${colors.primary}20`,
+                background: `linear-gradient(135deg, ${colors?.accent}10 0%, white 100%)`,
+                border: `1px solid ${colors?.primary}20`,
               }}
             >
               <h3
                 className="font-display text-2xl font-semibold mb-6"
-                style={{ color: colors.text }}
+                style={{ color: colors?.text }}
               >
                 Gửi lời chúc của bạn
               </h3>
@@ -95,7 +95,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   required
                   className="rounded-xl border-2 p-4"
                   style={{
-                    borderColor: `${colors.primary}30`,
+                    borderColor: `${colors?.primary}30`,
                     background: "white",
                   }}
                 />
@@ -109,7 +109,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   required
                   className="rounded-xl border-2 p-4 resize-none"
                   style={{
-                    borderColor: `${colors.primary}30`,
+                    borderColor: `${colors?.primary}30`,
                     background: "white",
                   }}
                 />
@@ -118,7 +118,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   size="lg"
                   className="rounded-xl px-8"
                   style={{
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                    background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                     color: "white",
                   }}
                 >
@@ -143,15 +143,15 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                 <div
                   className="p-6 rounded-2xl backdrop-blur-sm border shadow-md hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1"
                   style={{
-                    background: `linear-gradient(135deg, ${colors.accent}05 0%, white 100%)`,
-                    borderColor: `${colors.primary}20`,
+                    background: `linear-gradient(135deg, ${colors?.accent}05 0%, white 100%)`,
+                    borderColor: `${colors?.primary}20`,
                   }}
                 >
                   <div className="flex items-start gap-4 mb-4">
                     <div
                       className="w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
                       style={{
-                        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                        background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                         color: "white",
                       }}
                     >
@@ -160,16 +160,16 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                     <div>
                       <p
                         className="font-semibold"
-                        style={{ color: colors.text }}
+                        style={{ color: colors?.text }}
                       >
                         {wish.guestName}
                       </p>
-                      <p className="text-sm" style={{ color: colors.muted }}>
+                      <p className="text-sm" style={{ color: colors?.muted }}>
                         {formatDateStr(wish.createdAt)}
                       </p>
                     </div>
                   </div>
-                  <p className="italic" style={{ color: colors.text }}>
+                  <p className="italic" style={{ color: colors?.text }}>
                     "{wish.message}"
                   </p>
                 </div>
