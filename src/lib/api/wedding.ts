@@ -90,6 +90,15 @@ export const getWeddingDetailApi = async (weddingId: string): Promise<WeddingDet
 };
 
 // ==================== Create Wedding ====================
+export interface ThemeSettingsInput {
+  primaryColor?: string;
+  secondaryColor?: string;
+  fontHeading?: string;
+  fontBody?: string;
+  backgroundMusic?: string;
+  template?: string;
+}
+
 export interface CreateWeddingInput {
   title: string;
   slug?: string;
@@ -97,6 +106,7 @@ export interface CreateWeddingInput {
   weddingDate: string;
   bride: BrideGroomInput;
   groom: BrideGroomInput;
+  themeSettings?: ThemeSettingsInput;
 }
 
 interface CreateWeddingResponse {
