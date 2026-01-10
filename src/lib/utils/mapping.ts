@@ -1,4 +1,4 @@
-import { LoveStory, Wedding, WeddingEvent } from "@/types";
+import { Wedding } from "@/types";
 
 export const mapWeddingToCoupleData = (wedding?: Wedding | null) => {
   if (!wedding) return null;
@@ -20,10 +20,10 @@ export const mapWeddingToCoupleData = (wedding?: Wedding | null) => {
       ? new Date(Number(wedding.weddingDate))
       : null,
 
-    story:
+    stories:
       detail?.loveStories && detail.loveStories.length > 0
-        ? detail.loveStories.map((s: LoveStory) => s.content).join("\n\n")
-        : "",
+        ? detail.loveStories
+        : [],
 
     events: detail?.weddingEvents ?? [],
 

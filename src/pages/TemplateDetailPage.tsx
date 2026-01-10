@@ -1,28 +1,19 @@
 import {
-  ArrowLeft,
-  Facebook,
-  Instagram,
-  Link as LinkIcon,
-  Pause,
-  Play,
-  X,
-} from "lucide-react";
-import {
   COLOR_SCHEMES,
   coupleData,
   DEFAULT_COLORS,
   TEMPLATES_LIST,
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
-import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
 import RSVPSection from "@/components/wedding-ui/RSVPSection";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ShareModal from "@/components/wedding/ShareModal";
-import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, Pause, Play } from "lucide-react";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -246,7 +237,7 @@ const TemplateDetailPage = () => {
       />
 
       {/* Love Story Section */}
-      <LoveStorySection colors={colors} story={coupleData.story} />
+      <LoveStorySection colors={colors} stories={coupleData.story} />
 
       {/* Events Timeline */}
       <EventsTimelineSection colors={colors} events={coupleData.events} />

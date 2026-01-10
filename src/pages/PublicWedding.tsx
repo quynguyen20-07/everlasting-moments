@@ -20,9 +20,11 @@ import { getWeddingBySlugApi } from "@/lib/api/wedding";
 import { TemplateProvider } from "@/components/public";
 import { ColorType, TemplateType } from "@/types";
 import Hero from "@/components/wedding-ui/Hero";
+import { Button } from "@/components/ui/button";
 import type { Wedding } from "@/types/graphql";
 import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet-async";
+import { Pause, Play } from "lucide-react";
 import { motion } from "framer-motion";
 
 const templatesData = Object.fromEntries(
@@ -348,7 +350,7 @@ export default function PublicWedding() {
         {/* Love Story Section */}
         <LoveStorySection
           colors={colors}
-          story={mapWeddingToCoupleData(wedding).story}
+          stories={mapWeddingToCoupleData(wedding).stories}
         />
 
         {/* Events Timeline */}
@@ -397,6 +399,25 @@ export default function PublicWedding() {
           open={showShareModal}
           setOpen={setShowShareModal}
         />
+
+        {/* Music Toggle */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed bottom-6 right-6 z-40 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+          style={{
+            borderColor: colors?.primary,
+            background: "white",
+            color: colors?.primary,
+          }}
+          onClick={toggleMusic}
+        >
+          {isPlaying ? (
+            <Pause className="w-5 h-5" />
+          ) : (
+            <Play className="w-5 h-5" />
+          )}
+        </Button>
       </main>
     </TemplateProvider>
   );

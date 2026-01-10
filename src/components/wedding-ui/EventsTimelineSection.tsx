@@ -1,11 +1,11 @@
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { formatDateFromTimestamp } from "@/lib/utils";
-import { ColorScheme, WeddingEvent } from "@/types";
+import { ColorScheme, IWeddingEvent } from "@/types";
 import { motion } from "framer-motion";
 
 export type EventsTimelineSectionProps = {
   colors: ColorScheme;
-  events: WeddingEvent[];
+  events: IWeddingEvent[];
 };
 
 const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({

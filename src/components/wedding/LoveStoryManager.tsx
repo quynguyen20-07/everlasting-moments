@@ -9,22 +9,11 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  Heart,
-  Plus,
-  Edit,
-  Trash2,
-  Calendar,
-  X,
-  Loader2,
-  BookHeart,
-  GripVertical,
-} from "lucide-react";
-import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -34,39 +23,33 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  BookHeart,
+  Calendar,
+  Edit,
+  Heart,
+  Loader2,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { LoveStoryFormData, loveStorySchema } from "@/validation";
+import { Card, CardContent } from "@/components/ui/card";
 import { useWeddingStore } from "@/stores/weddingStore";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import type { LoveStory } from "@/types/graphql";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { formatDateVN } from "@/lib/utils";
+import type { ILoveStory } from "@/types";
 import { useForm } from "react-hook-form";
-// Love Story Manager Component - CRUD for love story timeline
 import { useState } from "react";
-import { z } from "zod";
-
-const loveStorySchema = z.object({
-  title: z
-    .string()
-    .min(1, "Vui lòng nhập tiêu đề")
-    .max(100, "Tiêu đề tối đa 100 ký tự"),
-  content: z
-    .string()
-    .min(1, "Vui lòng nhập nội dung")
-    .max(1000, "Nội dung tối đa 1000 ký tự"),
-  storyDate: z.string().optional(),
-  imageUrl: z.string().url("URL không hợp lệ").optional().or(z.literal("")),
-});
-
-type LoveStoryFormData = z.infer<typeof loveStorySchema>;
+import z from "zod";
 
 interface LoveStoryManagerProps {
   weddingId: string;
-  stories: LoveStory[];
+  stories: ILoveStory[];
 }
 
 export const LoveStoryManager = ({
@@ -78,7 +61,7 @@ export const LoveStoryManager = ({
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [editingStory, setEditingStory] = useState<LoveStory | null>(null);
+  const [editingStory, setEditingStory] = useState<ILoveStory | null>(null);
   const [deletingStoryId, setDeletingStoryId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -98,12 +81,12 @@ export const LoveStoryManager = ({
     setIsDialogOpen(true);
   };
 
-  const handleOpenEdit = (story: LoveStory) => {
+  const handleOpenEdit = (story: ILoveStory) => {
     setEditingStory(story);
     form.reset({
       title: story.title,
       content: story.content,
-      storyDate: story.storyDate || "",
+      storyDate: story.storyDate,
       imageUrl: story.imageUrl || "",
     });
     setIsDialogOpen(true);

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { WeddingEventManager } from "@/components/wedding/WeddingEventManager";
 import { LoveStoryManager } from "@/components/wedding/LoveStoryManager";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -211,8 +212,18 @@ const WeddingEdit = () => {
     { value: "lovestory", label: "Câu chuyện", icon: BookHeart },
     { value: "events", label: "Sự kiện", icon: Calendar },
     { value: "gallery", label: "Thư viện ảnh", icon: Image },
-    { value: "guests", label: "Khách mời", icon: Users, link: `/dashboard/weddings/${id}/guests` },
-    { value: "wishes", label: "Lời chúc", icon: Heart, link: `/dashboard/weddings/${id}/wishes` },
+    {
+      value: "guests",
+      label: "Khách mời",
+      icon: Users,
+      link: `/dashboard/weddings/${id}/guests`,
+    },
+    {
+      value: "wishes",
+      label: "Lời chúc",
+      icon: Heart,
+      link: `/dashboard/weddings/${id}/wishes`,
+    },
     { value: "gifts", label: "Mừng cưới", icon: Wallet },
     { value: "theme", label: "Giao diện", icon: Palette },
     { value: "settings", label: "Cài đặt", icon: Settings },
@@ -246,7 +257,7 @@ const WeddingEdit = () => {
 
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" asChild>
-              <Link to={`/wedding/${currentWedding.slug}`} target="_blank">
+              <Link to={`/weddings/${currentWedding.slug}`} target="_blank">
                 <Eye className="w-4 h-4 mr-2" /> Xem trước
               </Link>
             </Button>
@@ -444,18 +455,20 @@ const WeddingEdit = () => {
             />
           </TabsContent>
 
+          <TabsContent value="events">
+            <WeddingEventManager weddingId={currentWedding.id} />
+          </TabsContent>
+
           {/* Other tabs - coming soon */}
-          {["events", "gallery", "gifts", "theme", "settings"].map(
-            (tab) => (
-              <TabsContent key={tab} value={tab}>
-                <Card>
-                  <CardContent className="py-12 text-center text-muted-foreground">
-                    Tính năng đang được phát triển...
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            )
-          )}
+          {["gallery", "gifts", "theme", "settings"].map((tab) => (
+            <TabsContent key={tab} value={tab}>
+              <Card>
+                <CardContent className="py-12 text-center text-muted-foreground">
+                  Tính năng đang được phát triển...
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
     </div>
