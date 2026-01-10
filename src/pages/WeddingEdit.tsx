@@ -456,10 +456,7 @@ const WeddingEdit = () => {
           </TabsContent>
 
           <TabsContent value="events">
-            <WeddingEventManager
-              weddingId={currentWedding.id}
-              events={currentWedding.weddingDetail?.weddingEvents || []}
-            />
+            <WeddingEventManager weddingId={currentWedding.id} />
           </TabsContent>
 
           {/* Other tabs - coming soon */}

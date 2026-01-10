@@ -26,6 +26,21 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
+type EventType = "ceremony" | "reception" | "party";
+
+const toDateInputValue = (date?: string | number) => {
+  if (!date) return "";
+
+  if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return date;
+  }
+
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+
+  return d.toISOString().slice(0, 10);
+};
+
 export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
   const { toast } = useToast();
 
@@ -49,6 +64,8 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
       title: "",
       type: "ceremony",
       eventDate: "",
+      startTime: "",
+      endTime: "",
       address: "",
       description: "",
     },
@@ -56,7 +73,15 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
 
   const openCreate = () => {
     setEditing(null);
-    form.reset();
+    form.reset({
+      title: "",
+      type: "ceremony",
+      eventDate: "",
+      startTime: "",
+      endTime: "",
+      address: "",
+      description: "",
+    });
     setOpen(true);
   };
 
@@ -64,8 +89,8 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
     setEditing(event);
     form.reset({
       title: event.title,
-      type: event.type as "ceremony" | "reception" | "party",
-      eventDate: event.eventDate,
+      type: event.type as EventType,
+      eventDate: toDateInputValue(event.eventDate),
       startTime: event.startTime ?? "",
       endTime: event.endTime ?? "",
       address: event.address,
@@ -124,9 +149,6 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
     }
   };
 
-  /* ======================
-     RENDER
-  ====================== */
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -155,7 +177,7 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 <div>
                   <p className="font-semibold">{e.title}</p>
                   <p className="font-medium mb-2 text-muted-foreground">
-                    ⏰ {e.startTime}-{e.endTime} • 📅
+                    ⏰ {e.startTime || "--"} - {e.endTime || "--"} • 📅{" "}
                     {formatDateFromTimestamp(e.eventDate)}
                   </p>
                   <p className="text-sm flex items-start gap-2 text-muted-foreground">
@@ -189,9 +211,6 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
         </div>
       )}
 
-      {/* ======================
-          DIALOG
-      ====================== */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
@@ -218,6 +237,27 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
 
               <FormField
                 control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Loại sự kiện</FormLabel>
+                    <FormControl>
+                      <select
+                        {...field}
+                        className="w-full border rounded px-3 py-2"
+                      >
+                        <option value="ceremony">Lễ cưới</option>
+                        <option value="reception">Tiệc cưới</option>
+                        <option value="party">After Party</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="eventDate"
                 render={({ field }) => (
                   <FormItem>
@@ -229,6 +269,34 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                   </FormItem>
                 )}
               />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="startTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bắt đầu</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="endTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kết thúc</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
