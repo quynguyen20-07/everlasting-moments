@@ -10,7 +10,7 @@ import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
-import FogRevealHero from "@/components/wedding-ui/FogRevealHero";
+import FallingHearts from "@/components/wedding-ui/FallingHearts";
 import RSVPSection from "@/components/wedding-ui/RSVPSection";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,10 +21,10 @@ import { TemplateProvider } from "@/components/public";
 import { ColorType, TemplateType } from "@/types";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
-import type { Wedding } from "@/types/graphql";
 import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet-async";
 import { Pause, Play } from "lucide-react";
+import type { Wedding } from "@/types";
 import { motion } from "framer-motion";
 
 const templatesData = Object.fromEntries(
@@ -336,6 +336,8 @@ export default function PublicWedding() {
         <meta property="og:description" content={wedding.title} />
         <meta property="og:type" content="website" />
       </Helmet>
+
+      <FallingHearts colors={colors} />
 
       <main className={`template-wrapper min-h-screen bg-background ${""}`}>
         {/* Hero Section */}

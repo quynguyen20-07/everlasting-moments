@@ -5,14 +5,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { DashboardLayout } from "@/layouts/MainLayout";
+import GuestManagement from "@/pages/GuestManagement";
+import WishManagement from "@/pages/WishManagement";
+import AdminDashboard from "@/pages/AdminDashboard";
 import PublicWedding from "@/pages/PublicWedding";
 import { useAuthStore } from "@/stores/authStore";
 import { Toaster } from "@/components/ui/toaster";
 import WeddingList from "@/pages/WeddingList";
 import WeddingEdit from "@/pages/WeddingEdit";
-import GuestManagement from "@/pages/GuestManagement";
-import WishManagement from "@/pages/WishManagement";
-import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/NotFound";
 import Index from "@/pages/Index";
 import { useEffect } from "react";
@@ -68,7 +68,10 @@ const AppContent = () => {
         <Route index element={<Dashboard />} />
         <Route path="weddings" element={<WeddingList />} />
         <Route path="weddings/:id/edit" element={<WeddingEdit />} />
-        <Route path="weddings/:weddingId/guests" element={<GuestManagement />} />
+        <Route
+          path="weddings/:weddingId/guests"
+          element={<GuestManagement />}
+        />
         <Route path="weddings/:weddingId/wishes" element={<WishManagement />} />
         <Route
           path="gallery"

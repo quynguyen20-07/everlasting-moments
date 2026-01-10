@@ -7,6 +7,13 @@ export type ColorScheme = {
   muted: string;
 };
 
+export type ITimeCountdown = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
 export type CoupleInfo = {
   name: string;
 };

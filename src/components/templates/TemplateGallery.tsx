@@ -1,7 +1,11 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import {
+  weddingTemplates,
+  type WeddingTemplate,
+} from "@/lib/templates/wedding-templates";
 import { Sparkles } from "lucide-react";
-import { weddingTemplates, type WeddingTemplate } from "@/lib/templates/wedding-templates";
+import { motion } from "framer-motion";
+import { useState } from "react";
+
 import { TemplateCard } from "./TemplateCard";
 
 interface TemplateGalleryProps {
@@ -9,29 +13,33 @@ interface TemplateGalleryProps {
   onSelect?: (template: WeddingTemplate) => void;
 }
 
-const styleLabels: Record<WeddingTemplate['style'], string> = {
-  classic: 'Cổ điển',
-  modern: 'Hiện đại',
-  rustic: 'Mộc mạc',
-  romantic: 'Lãng mạn',
-  minimalist: 'Tối giản',
-  luxury: 'Xa hoa',
+const styleLabels: Record<WeddingTemplate["style"], string> = {
+  classic: "Cổ điển",
+  modern: "Hiện đại",
+  rustic: "Mộc mạc",
+  romantic: "Lãng mạn",
+  minimalist: "Tối giản",
+  luxury: "Xa hoa",
 };
 
-export function TemplateGallery({ selectedId, onSelect }: TemplateGalleryProps) {
-  const [filter, setFilter] = useState<WeddingTemplate['style'] | 'all'>('all');
+export function TemplateGallery({
+  selectedId,
+  onSelect,
+}: TemplateGalleryProps) {
+  const [filter, setFilter] = useState<WeddingTemplate["style"] | "all">("all");
 
-  const filteredTemplates = filter === 'all' 
-    ? weddingTemplates 
-    : weddingTemplates.filter(t => t.style === filter);
+  const filteredTemplates =
+    filter === "all"
+      ? weddingTemplates
+      : weddingTemplates.filter((t) => t.style === filter);
 
-  const styles: Array<WeddingTemplate['style'] | 'all'> = [
-    'all',
-    'classic',
-    'romantic',
-    'minimalist',
-    'luxury',
-    'rustic',
+  const styles: Array<WeddingTemplate["style"] | "all"> = [
+    "all",
+    "classic",
+    "romantic",
+    "minimalist",
+    "luxury",
+    "rustic",
   ];
 
   return (
@@ -44,9 +52,9 @@ export function TemplateGallery({ selectedId, onSelect }: TemplateGalleryProps) 
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-secondary-foreground mb-4"
         >
           <Sparkles className="w-4 h-4" />
-          <span className="font-elegant text-sm">6 Mẫu Thiệp Premium</span>
+          <span className="font-elegant text-sm">Các Mẫu Thiệp Premium</span>
         </motion.div>
-        
+
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -55,14 +63,15 @@ export function TemplateGallery({ selectedId, onSelect }: TemplateGalleryProps) 
         >
           Chọn Mẫu Thiệp Cưới
         </motion.h2>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="font-elegant text-lg text-muted-foreground max-w-xl mx-auto"
         >
-          Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách riêng biệt
+          Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách riêng
+          biệt
         </motion.p>
       </div>
 
@@ -79,13 +88,14 @@ export function TemplateGallery({ selectedId, onSelect }: TemplateGalleryProps) 
             onClick={() => setFilter(style)}
             className={`
               px-4 py-2 rounded-full text-sm font-medium transition-all
-              ${filter === style
-                ? 'gold-gradient text-primary-foreground shadow-soft'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              ${
+                filter === style
+                  ? "gold-gradient text-primary-foreground shadow-soft"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
               }
             `}
           >
-            {style === 'all' ? 'Tất cả' : styleLabels[style]}
+            {style === "all" ? "Tất cả" : styleLabels[style]}
           </button>
         ))}
       </motion.div>

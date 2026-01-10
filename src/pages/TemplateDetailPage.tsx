@@ -2,6 +2,7 @@ import {
   COLOR_SCHEMES,
   coupleData,
   DEFAULT_COLORS,
+  getCountdown,
   TEMPLATES_LIST,
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
@@ -9,6 +10,7 @@ import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
+import FallingHearts from "@/components/wedding-ui/FallingHearts";
 import RSVPSection from "@/components/wedding-ui/RSVPSection";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,6 +19,7 @@ import { ArrowLeft, Pause, Play } from "lucide-react";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { ITimeCountdown } from "@/types";
 
 const templatesData = Object.fromEntries(
   TEMPLATES_LIST.map((t) => [
@@ -33,22 +36,22 @@ const TemplateDetailPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const targetTime = new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000);
+
   const template = templatesData[slug as keyof typeof templatesData];
   const colors =
     COLOR_SCHEMES[slug as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS;
 
-  const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [countdown, setCountdown] = useState<ITimeCountdown>(
+    getCountdown(targetTime)
+  );
   const [isPlaying, setIsPlaying] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [rsvpData, setRsvpData] = useState({
     name: "",
     attending: true,
   });
+
   const [wishData, setWishData] = useState({ name: "", message: "" });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -74,25 +77,15 @@ const TemplateDetailPage = () => {
       navigate("/templates");
       return;
     }
-
-    const calculateCountdown = () => {
-      const now = new Date();
-      const diff = coupleData.weddingDate.getTime() - now.getTime();
-
-      if (diff > 0) {
-        setCountdown({
-          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((diff % (1000 * 60)) / 1000),
-        });
-      }
-    };
-
-    calculateCountdown();
-    const interval = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(interval);
   }, [template, navigate]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown(getCountdown(targetTime));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const audio = new Audio("/music/i-do.mp3");
@@ -225,6 +218,8 @@ const TemplateDetailPage = () => {
           </Button>
         </div>
       </div>
+
+      <FallingHearts colors={colors} />
 
       {/* Hero Section */}
       <Hero

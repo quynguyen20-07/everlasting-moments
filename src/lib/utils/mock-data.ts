@@ -1,3 +1,5 @@
+import { IWeddingEvent } from "@/types";
+
 export const DEFAULT_COLORS = {
   primary: "#B8860B",
   secondary: "#D4AF37",
@@ -7,10 +9,44 @@ export const DEFAULT_COLORS = {
   muted: "#8B7355",
 };
 
+export const mockEvent: IWeddingEvent[] = [
+  {
+    id: "1",
+    title: "Lễ Vu Quy",
+    type: "ceremony",
+    startTime: "08:00",
+    endTime: "09:00",
+    eventDate: Date.now().toString(),
+    address: "Nhà Gái - 123 Đường ABC, Quận 1, TP.HCM",
+    description: "Lễ đón dâu truyền thống",
+  },
+  {
+    id: "2",
+    title: "Lễ Thành Hôn",
+    type: "ceremony",
+    startTime: "10:00",
+    endTime: "12:00",
+    eventDate: Date.now().toString(),
+    address: "Nhà Trai - 456 Đường XYZ, Quận 7, TP.HCM",
+    description: "Lễ kết hôn chính thức",
+  },
+  {
+    id: "3",
+    title: "Tiệc Cưới",
+    type: "reception",
+    startTime: "18:00",
+    endTime: "20:00",
+    eventDate: Date.now().toString(),
+    address: "Trung Tâm Hội Nghị White Palace",
+    description: "Tiệc mừng cùng gia đình và bạn bè",
+  },
+];
+
 export const coupleData = {
   bride: { name: "Ngọc Linh", fullName: "Nguyễn Ngọc Linh" },
   groom: { name: "Minh Tuấn", fullName: "Trần Minh Tuấn" },
   weddingDate: new Date("2025-02-14T10:00:00"),
+
   story: [
     {
       id: "69620ff2b3838ddbf9bd234d",
@@ -21,38 +57,9 @@ export const coupleData = {
       imageUrl: null,
     },
   ],
-  events: [
-    {
-      id: "1",
-      title: "Lễ Vu Quy",
-      type: "Ceremony",
-      startTime: "08:00",
-      endTime: "09:00",
-      eventDate: Date.now(),
-      address: "Nhà Gái - 123 Đường ABC, Quận 1, TP.HCM",
-      description: "Lễ đón dâu truyền thống",
-    },
-    {
-      id: "2",
-      title: "Lễ Thành Hôn",
-      type: "Ceremony",
-      startTime: "10:00",
-      endTime: "12:00",
-      eventDate: Date.now(),
-      address: "Nhà Trai - 456 Đường XYZ, Quận 7, TP.HCM",
-      description: "Lễ kết hôn chính thức",
-    },
-    {
-      id: "3",
-      title: "Tiệc Cưới",
-      type: "Reception",
-      startTime: "18:00",
-      endTime: "20:00",
-      eventDate: Date.now(),
-      address: "Trung Tâm Hội Nghị White Palace",
-      description: "Tiệc mừng cùng gia đình và bạn bè",
-    },
-  ],
+
+  events: mockEvent,
+
   wishes: [
     {
       id: "1",
