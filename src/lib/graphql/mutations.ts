@@ -256,8 +256,14 @@ export const DELETE_LOVE_STORY_MUTATION = `
 // ==================== Wedding Event Mutations ====================
 
 export const ADD_WEDDING_EVENT_MUTATION = `
-  mutation AddWeddingEvent($weddingId: ID!, $event: WeddingEventInput!) {
-    addWeddingEvent(weddingId: $weddingId, event: $event) {
+  mutation AddWeddingEvent(
+    $weddingId: ID!
+    $event: WeddingEventInput!
+  ) {
+    addWeddingEvent(
+      weddingId: $weddingId
+      event: $event
+    ) {
       id
       weddingId
       weddingEvents {
@@ -268,9 +274,6 @@ export const ADD_WEDDING_EVENT_MUTATION = `
         startTime
         endTime
         address
-        locationLat
-        locationLng
-        mapEmbedUrl
         description
       }
     }

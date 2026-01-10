@@ -11,13 +11,16 @@ export const coupleData = {
   bride: { name: "Ngọc Linh", fullName: "Nguyễn Ngọc Linh" },
   groom: { name: "Minh Tuấn", fullName: "Trần Minh Tuấn" },
   weddingDate: new Date("2025-02-14T10:00:00"),
-  story: `Trong một chiều mưa Đà Nẵng, tại quán cà phê nhỏ ven sông Hàn, 
-  chúng tôi đã gặp nhau một cách tình cờ. Một cuốn sách rơi, một ánh mắt giao nhau, 
-  và thế là hành trình yêu thương bắt đầu. 
-  Từ những buổi hoàng hôn trên biển Mỹ Khê đến những đêm trò chuyện dài dưới ánh sao, 
-  mỗi khoảnh khắc đều là một mảnh ghép hoàn hảo cho tình yêu của chúng tôi. 
-  Hôm nay, chúng tôi chính thức bước tiếp hành trình ấy bên nhau, 
-  với lời hứa về một tương lai tràn đầy yêu thương và hạnh phúc.`,
+  story: [
+    {
+      id: "69620ff2b3838ddbf9bd234d",
+      title: "Lần đầu gặp nhau",
+      content:
+        "Trong một chiều mưa Đà Nẵng, tại quán cà phê nhỏ ven sông Hàn, chúng tôi đã gặp nhau một cách tình cờ. Một cuốn sách rơi, một ánh mắt giao nhau, và thế là hành trình yêu thương bắt đầu. Từ những buổi hoàng hôn trên biển Mỹ Khê đến những đêm trò chuyện dài dưới ánh sao, mỗi khoảnh khắc đều là một mảnh ghép hoàn hảo cho tình yêu của chúng tôi. Hôm nay, chúng tôi chính thức bước tiếp hành trình ấy bên nhau, với lời hứa về một tương lai tràn đầy yêu thương và hạnh phúc.\n\n",
+      storyDate: "1767571200000",
+      imageUrl: null,
+    },
+  ],
   events: [
     {
       id: "1",

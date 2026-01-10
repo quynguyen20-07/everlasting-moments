@@ -1,22 +1,14 @@
-// GraphQL Types - Matching backend schema EXACTLY
-// DO NOT modify these types - they match the GraphQL schema
+import {
+  BankAccount,
+  BrideGroom,
+  Guest,
+  ILoveStory,
+  User,
+  Wedding,
+  WeddingDetail,
+} from "./wedding";
 
 export type JSON = Record<string, unknown>;
-
-// ==================== User & Auth ====================
-
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-  phone?: string;
-  avatar?: string;
-  role: string;
-  isActive: boolean;
-  lastLogin?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface AuthPayload {
   user: User;
@@ -24,71 +16,22 @@ export interface AuthPayload {
   refreshToken: string;
 }
 
-// ==================== Theme Settings ====================
-
-export interface ThemeSettings {
-  primaryColor: string;
-  secondaryColor: string;
-  fontHeading: string;
-  fontBody: string;
-  template: string;
-  backgroundMusic?: string;
-}
-
 // ==================== Bride & Groom ====================
-
-export interface BrideGroom {
-  fullName: string;
-  avatar?: string;
-  shortBio?: string;
-  familyInfo?: string;
-  socialLinks?: JSON;
-}
 
 export interface BrideGroomInput {
   fullName: string;
-  avatar?: string;
   shortBio?: string;
   familyInfo?: string;
-  socialLinks?: JSON;
+  avatar?: string;
 }
 
 // ==================== Love Story ====================
-
-export interface LoveStory {
-  id: string;
-  title: string;
-  content: string;
-  storyDate?: string;
-  imageUrl?: string;
-}
 
 export interface LoveStoryInput {
   title: string;
   content: string;
   storyDate?: string;
   imageUrl?: string;
-}
-
-// ==================== Wedding Event ====================
-
-export interface WeddingEvent {
-  id: string;
-  title: string;
-  type: "ceremony" | "reception" | "party" | string;
-
-  eventDate: string | number;
-
-  startTime?: string;
-  endTime?: string;
-
-  address: string;
-
-  locationLat?: number | null;
-  locationLng?: number | null;
-  mapEmbedUrl?: string | null;
-
-  description?: string;
 }
 
 export interface WeddingEventInput {
@@ -102,55 +45,6 @@ export interface WeddingEventInput {
   locationLng?: number;
   mapEmbedUrl?: string;
   description?: string;
-}
-
-// ==================== Wedding Detail ====================
-
-export interface WeddingDetail {
-  id: string;
-  weddingId: string;
-  bride: BrideGroom;
-  groom: BrideGroom;
-  loveStories: LoveStory[];
-  weddingEvents: WeddingEvent[];
-}
-
-// ==================== Wedding ====================
-
-export interface Wedding {
-  id: string;
-  userId: string;
-  slug: string;
-  title: string;
-  status: string;
-  weddingDate: string;
-  language: string;
-  themeSettings: ThemeSettings;
-  viewCount: number;
-  publishedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-  weddingDetail?: WeddingDetail;
-}
-
-// ==================== Guest ====================
-
-export interface Guest {
-  id: string;
-  weddingId: string;
-  fullName: string;
-  email?: string;
-  phone?: string;
-  relationship?: string;
-  numberOfGuests: number;
-  attendanceStatus: string;
-  dietaryRestrictions?: string;
-  message?: string;
-  respondedAt?: string;
-  tableNumber?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface GuestInput {
@@ -184,19 +78,6 @@ export interface GuestStats {
 }
 
 // ==================== Bank Account ====================
-
-export interface BankAccount {
-  id: string;
-  weddingId: string;
-  bankName: string;
-  accountNumber: string;
-  accountHolder: string;
-  branch?: string;
-  qrCodeUrl?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface BankAccountInput {
   bankName: string;
@@ -247,10 +128,6 @@ export interface WeddingsResponse {
   weddings: Wedding[];
 }
 
-export interface WeddingResponse {
-  wedding: Wedding | null;
-}
-
 export interface WeddingBySlugResponse {
   weddingBySlug: Wedding | null;
 }
@@ -291,10 +168,6 @@ export interface LogoutResponse {
 
 export interface RefreshTokenResponse {
   refreshToken: AuthPayload;
-}
-
-export interface CreateWeddingResponse {
-  createWedding: Wedding;
 }
 
 export interface UpdateWeddingResponse {

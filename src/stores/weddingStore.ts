@@ -1,5 +1,3 @@
-// Wedding Store - Zustand store for wedding management with GraphQL
-import { create } from "zustand";
 import {
   getWeddingsApi,
   getWeddingApi,
@@ -15,9 +13,20 @@ import {
   updateLoveStoryApi,
   deleteLoveStoryApi,
   type ListWedding,
-  type CreateWeddingInput,
+  addWeddingEventApi,
+  updateWeddingEventApi,
+  deleteWeddingEventApi,
 } from "@/lib/api/wedding";
-import type { Wedding, BrideGroomInput, WeddingDetail, LoveStoryInput } from "@/types/graphql";
+import type {
+  Wedding,
+  BrideGroomInput,
+  WeddingDetail,
+  LoveStoryInput,
+  CreateWeddingInput,
+  WeddingEventInput,
+  IWeddingEvent,
+} from "@/types";
+import { create } from "zustand";
 
 interface WeddingStore {
   // State
@@ -33,12 +42,48 @@ interface WeddingStore {
   fetchWedding: (id: string) => Promise<void>;
   fetchPublicWedding: (slug: string) => Promise<void>;
   createWedding: (input: CreateWeddingInput) => Promise<Wedding>;
-  updateWedding: (id: string, updates: { title?: string; slug?: string; status?: string }) => Promise<void>;
-  updateBride: (weddingId: string, bride: BrideGroomInput) => Promise<WeddingDetail>;
-  updateGroom: (weddingId: string, groom: BrideGroomInput) => Promise<WeddingDetail>;
-  addLoveStory: (weddingId: string, story: LoveStoryInput) => Promise<WeddingDetail>;
-  updateLoveStory: (weddingId: string, storyId: string, story: LoveStoryInput) => Promise<WeddingDetail>;
-  deleteLoveStory: (weddingId: string, storyId: string) => Promise<WeddingDetail>;
+  updateWedding: (
+    id: string,
+    updates: { title?: string; slug?: string; status?: string }
+  ) => Promise<void>;
+  updateBride: (
+    weddingId: string,
+    bride: BrideGroomInput
+  ) => Promise<WeddingDetail>;
+  updateGroom: (
+    weddingId: string,
+    groom: BrideGroomInput
+  ) => Promise<WeddingDetail>;
+  addLoveStory: (
+    weddingId: string,
+    story: LoveStoryInput
+  ) => Promise<WeddingDetail>;
+  updateLoveStory: (
+    weddingId: string,
+    storyId: string,
+    story: LoveStoryInput
+  ) => Promise<WeddingDetail>;
+  deleteLoveStory: (
+    weddingId: string,
+    storyId: string
+  ) => Promise<WeddingDetail>;
+
+  addWeddingEvent: (
+    weddingId: string,
+    event: WeddingEventInput
+  ) => Promise<WeddingDetail>;
+
+  updateWeddingEvent: (
+    weddingId: string,
+    eventId: string,
+    event: WeddingEventInput
+  ) => Promise<WeddingDetail>;
+
+  deleteWeddingEvent: (
+    weddingId: string,
+    eventId: string
+  ) => Promise<WeddingDetail>;
+
   updateStatus: (id: string, status: string) => Promise<void>;
   publishWedding: (id: string) => Promise<void>;
   unpublishWedding: (id: string) => Promise<void>;
@@ -50,7 +95,7 @@ interface WeddingStore {
 
 // Helper to update currentWedding with new weddingDetail
 const updateCurrentWeddingDetail = (
-  state: Pick<WeddingStore, 'currentWedding'>,
+  state: Pick<WeddingStore, "currentWedding">,
   weddingId: string,
   updatedDetail: WeddingDetail
 ) => {
@@ -81,7 +126,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       const weddings = await getWeddingsApi();
       set({ weddings, isLoading: false });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể tải danh sách thiệp cưới";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể tải danh sách thiệp cưới";
       set({ error: message, isLoading: false });
     }
   },
@@ -97,7 +145,8 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
         isLoading: false,
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể tải thiệp cưới";
+      const message =
+        error instanceof Error ? error.message : "Không thể tải thiệp cưới";
       set({ error: message, isLoading: false });
     }
   },
@@ -109,7 +158,8 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       const wedding = await getPublicWeddingApi(slug);
       set({ publicWedding: wedding, isLoading: false });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không tìm thấy thiệp cưới";
+      const message =
+        error instanceof Error ? error.message : "Không tìm thấy thiệp cưới";
       set({ error: message, isLoading: false });
     }
   },
@@ -143,7 +193,8 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
 
       return wedding;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể tạo thiệp cưới";
+      const message =
+        error instanceof Error ? error.message : "Không thể tạo thiệp cưới";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -167,12 +218,17 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
               }
             : w
         ),
-        weddingDetail: state.weddingDetail?.id === id ? updated : state.weddingDetail,
-        currentWedding: state.currentWedding?.id === id ? updated : state.currentWedding,
+        weddingDetail:
+          state.weddingDetail?.id === id ? updated : state.weddingDetail,
+        currentWedding:
+          state.currentWedding?.id === id ? updated : state.currentWedding,
         isLoading: false,
       }));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể cập nhật thiệp cưới";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể cập nhật thiệp cưới";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -189,7 +245,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       }));
       return updatedDetail;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin cô dâu";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể cập nhật thông tin cô dâu";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -206,7 +265,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       }));
       return updatedDetail;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể cập nhật thông tin chú rể";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể cập nhật thông tin chú rể";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -223,7 +285,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       }));
       return updatedDetail;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể thêm câu chuyện tình yêu";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể thêm câu chuyện tình yêu";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -240,7 +305,10 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       }));
       return updatedDetail;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể cập nhật câu chuyện";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể cập nhật câu chuyện";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -257,7 +325,66 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       }));
       return updatedDetail;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể xóa câu chuyện";
+      const message =
+        error instanceof Error ? error.message : "Không thể xóa câu chuyện";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== ADD WEDDING EVENT =====
+  addWeddingEvent: async (weddingId, event) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await addWeddingEventApi(weddingId, event);
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể thêm sự kiện";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== UPDATE WEDDING EVENT =====
+  updateWeddingEvent: async (weddingId, eventId, event) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await updateWeddingEventApi(
+        weddingId,
+        eventId,
+        event
+      );
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể cập nhật sự kiện";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  // ===== DELETE WEDDING EVENT =====
+  deleteWeddingEvent: async (weddingId, eventId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedDetail = await deleteWeddingEventApi(weddingId, eventId);
+      set((state) => ({
+        ...updateCurrentWeddingDetail(state, weddingId, updatedDetail),
+        isLoading: false,
+      }));
+      return updatedDetail;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể xóa sự kiện";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -273,13 +400,17 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
         weddings: state.weddings.map((w) =>
           w.id === id ? { ...w, status: updated.status } : w
         ),
-        currentWedding: state.currentWedding?.id === id
-          ? { ...state.currentWedding, status: updated.status }
-          : state.currentWedding,
+        currentWedding:
+          state.currentWedding?.id === id
+            ? { ...state.currentWedding, status: updated.status }
+            : state.currentWedding,
         isLoading: false,
       }));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể cập nhật trạng thái";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Không thể cập nhật trạng thái";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -293,15 +424,23 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
 
       set((state) => ({
         weddings: state.weddings.map((w) =>
-          w.id === id ? { ...w, status: updated.status, publishedAt: updated.publishedAt } : w
+          w.id === id
+            ? { ...w, status: updated.status, publishedAt: updated.publishedAt }
+            : w
         ),
-        currentWedding: state.currentWedding?.id === id
-          ? { ...state.currentWedding, status: updated.status, publishedAt: updated.publishedAt }
-          : state.currentWedding,
+        currentWedding:
+          state.currentWedding?.id === id
+            ? {
+                ...state.currentWedding,
+                status: updated.status,
+                publishedAt: updated.publishedAt,
+              }
+            : state.currentWedding,
         isLoading: false,
       }));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể xuất bản";
+      const message =
+        error instanceof Error ? error.message : "Không thể xuất bản";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -315,15 +454,23 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
 
       set((state) => ({
         weddings: state.weddings.map((w) =>
-          w.id === id ? { ...w, status: updated.status, publishedAt: undefined } : w
+          w.id === id
+            ? { ...w, status: updated.status, publishedAt: undefined }
+            : w
         ),
-        currentWedding: state.currentWedding?.id === id
-          ? { ...state.currentWedding, status: updated.status, publishedAt: undefined }
-          : state.currentWedding,
+        currentWedding:
+          state.currentWedding?.id === id
+            ? {
+                ...state.currentWedding,
+                status: updated.status,
+                publishedAt: undefined,
+              }
+            : state.currentWedding,
         isLoading: false,
       }));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể hủy xuất bản";
+      const message =
+        error instanceof Error ? error.message : "Không thể hủy xuất bản";
       set({ error: message, isLoading: false });
       throw error;
     }
@@ -336,12 +483,15 @@ export const useWeddingStore = create<WeddingStore>((set, get) => ({
       await deleteWeddingApi(id);
       set((state) => ({
         weddings: state.weddings.filter((w) => w.id !== id),
-        currentWedding: state.currentWedding?.id === id ? null : state.currentWedding,
-        weddingDetail: state.weddingDetail?.id === id ? null : state.weddingDetail,
+        currentWedding:
+          state.currentWedding?.id === id ? null : state.currentWedding,
+        weddingDetail:
+          state.weddingDetail?.id === id ? null : state.weddingDetail,
         isLoading: false,
       }));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Không thể xóa thiệp cưới";
+      const message =
+        error instanceof Error ? error.message : "Không thể xóa thiệp cưới";
       set({ error: message, isLoading: false });
       throw error;
     }
