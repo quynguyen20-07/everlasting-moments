@@ -1,0 +1,1 @@
+export { WishManager } from './WishManager';

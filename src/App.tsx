@@ -10,9 +10,11 @@ import { useAuthStore } from "@/stores/authStore";
 import { Toaster } from "@/components/ui/toaster";
 import WeddingList from "@/pages/WeddingList";
 import WeddingEdit from "@/pages/WeddingEdit";
+import GuestManagement from "@/pages/GuestManagement";
+import WishManagement from "@/pages/WishManagement";
+import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/NotFound";
 import Index from "@/pages/Index";
-import Admin from "@/pages/Admin";
 import { useEffect } from "react";
 import Demo from "@/pages/Demo";
 import Auth from "@/pages/Auth";
@@ -66,17 +68,8 @@ const AppContent = () => {
         <Route index element={<Dashboard />} />
         <Route path="weddings" element={<WeddingList />} />
         <Route path="weddings/:id/edit" element={<WeddingEdit />} />
-        <Route
-          path="guests"
-          element={
-            <div className="bg-card rounded-xl border p-6">
-              <h1 className="text-2xl font-bold mb-4">Quản lý Khách mời</h1>
-              <p className="text-muted-foreground">
-                Tính năng đang được phát triển...
-              </p>
-            </div>
-          }
-        />
+        <Route path="weddings/:weddingId/guests" element={<GuestManagement />} />
+        <Route path="weddings/:weddingId/wishes" element={<WishManagement />} />
         <Route
           path="gallery"
           element={
@@ -110,7 +103,7 @@ const AppContent = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Admin />} />
+        <Route index element={<AdminDashboard />} />
       </Route>
 
       {/* 404 */}
