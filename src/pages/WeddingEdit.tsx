@@ -211,7 +211,8 @@ const WeddingEdit = () => {
     { value: "lovestory", label: "Câu chuyện", icon: BookHeart },
     { value: "events", label: "Sự kiện", icon: Calendar },
     { value: "gallery", label: "Thư viện ảnh", icon: Image },
-    { value: "guests", label: "Khách mời", icon: Users },
+    { value: "guests", label: "Khách mời", icon: Users, link: `/dashboard/weddings/${id}/guests` },
+    { value: "wishes", label: "Lời chúc", icon: Heart, link: `/dashboard/weddings/${id}/wishes` },
     { value: "gifts", label: "Mừng cưới", icon: Wallet },
     { value: "theme", label: "Giao diện", icon: Palette },
     { value: "settings", label: "Cài đặt", icon: Settings },
@@ -286,7 +287,14 @@ const WeddingEdit = () => {
         {/* Tabs */}
         <Tabs
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={(val) => {
+            const tab = tabItems.find((t) => t.value === val);
+            if (tab?.link) {
+              navigate(tab.link);
+            } else {
+              setActiveTab(val);
+            }
+          }}
           className="space-y-6"
         >
           <TabsList className="w-full justify-start overflow-x-auto flex-nowrap bg-card border border-border p-1 rounded-lg">
@@ -437,7 +445,7 @@ const WeddingEdit = () => {
           </TabsContent>
 
           {/* Other tabs - coming soon */}
-          {["events", "gallery", "guests", "gifts", "theme", "settings"].map(
+          {["events", "gallery", "gifts", "theme", "settings"].map(
             (tab) => (
               <TabsContent key={tab} value={tab}>
                 <Card>
