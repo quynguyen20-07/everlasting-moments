@@ -1,29 +1,90 @@
-import { Users, Send } from "lucide-react";
+import { Users, Send, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { ColorScheme } from "@/types";
+import { useState } from "react";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
-export type RSVPData = {
-  name: string;
-
-  attending: boolean;
+export type RSVPFormData = {
+  fullName: string;
+  email: string;
+  phone: string;
+  numberOfGuests: number;
+  attendanceStatus: "confirmed" | "declined";
+  dietaryRestrictions: string;
+  message: string;
 };
 
 export type RSVPSectionProps = {
   colors: ColorScheme;
-  rsvpData: RSVPData;
-  setRsvpData: React.Dispatch<React.SetStateAction<RSVPData>>;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  weddingId: string;
+  onSubmit: (data: RSVPFormData) => Promise<void>;
 };
 
 const RSVPSection: React.FC<RSVPSectionProps> = ({
   colors,
-  rsvpData,
-  setRsvpData,
+  weddingId,
   onSubmit,
 }) => {
+  const [formData, setFormData] = useState<RSVPFormData>({
+    fullName: "",
+    email: "",
+    phone: "",
+    numberOfGuests: 1,
+    attendanceStatus: "confirmed",
+    dietaryRestrictions: "",
+    message: "",
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!formData.fullName.trim()) {
+      setErrorMessage("Vui lòng nhập tên của bạn");
+      setSubmitStatus("error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
+
+    try {
+      await onSubmit(formData);
+      setSubmitStatus("success");
+      // Reset form after success
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        numberOfGuests: 1,
+        attendanceStatus: "confirmed",
+        dietaryRestrictions: "",
+        message: "",
+      });
+    } catch (error) {
+      setSubmitStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (field: keyof RSVPFormData, value: string | number) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (submitStatus === "error") {
+      setSubmitStatus("idle");
+      setErrorMessage("");
+    }
+  };
+
   return (
     <section
       id="rsvp"
@@ -60,14 +121,63 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
           </p>
         </motion.div>
 
+        {/* Success Message */}
+        {submitStatus === "success" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div
+              className="p-6 rounded-2xl flex items-center gap-4"
+              style={{
+                background: `linear-gradient(135deg, #10b98120 0%, #10b98110 100%)`,
+                border: "1px solid #10b98140",
+              }}
+            >
+              <CheckCircle2 className="w-8 h-8 text-emerald-500 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold text-emerald-700">Đã Xác Nhận Thành Công!</h3>
+                <p className="text-emerald-600 text-sm">
+                  Cảm ơn bạn đã phản hồi. Chúng tôi rất mong được gặp bạn!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Error Message */}
+        {submitStatus === "error" && errorMessage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div
+              className="p-6 rounded-2xl flex items-center gap-4"
+              style={{
+                background: `linear-gradient(135deg, #ef444420 0%, #ef444410 100%)`,
+                border: "1px solid #ef444440",
+              }}
+            >
+              <XCircle className="w-8 h-8 text-red-500 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold text-red-700">Có Lỗi Xảy Ra</h3>
+                <p className="text-red-600 text-sm">{errorMessage}</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           className="max-w-2xl mx-auto"
         >
           <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {/* Full Name */}
             <div className="md:col-span-2">
               <label
                 className="block text-sm font-semibold mb-3"
@@ -77,11 +187,10 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               </label>
               <Input
                 placeholder="Nhập tên đầy đủ"
-                value={rsvpData.name}
-                onChange={(e) =>
-                  setRsvpData({ ...rsvpData, name: e.target.value })
-                }
+                value={formData.fullName}
+                onChange={(e) => handleChange("fullName", e.target.value)}
                 required
+                disabled={isSubmitting}
                 className="rounded-xl border-2 p-4"
                 style={{
                   borderColor: `${colors?.primary}30`,
@@ -89,20 +198,21 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 }}
               />
             </div>
-            {/* <div>
+
+            {/* Email */}
+            <div>
               <label
                 className="block text-sm font-semibold mb-3"
                 style={{ color: colors?.text }}
               >
-                Số điện thoại *
+                Email
               </label>
               <Input
-                placeholder="Nhập số điện thoại"
-                value={rsvpData.phone}
-                onChange={(e) =>
-                  setRsvpData({ ...rsvpData, phone: e.target.value })
-                }
-                required
+                type="email"
+                placeholder="email@example.com"
+                value={formData.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                disabled={isSubmitting}
                 className="rounded-xl border-2 p-4"
                 style={{
                   borderColor: `${colors?.primary}30`,
@@ -110,6 +220,30 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 }}
               />
             </div>
+
+            {/* Phone */}
+            <div>
+              <label
+                className="block text-sm font-semibold mb-3"
+                style={{ color: colors?.text }}
+              >
+                Số điện thoại
+              </label>
+              <Input
+                type="tel"
+                placeholder="0912 345 678"
+                value={formData.phone}
+                onChange={(e) => handleChange("phone", e.target.value)}
+                disabled={isSubmitting}
+                className="rounded-xl border-2 p-4"
+                style={{
+                  borderColor: `${colors?.primary}30`,
+                  background: "white",
+                }}
+              />
+            </div>
+
+            {/* Number of Guests */}
             <div className="md:col-span-2">
               <label
                 className="block text-sm font-semibold mb-3"
@@ -121,72 +255,128 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 type="number"
                 min="1"
                 max="10"
-                value={rsvpData.guests}
-                onChange={(e) =>
-                  setRsvpData({ ...rsvpData, guests: e.target.value })
-                }
+                value={formData.numberOfGuests}
+                onChange={(e) => handleChange("numberOfGuests", parseInt(e.target.value) || 1)}
                 required
+                disabled={isSubmitting}
                 className="rounded-xl border-2 p-4"
                 style={{
                   borderColor: `${colors?.primary}30`,
                   background: "white",
                 }}
               />
-            </div> */}
+            </div>
+
+            {/* Dietary Restrictions */}
+            <div className="md:col-span-2">
+              <label
+                className="block text-sm font-semibold mb-3"
+                style={{ color: colors?.text }}
+              >
+                Yêu cầu ăn uống đặc biệt
+              </label>
+              <Input
+                placeholder="VD: Ăn chay, dị ứng hải sản..."
+                value={formData.dietaryRestrictions}
+                onChange={(e) => handleChange("dietaryRestrictions", e.target.value)}
+                disabled={isSubmitting}
+                className="rounded-xl border-2 p-4"
+                style={{
+                  borderColor: `${colors?.primary}30`,
+                  background: "white",
+                }}
+              />
+            </div>
+
+            {/* Message */}
+            <div className="md:col-span-2">
+              <label
+                className="block text-sm font-semibold mb-3"
+                style={{ color: colors?.text }}
+              >
+                Lời nhắn
+              </label>
+              <Textarea
+                placeholder="Gửi lời nhắn đến cô dâu chú rể..."
+                rows={3}
+                value={formData.message}
+                onChange={(e) => handleChange("message", e.target.value)}
+                disabled={isSubmitting}
+                className="rounded-xl border-2 p-4 resize-none"
+                style={{
+                  borderColor: `${colors?.primary}30`,
+                  background: "white",
+                }}
+              />
+            </div>
           </div>
 
+          {/* Attendance Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Button
               type="button"
               size="lg"
+              disabled={isSubmitting}
               className={`flex-1 rounded-xl py-6 text-lg font-semibold transition-all ${
-                rsvpData.attending ? "shadow-lg scale-105" : ""
+                formData.attendanceStatus === "confirmed" ? "shadow-lg scale-105" : ""
               }`}
               style={{
-                background: rsvpData.attending
+                background: formData.attendanceStatus === "confirmed"
                   ? `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`
                   : `${colors?.accent}20`,
-                color: rsvpData.attending ? "white" : colors?.text,
+                color: formData.attendanceStatus === "confirmed" ? "white" : colors?.text,
                 border: `2px solid ${
-                  rsvpData.attending ? colors?.primary : `${colors?.primary}30`
+                  formData.attendanceStatus === "confirmed" ? colors?.primary : `${colors?.primary}30`
                 }`,
               }}
-              onClick={() => setRsvpData({ ...rsvpData, attending: true })}
+              onClick={() => handleChange("attendanceStatus", "confirmed")}
             >
               💖 Sẽ Tham Dự
             </Button>
             <Button
               type="button"
               size="lg"
+              disabled={isSubmitting}
               className={`flex-1 rounded-xl py-6 text-lg font-semibold transition-all ${
-                !rsvpData.attending ? "shadow-lg scale-105" : ""
+                formData.attendanceStatus === "declined" ? "shadow-lg scale-105" : ""
               }`}
               style={{
-                background: !rsvpData.attending
+                background: formData.attendanceStatus === "declined"
                   ? `linear-gradient(135deg, ${colors?.muted} 0%, ${colors?.text}80 100%)`
                   : `${colors?.accent}20`,
-                color: !rsvpData.attending ? "white" : colors?.text,
+                color: formData.attendanceStatus === "declined" ? "white" : colors?.text,
                 border: `2px solid ${
-                  !rsvpData.attending ? colors?.muted : `${colors?.primary}30`
+                  formData.attendanceStatus === "declined" ? colors?.muted : `${colors?.primary}30`
                 }`,
               }}
-              onClick={() => setRsvpData({ ...rsvpData, attending: false })}
+              onClick={() => handleChange("attendanceStatus", "declined")}
             >
               😔 Không Tham Dự
             </Button>
           </div>
 
+          {/* Submit Button */}
           <Button
             type="submit"
             size="lg"
-            className="w-full rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+            disabled={isSubmitting}
+            className="w-full rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
             style={{
               background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
               color: "white",
             }}
           >
-            <Send className="w-5 h-5 mr-2" />
-            Gửi Xác Nhận
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Đang gửi...
+              </>
+            ) : (
+              <>
+                <Send className="w-5 h-5 mr-2" />
+                Gửi Xác Nhận
+              </>
+            )}
           </Button>
         </motion.form>
       </div>
