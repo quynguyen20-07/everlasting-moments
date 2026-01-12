@@ -1,8 +1,19 @@
-import {
+// Re-export types from wedding.ts for convenience
+export type {
   BankAccount,
   BrideGroom,
   Guest,
   ILoveStory,
+  User,
+  Wedding,
+  WeddingDetail,
+  ThemeSettings,
+} from "./wedding";
+
+// Import for use in this file
+import type {
+  BankAccount,
+  Guest,
   User,
   Wedding,
   WeddingDetail,

@@ -14,7 +14,7 @@ export const getUserApi = async (id: string): Promise<User | null> => {
   return mockUsers.find(u => u.id === id) || null;
 };
 
-// Lock user
+// Lock user (set isActive to false)
 export const lockUserApi = async (id: string): Promise<User> => {
   await delay(300);
   
@@ -23,12 +23,12 @@ export const lockUserApi = async (id: string): Promise<User> => {
     throw new Error('User not found');
   }
   
-  user.isLocked = true;
+  user.isActive = false;
   user.updatedAt = new Date().toISOString();
   return user;
 };
 
-// Unlock user
+// Unlock user (set isActive to true)
 export const unlockUserApi = async (id: string): Promise<User> => {
   await delay(300);
   
@@ -37,7 +37,7 @@ export const unlockUserApi = async (id: string): Promise<User> => {
     throw new Error('User not found');
   }
   
-  user.isLocked = false;
+  user.isActive = true;
   user.updatedAt = new Date().toISOString();
   return user;
 };

@@ -1,33 +1,81 @@
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { formatDateStr } from "@/lib/utils";
 import { ColorScheme, Wish } from "@/types";
-// import { formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 export type WishFormData = {
-  name: string;
+  guestName: string;
   message: string;
 };
 
 export type GuestWishesSectionProps = {
   colors: ColorScheme;
   wishes: Wish[];
-  wishData: WishFormData;
-  setWishData: React.Dispatch<React.SetStateAction<WishFormData>>;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  weddingId: string;
+  onSubmit: (data: WishFormData) => Promise<void>;
 };
 
 const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
   colors,
   wishes,
-  wishData,
-  setWishData,
+  weddingId,
   onSubmit,
 }) => {
+  const [formData, setFormData] = useState<WishFormData>({
+    guestName: "",
+    message: "",
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!formData.guestName.trim() || !formData.message.trim()) {
+      setErrorMessage("Vui lòng nhập đầy đủ tên và lời chúc");
+      setSubmitStatus("error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
+
+    try {
+      await onSubmit(formData);
+      setSubmitStatus("success");
+      // Reset form after success
+      setFormData({
+        guestName: "",
+        message: "",
+      });
+    } catch (error) {
+      setSubmitStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (field: keyof WishFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (submitStatus === "error") {
+      setSubmitStatus("idle");
+      setErrorMessage("");
+    }
+  };
+
+  // Filter only approved wishes
+  const approvedWishes = wishes.filter(wish => wish.isApproved);
+
   return (
     <section
       className="py-20 md:py-28"
@@ -64,12 +112,60 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
+          {/* Success Message */}
+          {submitStatus === "success" && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-8"
+            >
+              <div
+                className="p-6 rounded-2xl flex items-center gap-4"
+                style={{
+                  background: `linear-gradient(135deg, #10b98120 0%, #10b98110 100%)`,
+                  border: "1px solid #10b98140",
+                }}
+              >
+                <CheckCircle2 className="w-8 h-8 text-emerald-500 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-emerald-700">Đã Gửi Lời Chúc!</h3>
+                  <p className="text-emerald-600 text-sm">
+                    Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Error Message */}
+          {submitStatus === "error" && errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-8"
+            >
+              <div
+                className="p-6 rounded-2xl flex items-center gap-4"
+                style={{
+                  background: `linear-gradient(135deg, #ef444420 0%, #ef444410 100%)`,
+                  border: "1px solid #ef444440",
+                }}
+              >
+                <XCircle className="w-8 h-8 text-red-500 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-red-700">Có Lỗi Xảy Ra</h3>
+                  <p className="text-red-600 text-sm">{errorMessage}</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Wish Form */}
           <motion.form
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             className="mb-12"
           >
             <div
@@ -88,11 +184,10 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
               <div className="space-y-6">
                 <Input
                   placeholder="Tên của bạn"
-                  value={wishData.name}
-                  onChange={(e) =>
-                    setWishData({ ...wishData, name: e.target.value })
-                  }
+                  value={formData.guestName}
+                  onChange={(e) => handleChange("guestName", e.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="rounded-xl border-2 p-4"
                   style={{
                     borderColor: `${colors?.primary}30`,
@@ -102,11 +197,10 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                 <Textarea
                   placeholder="Viết lời chúc từ trái tim của bạn..."
                   rows={4}
-                  value={wishData.message}
-                  onChange={(e) =>
-                    setWishData({ ...wishData, message: e.target.value })
-                  }
+                  value={formData.message}
+                  onChange={(e) => handleChange("message", e.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="rounded-xl border-2 p-4 resize-none"
                   style={{
                     borderColor: `${colors?.primary}30`,
@@ -116,66 +210,84 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                 <Button
                   type="submit"
                   size="lg"
-                  className="rounded-xl px-8"
+                  disabled={isSubmitting}
+                  className="rounded-xl px-8 disabled:opacity-70"
                   style={{
                     background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                     color: "white",
                   }}
                 >
-                  <Send className="w-5 h-5 mr-2" />
-                  Gửi Lời Chúc
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Đang gửi...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 mr-2" />
+                      Gửi Lời Chúc
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
           </motion.form>
 
           {/* Wishes List */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {wishes.map((wish, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group"
-              >
-                <div
-                  className="p-6 rounded-2xl backdrop-blur-sm border shadow-md hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors?.accent}05 0%, white 100%)`,
-                    borderColor: `${colors?.primary}20`,
-                  }}
+          {approvedWishes.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {approvedWishes.map((wish, index) => (
+                <motion.div
+                  key={wish.id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
                 >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
-                      style={{
-                        background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
-                        color: "white",
-                      }}
-                    >
-                      <span className="font-bold">{wish.guestName[0]}</span>
-                    </div>
-                    <div>
-                      <p
-                        className="font-semibold"
-                        style={{ color: colors?.text }}
+                  <div
+                    className="p-6 rounded-2xl backdrop-blur-sm border shadow-md hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors?.accent}05 0%, white 100%)`,
+                      borderColor: `${colors?.primary}20`,
+                    }}
+                  >
+                    <div className="flex items-start gap-4 mb-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+                        style={{
+                          background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
+                          color: "white",
+                        }}
                       >
-                        {wish.guestName}
-                      </p>
-                      <p className="text-sm" style={{ color: colors?.muted }}>
-                        {formatDateStr(wish.createdAt)}
-                      </p>
+                        <span className="font-bold">{wish.guestName[0]?.toUpperCase()}</span>
+                      </div>
+                      <div>
+                        <p
+                          className="font-semibold"
+                          style={{ color: colors?.text }}
+                        >
+                          {wish.guestName}
+                        </p>
+                        <p className="text-sm" style={{ color: colors?.muted }}>
+                          {formatDateStr(wish.createdAt)}
+                        </p>
+                      </div>
                     </div>
+                    <p className="italic" style={{ color: colors?.text }}>
+                      "{wish.message}"
+                    </p>
                   </div>
-                  <p className="italic" style={{ color: colors?.text }}>
-                    "{wish.message}"
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p style={{ color: colors?.muted }}>
+                Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời chúc!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -47,12 +47,7 @@ const TemplateDetailPage = () => {
   );
   const [isPlaying, setIsPlaying] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [rsvpData, setRsvpData] = useState({
-    name: "",
-    attending: true,
-  });
-
-  const [wishData, setWishData] = useState({ name: "", message: "" });
+  const [demoWishes, setDemoWishes] = useState(coupleData.wishes || []);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 

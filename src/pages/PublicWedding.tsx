@@ -7,6 +7,8 @@ import {
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
 import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
+import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
+import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
@@ -18,7 +20,9 @@ import { PageLoading } from "@/components/LoadingSpinner";
 import ShareModal from "@/components/wedding/ShareModal";
 import { getWeddingBySlugApi } from "@/lib/api/wedding";
 import { TemplateProvider } from "@/components/public";
-import { ColorType, TemplateType } from "@/types";
+import { submitRSVPApi } from "@/lib/api/guest";
+import { addWishApi } from "@/lib/api/wish";
+import { ColorType, TemplateType, Wish } from "@/types";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -55,11 +59,7 @@ export default function PublicWedding() {
     seconds: 0,
   });
   const [isPlaying, setIsPlaying] = useState(true);
-  const [rsvpData, setRsvpData] = useState({
-    name: "",
-    attending: true,
-  });
-  const [wishData, setWishData] = useState({ name: "", message: "" });
+  const [wishes, setWishes] = useState<Wish[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -92,6 +92,8 @@ export default function PublicWedding() {
         const data = await getWeddingBySlugApi(slug);
         if (data) {
           setWedding(data);
+          // Initialize wishes from mock data (will be replaced with API call)
+          setWishes(mapWeddingToCoupleData(data).wishes || []);
         } else {
           setError("Thiệp mời không tồn tại hoặc chưa được công khai");
         }
@@ -266,22 +268,58 @@ export default function PublicWedding() {
     (e) => e.type === "ceremony" || e.type === "reception"
   );
 
-  const handleRSVP = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Đã Xác Nhận!",
-      description: "Cảm ơn bạn đã xác nhận sẽ tham dự.",
-    });
-    setRsvpData({ name: "", attending: true });
+  // Handle RSVP submission
+  const handleRSVP = async (data: RSVPFormData) => {
+    if (!wedding?.id) {
+      throw new Error("Wedding ID không tồn tại");
+    }
+
+    try {
+      await submitRSVPApi(wedding.id, {
+        fullName: data.fullName,
+        email: data.email || undefined,
+        phone: data.phone || undefined,
+        numberOfGuests: data.numberOfGuests,
+        attendanceStatus: data.attendanceStatus,
+        dietaryRestrictions: data.dietaryRestrictions || undefined,
+        message: data.message || undefined,
+      });
+
+      toast({
+        title: "Đã Xác Nhận!",
+        description: data.attendanceStatus === "confirmed" 
+          ? "Cảm ơn bạn đã xác nhận sẽ tham dự." 
+          : "Cảm ơn bạn đã phản hồi.",
+      });
+    } catch (error) {
+      console.error("RSVP submission error:", error);
+      throw new Error("Không thể gửi xác nhận. Vui lòng thử lại sau.");
+    }
   };
 
-  const handleWish = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toast({
-      title: "Đã Gửi Lời Chúc!",
-      description: "Cảm ơn bạn đã gửi lời chúc tuyệt vời!",
-    });
-    setWishData({ name: "", message: "" });
+  // Handle Wish submission
+  const handleWish = async (data: WishFormData) => {
+    if (!wedding?.id) {
+      throw new Error("Wedding ID không tồn tại");
+    }
+
+    try {
+      const newWish = await addWishApi(wedding.id, {
+        guestName: data.guestName,
+        message: data.message,
+      });
+
+      // Add to local state (pending approval)
+      setWishes(prev => [...prev, newWish]);
+
+      toast({
+        title: "Đã Gửi Lời Chúc!",
+        description: "Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.",
+      });
+    } catch (error) {
+      console.error("Wish submission error:", error);
+      throw new Error("Không thể gửi lời chúc. Vui lòng thử lại sau.");
+    }
   };
 
   const handleGalleryClick = (index: number) => {
@@ -371,18 +409,16 @@ export default function PublicWedding() {
         {/* RSVP Section */}
         <RSVPSection
           colors={colors}
-          rsvpData={rsvpData}
-          setRsvpData={setRsvpData}
+          weddingId={wedding.id}
           onSubmit={handleRSVP}
         />
 
         {/* Guest Wishes */}
         <GuestWishesSection
           colors={colors}
-          wishes={mapWeddingToCoupleData(wedding).wishes}
-          wishData={wishData}
+          wishes={wishes}
+          weddingId={wedding.id}
           onSubmit={handleWish}
-          setWishData={setWishData}
         />
 
         {/* Footer */}
