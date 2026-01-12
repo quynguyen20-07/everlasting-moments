@@ -7,6 +7,8 @@ import {
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
 import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
+import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
+import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
@@ -19,7 +21,7 @@ import { ArrowLeft, Pause, Play } from "lucide-react";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ITimeCountdown } from "@/types";
+import { ITimeCountdown, Wish } from "@/types";
 
 const templatesData = Object.fromEntries(
   TEMPLATES_LIST.map((t) => [
@@ -142,22 +144,40 @@ const TemplateDetailPage = () => {
     }
   }, [isPlaying]);
 
-  const handleRSVP = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Demo RSVP handler (just shows toast, no real API call)
+  const handleRSVP = async (data: RSVPFormData): Promise<void> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
     toast({
       title: "Đã Xác Nhận!",
-      description: "Cảm ơn bạn đã xác nhận sẽ tham dự.",
+      description: data.attendanceStatus === "confirmed" 
+        ? "Cảm ơn bạn đã xác nhận sẽ tham dự."
+        : "Cảm ơn bạn đã phản hồi.",
     });
-    setRsvpData({ name: "", attending: true });
   };
 
-  const handleWish = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // Demo Wish handler (just shows toast, no real API call)
+  const handleWish = async (data: WishFormData): Promise<void> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Add to demo wishes list
+    const newWish: Wish = {
+      id: `demo-${Date.now()}`,
+      weddingId: "demo",
+      guestName: data.guestName,
+      message: data.message,
+      isApproved: true,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setDemoWishes(prev => [...prev, newWish]);
+    
     toast({
       title: "Đã Gửi Lời Chúc!",
       description: "Cảm ơn bạn đã gửi lời chúc tuyệt vời!",
     });
-    setWishData({ name: "", message: "" });
   };
 
   const handleGalleryClick = (index: number) => {
@@ -242,18 +262,16 @@ const TemplateDetailPage = () => {
       {/* RSVP Section */}
       <RSVPSection
         colors={colors}
-        rsvpData={rsvpData}
-        setRsvpData={setRsvpData}
+        weddingId="demo"
         onSubmit={handleRSVP}
       />
 
       {/* Guest Wishes */}
       <GuestWishesSection
         colors={colors}
-        wishes={coupleData.wishes}
-        wishData={wishData}
+        wishes={demoWishes}
+        weddingId="demo"
         onSubmit={handleWish}
-        setWishData={setWishData}
       />
 
       {/* Footer */}
