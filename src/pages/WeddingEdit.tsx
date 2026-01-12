@@ -27,6 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WeddingEventManager } from "@/components/wedding/WeddingEventManager";
 import { LoveStoryManager } from "@/components/wedding/LoveStoryManager";
+import MediaManager from "@/components/wedding/MediaManager";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useWeddingStore } from "@/stores/weddingStore";
@@ -459,8 +460,13 @@ const WeddingEdit = () => {
             <WeddingEventManager weddingId={currentWedding.id} />
           </TabsContent>
 
+          {/* Gallery Tab */}
+          <TabsContent value="gallery">
+            <MediaManager weddingId={currentWedding.id} />
+          </TabsContent>
+
           {/* Other tabs - coming soon */}
-          {["gallery", "gifts", "theme", "settings"].map((tab) => (
+          {["gifts", "theme", "settings"].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <Card>
                 <CardContent className="py-12 text-center text-muted-foreground">
