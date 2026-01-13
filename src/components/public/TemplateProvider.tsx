@@ -3,11 +3,20 @@ import type { ThemeSettings } from '@/types/graphql';
 import {
   weddingTemplates,
   getPatternSVG,
+  getThemeById,
+  getLayoutById,
+  createWeddingTemplate,
+  TEMPLATES_THEME_LIST,
+  TEMPLATE_LAYOUTS,
   type WeddingTemplate,
+  type TemplateTheme,
+  type TemplateLayout,
 } from '@/lib/templates/wedding-templates';
 
 interface TemplateContextType {
   template: WeddingTemplate;
+  theme: TemplateTheme;
+  layout: TemplateLayout;
   cssVars: React.CSSProperties;
   patternUrl: string;
   isDark: boolean;
@@ -29,59 +38,78 @@ interface TemplateProviderProps {
 }
 
 // Match theme settings to template
-function findMatchingTemplate(themeSettings?: ThemeSettings | null): WeddingTemplate {
+function findMatchingTemplate(themeSettings?: ThemeSettings | null): {
+  template: WeddingTemplate;
+  theme: TemplateTheme;
+  layout: TemplateLayout;
+} {
+  // Default layout and theme
+  const defaultLayout = TEMPLATE_LAYOUTS[0];
+  const defaultTheme = TEMPLATES_THEME_LIST[0];
+  
   if (!themeSettings) {
-    return weddingTemplates[0]; // Default to Golden Elegance
+    return {
+      template: weddingTemplates[0],
+      theme: defaultTheme,
+      layout: defaultLayout,
+    };
   }
 
-  // Try to match by primary color
+  // Try to find theme by template ID (theme ID in legacy system)
+  const templateId = themeSettings.template;
+  const theme = getThemeById(templateId) || defaultTheme;
+  
+  // For layout, try to match by primary color style hints or default
   const primaryColor = themeSettings.primaryColor?.toLowerCase();
+  let layout = defaultLayout;
   
   if (primaryColor?.includes('pink') || primaryColor?.includes('rose') || primaryColor?.includes('blush')) {
-    return weddingTemplates.find(t => t.id === 'blush-romance') || weddingTemplates[0];
-  }
-  if (primaryColor?.includes('green') || primaryColor?.includes('sage') || primaryColor?.includes('olive')) {
-    return weddingTemplates.find(t => t.id === 'sage-garden') || weddingTemplates[0];
-  }
-  if (primaryColor?.includes('navy') || primaryColor?.includes('dark') || primaryColor?.includes('midnight')) {
-    return weddingTemplates.find(t => t.id === 'midnight-luxe') || weddingTemplates[0];
-  }
-  if (primaryColor?.includes('white') || primaryColor?.includes('black') || primaryColor?.includes('minimal')) {
-    return weddingTemplates.find(t => t.id === 'pure-minimal') || weddingTemplates[0];
-  }
-  if (primaryColor?.includes('purple') || primaryColor?.includes('lavender') || primaryColor?.includes('violet')) {
-    return weddingTemplates.find(t => t.id === 'lavender-dream') || weddingTemplates[0];
+    layout = getLayoutById('romantic-garden') || defaultLayout;
+  } else if (primaryColor?.includes('green') || primaryColor?.includes('sage') || primaryColor?.includes('olive')) {
+    layout = getLayoutById('rustic-charm') || defaultLayout;
+  } else if (primaryColor?.includes('navy') || primaryColor?.includes('dark') || primaryColor?.includes('midnight')) {
+    layout = getLayoutById('luxury-royal') || defaultLayout;
+  } else if (primaryColor?.includes('white') || primaryColor?.includes('black') || primaryColor?.includes('minimal')) {
+    layout = getLayoutById('minimalist-pure') || defaultLayout;
+  } else if (primaryColor?.includes('purple') || primaryColor?.includes('lavender') || primaryColor?.includes('violet')) {
+    layout = getLayoutById('romantic-garden') || defaultLayout;
+  } else if (primaryColor?.includes('modern')) {
+    layout = getLayoutById('modern-minimal') || defaultLayout;
   }
 
-  // Default to Golden Elegance for gold/champagne or any unmatched
-  return weddingTemplates[0];
+  const template = createWeddingTemplate(layout, theme);
+
+  return { template, theme, layout };
 }
 
 export function TemplateProvider({ themeSettings, children }: TemplateProviderProps) {
-  const template = useMemo(() => findMatchingTemplate(themeSettings), [themeSettings]);
+  const { template, theme, layout } = useMemo(
+    () => findMatchingTemplate(themeSettings),
+    [themeSettings]
+  );
 
   const isDark = useMemo(() => {
     // Check if background is dark (low lightness)
-    const bgParts = template.colors.background.split(' ');
+    const bgParts = theme.colors.background.split(' ');
     const lightness = parseFloat(bgParts[2]?.replace('%', '') || '98');
-    return lightness < 50;
-  }, [template]);
+    return lightness < 50 || theme.isDark === true;
+  }, [theme]);
 
   const cssVars = useMemo(() => ({
-    '--template-primary': template.colors.primary,
-    '--template-secondary': template.colors.secondary,
-    '--template-background': template.colors.background,
-    '--template-foreground': template.colors.foreground,
-    '--template-accent': template.colors.accent,
-    '--template-muted': template.colors.muted,
-    '--template-card': template.colors.card,
-    '--template-gradient': template.gradient,
-  } as React.CSSProperties), [template]);
+    '--template-primary': theme.colors.primary,
+    '--template-secondary': theme.colors.secondary,
+    '--template-background': theme.colors.background,
+    '--template-foreground': theme.colors.foreground,
+    '--template-accent': theme.colors.accent,
+    '--template-muted': theme.colors.muted,
+    '--template-card': theme.colors.card,
+    '--template-gradient': theme.gradient,
+  } as React.CSSProperties), [theme]);
 
-  const patternUrl = useMemo(() => getPatternSVG(template.pattern), [template.pattern]);
+  const patternUrl = useMemo(() => getPatternSVG(theme.pattern), [theme.pattern]);
 
   return (
-    <TemplateContext.Provider value={{ template, cssVars, patternUrl, isDark }}>
+    <TemplateContext.Provider value={{ template, theme, layout, cssVars, patternUrl, isDark }}>
       <div
         style={cssVars}
         className={isDark ? 'template-dark' : 'template-light'}

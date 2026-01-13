@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Heart } from "lucide-react";
-import type { WeddingTemplate } from "@/lib/templates/wedding-templates";
+import type { WeddingTemplate, TemplateTheme } from "@/lib/templates/wedding-templates";
 
 interface TemplateCardProps {
   template: WeddingTemplate;
@@ -9,10 +9,11 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, isSelected, onSelect }: TemplateCardProps) {
-  const primaryHsl = template.colors.primary;
-  const secondaryHsl = template.colors.secondary;
-  const bgHsl = template.colors.background;
-  const fgHsl = template.colors.foreground;
+  const theme = template.theme;
+  const primaryHsl = theme.colors.primary;
+  const secondaryHsl = theme.colors.secondary;
+  const bgHsl = theme.colors.background;
+  const fgHsl = theme.colors.foreground;
 
   return (
     <motion.div
@@ -40,7 +41,7 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
           {/* Decorative Top */}
           <div
             className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-px"
-            style={{ background: template.gradient }}
+            style={{ background: theme.gradient }}
           />
           
           {/* Heart Icon */}
@@ -60,7 +61,7 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
             </p>
             <div
               className="w-12 h-px mx-auto my-2"
-              style={{ background: template.gradient }}
+              style={{ background: theme.gradient }}
             />
             <p
               className="text-xs opacity-70"
@@ -127,17 +128,17 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
         <div className="flex gap-1.5 mt-3">
           <div
             className="w-5 h-5 rounded-full border border-border/50"
-            style={{ backgroundColor: `hsl(${template.colors.primary})` }}
+            style={{ backgroundColor: `hsl(${theme.colors.primary})` }}
             title="Màu chính"
           />
           <div
             className="w-5 h-5 rounded-full border border-border/50"
-            style={{ backgroundColor: `hsl(${template.colors.secondary})` }}
+            style={{ backgroundColor: `hsl(${theme.colors.secondary})` }}
             title="Màu phụ"
           />
           <div
             className="w-5 h-5 rounded-full border border-border/50"
-            style={{ backgroundColor: `hsl(${template.colors.accent})` }}
+            style={{ backgroundColor: `hsl(${theme.colors.accent})` }}
             title="Màu nhấn"
           />
         </div>
