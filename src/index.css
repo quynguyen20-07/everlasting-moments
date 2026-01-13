@@ -29,8 +29,8 @@
     /* Muted: Warm Rose Beige */
     --muted: 11 20% 93%;
     --muted-foreground: 11 15% 45%;
-    --inverse-on-surface-text: 0 0% 100%;
-    --on-surface-text: 220.65 13.19% 46.08%;
+    --inverse-text: 0 0% 100%;
+    --surface-text: 220.65 13.19% 46.08%;
 
     /* Accent: Deeper Rose */
     --accent: 11 45% 60%;

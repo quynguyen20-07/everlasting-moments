@@ -59,7 +59,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="text-sm font-medium text-white hover:text-primary transition-colors"
+                  className="text-sm font-medium !text-inverse-text hover:text-primary transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -71,7 +71,7 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <>
                   {user.role === "admin" && (
-                    <Button variant="outline" asChild>
+                    <Button variant="gold" asChild>
                       <Link to="/dashboard">
                         <LayoutDashboard className="w-4 h-4 mr-2" />
                         Bảng Điều Khiển

@@ -62,7 +62,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-on-surface-text max-w-2xl mx-auto mb-10 font-elegant"
+            className="text-lg md:text-xl text-surface-text max-w-2xl mx-auto mb-10 font-elegant"
           >
             Tạo những thiệp cưới kỹ thuật số tuyệt đẹp, nắm bắt được bản chất
             của ngày đặc biệt của bạn. Chia sẻ câu chuyện tình yêu của bạn, quản

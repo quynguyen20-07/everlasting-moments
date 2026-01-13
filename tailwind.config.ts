@@ -25,6 +25,8 @@ export default {
         body: ["var(--font-body)"],
       },
       colors: {
+        "inverse-text": "hsl(var(--inverse-text))",
+        "surface-text": "hsl(var(--surface-text))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

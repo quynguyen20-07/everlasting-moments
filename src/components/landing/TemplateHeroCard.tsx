@@ -280,10 +280,9 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
             "
             >
               <Button
+                variant="secondary"
                 size="sm"
                 className="
-              bg-[#CC998D] text-white
-                text-xs gap-2
                 px-5 py-2.5
                 rounded-full font-medium
                 transition-all duration-200
@@ -300,9 +299,9 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
               </Button>
 
               <Button
+                variant="gold"
                 size="sm"
                 className="
-                bg-[#CC998D] text-white
                 text-xs
                 gap-2
                 px-5 py-2.5
