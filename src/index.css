@@ -29,68 +29,68 @@
 
 @layer base {
   :root {
-    /* Cream & Champagne Base */
-    --background: 40 33% 98%;
-    --foreground: 30 10% 15%;
+    /* Cream & Dusty Rose Base */
+    --background: 11 30% 98%;
+    --foreground: 11 15% 15%;
 
     /* Cards with subtle warmth */
-    --card: 40 40% 99%;
-    --card-foreground: 30 10% 15%;
+    --card: 11 25% 99%;
+    --card-foreground: 11 15% 15%;
 
     /* Popovers */
-    --popover: 40 40% 99%;
-    --popover-foreground: 30 10% 15%;
+    --popover: 11 25% 99%;
+    --popover-foreground: 11 15% 15%;
 
-    /* Primary: Champagne Gold */
-    --primary: 38 45% 55%;
-    --primary-foreground: 40 33% 98%;
+    /* Primary: Dusty Rose #CC998D */
+    --primary: 11 38% 68%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Blush Pink */
-    --secondary: 350 35% 92%;
-    --secondary-foreground: 350 25% 30%;
+    /* Secondary: Light Rose */
+    --secondary: 11 30% 92%;
+    --secondary-foreground: 11 30% 30%;
 
-    /* Muted: Warm Beige */
-    --muted: 35 25% 93%;
-    --muted-foreground: 30 10% 45%;
+    /* Muted: Warm Rose Beige */
+    --muted: 11 20% 93%;
+    --muted-foreground: 11 15% 45%;
 
-    /* Accent: Rose Gold */
-    --accent: 15 50% 75%;
-    --accent-foreground: 15 40% 20%;
+    /* Accent: Deeper Rose */
+    --accent: 11 45% 60%;
+    --accent-foreground: 0 0% 100%;
 
     /* Destructive */
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders & Inputs */
-    --border: 35 20% 88%;
-    --input: 35 20% 88%;
-    --ring: 38 45% 55%;
+    --border: 11 25% 85%;
+    --input: 11 25% 85%;
+    --ring: 11 38% 68%;
 
     --radius: 0.625rem;
 
-    /* Custom Colors */
-    --champagne: 38 45% 55%;
-    --champagne-light: 38 45% 75%;
-    --champagne-dark: 38 45% 40%;
-    --blush: 350 35% 85%;
-    --blush-light: 350 35% 95%;
-    --rose-gold: 15 50% 70%;
-    --cream: 40 33% 97%;
-    --cream-dark: 35 20% 92%;
-    --sage: 150 20% 75%;
-    --dusty-rose: 350 25% 70%;
+    /* Custom Colors - All based on #CC998D */
+    --champagne: 11 38% 68%;
+    --champagne-light: 11 38% 82%;
+    --champagne-dark: 11 38% 50%;
+    --blush: 11 35% 85%;
+    --blush-light: 11 30% 95%;
+    --rose-gold: 11 45% 65%;
+    --cream: 11 25% 97%;
+    --cream-dark: 11 20% 92%;
+    --sage: 11 15% 75%;
+    --dusty-rose: 11 38% 68%;
 
     /* Gradients */
-    --gradient-romantic: linear-gradient(135deg, hsl(40 33% 98%) 0%, hsl(350 35% 95%) 50%, hsl(40 40% 97%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(38 45% 65%) 0%, hsl(38 45% 50%) 100%);
-    --gradient-blush: linear-gradient(180deg, hsl(350 35% 95%) 0%, hsl(40 33% 98%) 100%);
-    --gradient-overlay: linear-gradient(180deg, hsla(30 10% 15% / 0) 0%, hsla(30 10% 15% / 0.4) 100%);
+    --gradient-romantic: linear-gradient(135deg, hsl(11 30% 98%) 0%, hsl(11 35% 95%) 50%, hsl(11 25% 97%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(11 38% 72%) 0%, hsl(11 38% 60%) 100%);
+    --gradient-blush: linear-gradient(180deg, hsl(11 35% 95%) 0%, hsl(11 30% 98%) 100%);
+    --gradient-overlay: linear-gradient(180deg, hsla(11 15% 15% / 0) 0%, hsla(11 15% 15% / 0.4) 100%);
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsla(30 10% 15% / 0.08);
-    --shadow-elegant: 0 8px 40px -8px hsla(30 10% 15% / 0.12);
-    --shadow-card: 0 2px 12px -2px hsla(30 10% 15% / 0.06);
-    --shadow-glow: 0 0 40px hsla(38 45% 55% / 0.2);
+    --shadow-soft: 0 4px 20px -4px hsla(11 15% 15% / 0.08);
+    --shadow-elegant: 0 8px 40px -8px hsla(11 15% 15% / 0.12);
+    --shadow-card: 0 2px 12px -2px hsla(11 15% 15% / 0.06);
+    --shadow-glow: 0 0 40px hsla(11 38% 68% / 0.25);
 
     /* ====================== */
     /* TYPOGRAPHY */
@@ -101,14 +101,14 @@
     --font-body: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;  
 
     /* Sidebar */
-    --sidebar-background: 40 33% 97%;
-    --sidebar-foreground: 30 10% 25%;
-    --sidebar-primary: 38 45% 55%;
-    --sidebar-primary-foreground: 40 33% 98%;
-    --sidebar-accent: 35 25% 93%;
-    --sidebar-accent-foreground: 30 10% 25%;
-    --sidebar-border: 35 20% 90%;
-    --sidebar-ring: 38 45% 55%;
+    --sidebar-background: 11 25% 97%;
+    --sidebar-foreground: 11 15% 25%;
+    --sidebar-primary: 11 38% 68%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 11 20% 93%;
+    --sidebar-accent-foreground: 11 15% 25%;
+    --sidebar-border: 11 25% 90%;
+    --sidebar-ring: 11 38% 68%;
   }
 
   .dark {
@@ -168,7 +168,7 @@
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(38 45% 50%) 0%, hsl(38 55% 65%) 100%);
+    background: linear-gradient(135deg, hsl(11 38% 60%) 0%, hsl(11 45% 72%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -180,13 +180,13 @@
   }
 
   .glass-card {
-    background: hsla(40 40% 99% / 0.8);
+    background: hsla(11 25% 99% / 0.8);
     backdrop-filter: blur(12px);
-    border: 1px solid hsla(35 20% 88% / 0.5);
+    border: 1px solid hsla(11 25% 85% / 0.5);
   }
 
   .invitation-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a86c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23cc998d' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .ornament-divider {
@@ -205,26 +205,26 @@
 
   /* Template-specific overrides for public wedding pages */
   .template-wrapper {
-    --primary: var(--template-primary, 38 45% 55%);
-    --secondary: var(--template-secondary, 350 35% 92%);
-    --background: var(--template-background, 40 33% 98%);
-    --foreground: var(--template-foreground, 30 10% 15%);
-    --accent: var(--template-accent, 15 50% 75%);
-    --muted: var(--template-muted, 35 25% 93%);
-    --card: var(--template-card, 40 40% 99%);
-    --muted-foreground: var(--template-foreground, 30 10% 45%);
-    --card-foreground: var(--template-foreground, 30 10% 15%);
-    --border: var(--template-muted, 35 20% 88%);
+    --primary: var(--template-primary, 11 38% 68%);
+    --secondary: var(--template-secondary, 11 30% 92%);
+    --background: var(--template-background, 11 30% 98%);
+    --foreground: var(--template-foreground, 11 15% 15%);
+    --accent: var(--template-accent, 11 45% 60%);
+    --muted: var(--template-muted, 11 20% 93%);
+    --card: var(--template-card, 11 25% 99%);
+    --muted-foreground: var(--template-foreground, 11 15% 45%);
+    --card-foreground: var(--template-foreground, 11 15% 15%);
+    --border: var(--template-muted, 11 25% 85%);
   }
 
   .template-wrapper.template-dark {
-    --muted-foreground: var(--template-foreground, 40 20% 70%);
-    --border: var(--template-muted, 30 10% 25%);
+    --muted-foreground: var(--template-foreground, 11 20% 70%);
+    --border: var(--template-muted, 11 15% 25%);
   }
 
   /* Template Patterns */
   .template-pattern-gold {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a86c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23cc998d' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .template-pattern-roses {
@@ -236,7 +236,7 @@
   }
 
   .template-pattern-stars {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.08'%3E%3Cpath d='M30 30l3-6 3 6 6 3-6 3-3 6-3-6-6-3 6-3zM10 10l2-4 2 4 4 2-4 2-2 4-2-4-4-2 4-2zM50 50l2-4 2 4 4 2-4 2-2 4-2-4-4-2 4-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23cc998d' fill-opacity='0.08'%3E%3Cpath d='M30 30l3-6 3 6 6 3-6 3-3 6-3-6-6-3 6-3zM10 10l2-4 2 4 4 2-4 2-2 4-2-4-4-2 4-2zM50 50l2-4 2 4 4 2-4 2-2 4-2-4-4-2 4-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .template-pattern-geometric {
@@ -249,9 +249,9 @@
 
   /* Wedding-specific colors (applied per-template) */
   .wedding-gold {
-    --wedding-gold: var(--template-primary, 38 45% 55%);
-    --wedding-gold-light: var(--template-accent, 38 45% 75%);
-    --wedding-gold-dark: var(--template-primary, 38 45% 40%);
+    --wedding-gold: var(--template-primary, 11 38% 68%);
+    --wedding-gold-light: var(--template-accent, 11 38% 82%);
+    --wedding-gold-dark: var(--template-primary, 11 38% 50%);
   }
 }
 
