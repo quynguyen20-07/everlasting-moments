@@ -1,6 +1,8 @@
 import {
   weddingTemplates,
+  styleLabels,
   type WeddingTemplate,
+  type LayoutStyle,
 } from "@/lib/templates/wedding-templates";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,33 +15,25 @@ interface TemplateGalleryProps {
   onSelect?: (template: WeddingTemplate) => void;
 }
 
-const styleLabels: Record<WeddingTemplate["style"], string> = {
-  classic: "Cổ điển",
-  modern: "Hiện đại",
-  rustic: "Mộc mạc",
-  romantic: "Lãng mạn",
-  minimalist: "Tối giản",
-  luxury: "Xa hoa",
-};
-
 export function TemplateGallery({
   selectedId,
   onSelect,
 }: TemplateGalleryProps) {
-  const [filter, setFilter] = useState<WeddingTemplate["style"] | "all">("all");
+  const [filter, setFilter] = useState<LayoutStyle | "all">("all");
 
   const filteredTemplates =
     filter === "all"
       ? weddingTemplates
       : weddingTemplates.filter((t) => t.style === filter);
 
-  const styles: Array<WeddingTemplate["style"] | "all"> = [
+  const styles: Array<LayoutStyle | "all"> = [
     "all",
     "classic",
     "romantic",
     "minimalist",
     "luxury",
     "rustic",
+    "modern",
   ];
 
   return (
@@ -70,8 +64,7 @@ export function TemplateGallery({
           transition={{ delay: 0.2 }}
           className="font-elegant text-lg text-muted-foreground max-w-xl mx-auto"
         >
-          Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách riêng
-          biệt
+          Mỗi mẫu thiệp được thiết kế tinh tế với bố cục riêng biệt, có thể kết hợp với nhiều bảng màu khác nhau
         </motion.p>
       </div>
 
