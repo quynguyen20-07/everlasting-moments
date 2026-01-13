@@ -9,6 +9,7 @@ import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection
 import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
+import BankAccountSection from "@/components/wedding-ui/BankAccountSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
@@ -411,6 +412,13 @@ export default function PublicWedding() {
           colors={colors}
           weddingId={wedding.id}
           onSubmit={handleRSVP}
+        />
+
+        {/* Bank Account / Gift Section */}
+        <BankAccountSection
+          colors={colors}
+          brideName={bride?.fullName}
+          groomName={groom?.fullName}
         />
 
         {/* Guest Wishes */}
