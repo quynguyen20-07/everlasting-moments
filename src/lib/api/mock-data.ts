@@ -48,7 +48,7 @@ export const mockWeddings: Wedding[] = [
     themeSettings: {
       primaryColor: "#D4A574",
       secondaryColor: "#F6C1CC",
-      fontHeading: "Abril Fatface",
+      fontHeading: "Georgia",
       fontBody: "Lora",
       template: "blush-romance",
       backgroundMusic: "/music/wedding-song.mp3",
@@ -58,13 +58,15 @@ export const mockWeddings: Wedding[] = [
       weddingId: "wedding-1",
       bride: {
         fullName: "Trần Thị Mai Anh",
-        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400",
+        avatar:
+          "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400",
         shortBio: "Một cô gái yêu thích nghệ thuật và âm nhạc",
         familyInfo: "Con ông Trần Văn Hoàng và bà Nguyễn Thị Lan",
       },
       groom: {
         fullName: "Nguyễn Văn Minh",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+        avatar:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
         shortBio: "Kỹ sư phần mềm, yêu thích du lịch",
         familyInfo: "Con ông Nguyễn Văn Hùng và bà Lê Thị Thu",
       },
@@ -74,21 +76,24 @@ export const mockWeddings: Wedding[] = [
           title: "Lần đầu gặp gỡ",
           content: "Chúng tôi gặp nhau tại một buổi hội thảo công nghệ...",
           storyDate: "2020-03-15",
-          imageUrl: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600",
+          imageUrl:
+            "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600",
         },
         {
           id: "story-2",
           title: "Ngày hẹn hò đầu tiên",
           content: "Valentine đầu tiên bên nhau tại một quán café nhỏ...",
           storyDate: "2021-02-14",
-          imageUrl: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600",
+          imageUrl:
+            "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600",
         },
         {
           id: "story-3",
           title: "Cầu hôn",
           content: "Dưới ánh đèn Giáng sinh lung linh...",
           storyDate: "2023-12-25",
-          imageUrl: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600",
+          imageUrl:
+            "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600",
         },
       ],
       weddingEvents: [

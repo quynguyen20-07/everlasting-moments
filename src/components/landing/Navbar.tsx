@@ -48,7 +48,7 @@ const Navbar = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <Heart className="w-6 h-6 text-primary fill-primary" />
-              <span className="font-display text-xl font-semibold">
+              <span className="font-display text-xl font-semibold text-white">
                 True loves
               </span>
             </Link>
@@ -59,7 +59,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm font-medium text-white hover:text-primary transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -132,11 +132,8 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Button variant="ghost" asChild>
-                    <Link to="/auth">Đăng Nhập</Link>
-                  </Button>
                   <Button variant="gold" asChild>
-                    <Link to="/auth?mode=signup">Bắt Đầu</Link>
+                    <Link to="/auth">Đăng Nhập</Link>
                   </Button>
                 </>
               )}

@@ -40,7 +40,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "0 15% 93%",
       card: "40 40% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(0 65% 50%) 0%, hsl(45 80% 55%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(0 65% 50%) 0%, hsl(45 80% 55%) 100%)",
     pattern: "floral-gold",
   },
   {
@@ -59,7 +60,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "210 15% 93%",
       card: "210 30% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(210 100% 60%) 0%, hsl(210 80% 45%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(210 100% 60%) 0%, hsl(210 80% 45%) 100%)",
     pattern: "geometric",
   },
   {
@@ -78,7 +80,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "45 20% 93%",
       card: "50 35% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(45 65% 55%) 0%, hsl(150 40% 40%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(45 65% 55%) 0%, hsl(150 40% 40%) 100%)",
     pattern: "botanical",
   },
   {
@@ -97,7 +100,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "135 15% 93%",
       card: "135 20% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(135 60% 40%) 0%, hsl(135 50% 30%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(135 60% 40%) 0%, hsl(135 50% 30%) 100%)",
     pattern: "botanical",
   },
   {
@@ -116,7 +120,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "350 20% 93%",
       card: "350 30% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(350 45% 70%) 0%, hsl(350 50% 55%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(350 45% 70%) 0%, hsl(350 50% 55%) 100%)",
     pattern: "roses",
   },
   {
@@ -154,7 +159,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "35 20% 93%",
       card: "40 35% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(35 45% 65%) 0%, hsl(35 50% 50%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(35 45% 65%) 0%, hsl(35 50% 50%) 100%)",
     pattern: "floral-gold",
   },
   {
@@ -173,7 +179,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "340 20% 93%",
       card: "340 25% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(340 65% 65%) 0%, hsl(340 60% 50%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(340 65% 65%) 0%, hsl(340 60% 50%) 100%)",
     pattern: "roses",
   },
   {
@@ -192,7 +199,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "25 20% 92%",
       card: "30 30% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(20 60% 40%) 0%, hsl(20 50% 30%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(20 60% 40%) 0%, hsl(20 50% 30%) 100%)",
     pattern: "botanical",
   },
   {
@@ -211,7 +219,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "220 20% 93%",
       card: "220 30% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(240 100% 30%) 0%, hsl(220 80% 35%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(240 100% 30%) 0%, hsl(220 80% 35%) 100%)",
     pattern: "geometric",
   },
   {
@@ -230,7 +239,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "45 25% 93%",
       card: "45 35% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(50 100% 55%) 0%, hsl(45 80% 45%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(50 100% 55%) 0%, hsl(45 80% 45%) 100%)",
     pattern: "stars",
   },
   {
@@ -249,7 +259,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "30 20% 93%",
       card: "35 30% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(0 80% 55%) 0%, hsl(35 60% 50%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(0 80% 55%) 0%, hsl(35 60% 50%) 100%)",
     pattern: "roses",
   },
   {
@@ -306,7 +317,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "150 15% 92%",
       card: "60 25% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(150 35% 50%) 0%, hsl(150 40% 35%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(150 35% 50%) 0%, hsl(150 40% 35%) 100%)",
     pattern: "botanical",
   },
   {
@@ -326,7 +338,8 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "220 25% 20%",
       card: "220 30% 16%",
     },
-    gradient: "linear-gradient(135deg, hsl(38 55% 60%) 0%, hsl(38 50% 45%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(38 55% 60%) 0%, hsl(38 50% 45%) 100%)",
     pattern: "stars",
   },
   {
@@ -345,14 +358,21 @@ export const TEMPLATES_THEME_LIST: TemplateTheme[] = [
       muted: "270 15% 93%",
       card: "270 25% 99%",
     },
-    gradient: "linear-gradient(135deg, hsl(270 40% 65%) 0%, hsl(270 45% 50%) 100%)",
+    gradient:
+      "linear-gradient(135deg, hsl(270 40% 65%) 0%, hsl(270 45% 50%) 100%)",
     pattern: "floral-lavender",
   },
 ];
 
 // ============= LAYOUT DEFINITIONS =============
 
-export type LayoutStyle = "classic" | "modern" | "rustic" | "romantic" | "minimalist" | "luxury";
+export type LayoutStyle =
+  | "classic"
+  | "modern"
+  | "rustic"
+  | "romantic"
+  | "minimalist"
+  | "luxury";
 
 export interface TemplateLayout {
   id: string;
@@ -375,12 +395,14 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     id: "classic-elegance",
     name: "Classic Elegance",
     nameVi: "Cổ Điển Sang Trọng",
-    description: "Timeless elegance with traditional layout and refined details",
-    descriptionVi: "Phong cách cổ điển vượt thời gian với bố cục truyền thống và chi tiết tinh tế",
+    description:
+      "Timeless elegance with traditional layout and refined details",
+    descriptionVi:
+      "Phong cách cổ điển vượt thời gian với bố cục truyền thống và chi tiết tinh tế",
     preview: "/templates/classic-elegance.jpg",
     style: "classic",
     fonts: {
-      heading: "Abril Fatface",
+      heading: "Georgia",
       body: "Cormorant Garamond",
     },
     defaultThemeId: "red-gold",
@@ -404,7 +426,8 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     name: "Romantic Garden",
     nameVi: "Vườn Lãng Mạn",
     description: "Soft, dreamy design with floral accents and romantic vibes",
-    descriptionVi: "Thiết kế nhẹ nhàng, mơ màng với điểm nhấn hoa và không khí lãng mạn",
+    descriptionVi:
+      "Thiết kế nhẹ nhàng, mơ màng với điểm nhấn hoa và không khí lãng mạn",
     preview: "/templates/romantic-garden.jpg",
     style: "romantic",
     fonts: {
@@ -422,7 +445,7 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     preview: "/templates/rustic-charm.jpg",
     style: "rustic",
     fonts: {
-      heading: "Abril Fatface",
+      heading: "Georgia",
       body: "ui-sans-serif",
     },
     defaultThemeId: "sage-garden",
@@ -432,11 +455,12 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     name: "Luxury Royal",
     nameVi: "Xa Hoa Hoàng Gia",
     description: "Opulent design with rich details and luxurious feel",
-    descriptionVi: "Thiết kế xa hoa với chi tiết phong phú và cảm giác sang trọng",
+    descriptionVi:
+      "Thiết kế xa hoa với chi tiết phong phú và cảm giác sang trọng",
     preview: "/templates/luxury-royal.jpg",
     style: "luxury",
     fonts: {
-      heading: "Abril Fatface",
+      heading: "Georgia",
       body: "Cormorant Garamond",
     },
     defaultThemeId: "luxury-gold",
@@ -446,7 +470,8 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     name: "Minimalist Pure",
     nameVi: "Thuần Khiết Tối Giản",
     description: "Ultra-clean design focusing on typography and whitespace",
-    descriptionVi: "Thiết kế siêu sạch tập trung vào typography và khoảng trắng",
+    descriptionVi:
+      "Thiết kế siêu sạch tập trung vào typography và khoảng trắng",
     preview: "/templates/minimalist-pure.jpg",
     style: "minimalist",
     fonts: {
@@ -488,8 +513,12 @@ export function createWeddingTemplate(
     id: `${layout.id}-${theme.id}`,
     name: `${layout.name} - ${theme.name}`,
     nameVi: `${layout.nameVi} - ${theme.name}`,
-    description: `${layout.description} with ${theme.description.toLowerCase()}`,
-    descriptionVi: `${layout.descriptionVi} với ${theme.description.toLowerCase()}`,
+    description: `${
+      layout.description
+    } with ${theme.description.toLowerCase()}`,
+    descriptionVi: `${
+      layout.descriptionVi
+    } với ${theme.description.toLowerCase()}`,
     preview: layout.preview,
     layout,
     theme,
@@ -502,10 +531,14 @@ export function createWeddingTemplate(
 }
 
 // Default wedding templates (layout + default theme)
-export const weddingTemplates: WeddingTemplate[] = TEMPLATE_LAYOUTS.map((layout) => {
-  const theme = TEMPLATES_THEME_LIST.find((t) => t.id === layout.defaultThemeId) || TEMPLATES_THEME_LIST[0];
-  return createWeddingTemplate(layout, theme);
-});
+export const weddingTemplates: WeddingTemplate[] = TEMPLATE_LAYOUTS.map(
+  (layout) => {
+    const theme =
+      TEMPLATES_THEME_LIST.find((t) => t.id === layout.defaultThemeId) ||
+      TEMPLATES_THEME_LIST[0];
+    return createWeddingTemplate(layout, theme);
+  }
+);
 
 // ============= LEGACY SUPPORT: TEMPLATES_LIST =============
 // Keep this for backward compatibility with existing components
@@ -543,25 +576,28 @@ export function getThemesByPattern(pattern: string): TemplateTheme[] {
 }
 
 // Create a custom template with any layout + theme combination
-export function getCustomTemplate(layoutId: string, themeId: string): WeddingTemplate | null {
+export function getCustomTemplate(
+  layoutId: string,
+  themeId: string
+): WeddingTemplate | null {
   const layout = getLayoutById(layoutId);
   const theme = getThemeById(themeId);
-  
+
   if (!layout || !theme) return null;
-  
+
   return createWeddingTemplate(layout, theme);
 }
 
 // Get all possible template combinations
 export function getAllTemplateCombinations(): WeddingTemplate[] {
   const combinations: WeddingTemplate[] = [];
-  
+
   TEMPLATE_LAYOUTS.forEach((layout) => {
     TEMPLATES_THEME_LIST.forEach((theme) => {
       combinations.push(createWeddingTemplate(layout, theme));
     });
   });
-  
+
   return combinations;
 }
 

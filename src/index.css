@@ -1,31 +1,8 @@
-/* index.css - Đã tối ưu cho font hiện đại và tiếng Việt */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ====================== */
-/* IMPORT FONT HIỆN ĐẠI   */
-/* ====================== */
-
-/* OPTION 1: Sử dụng Google Fonts (CDN - Dễ dàng, hiệu suất tốt) */
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
-/* Font chính: Abril Fatface (Display), Font phụ: Lora (Body & Elegant) */
-
-/* OPTION 2: Sử dụng FontSource (Self-host - Bảo mật, ổn định) */
-/* 
-@import "@fontsource/abril-fatface/400.css";
-@import "@fontsource/lora/400.css";
-@import "@fontsource/lora/500.css";
-@import "@fontsource/lora/600.css";
-@import "@fontsource/lora/700.css";
-@import "@fontsource/lora/400-italic.css";
-@import "@fontsource/lora/700-italic.css";
-*/
-
-/* ====================== */
-/* WEDDING DESIGN SYSTEM  */
-/* ====================== */
 
 @layer base {
   :root {
@@ -52,6 +29,8 @@
     /* Muted: Warm Rose Beige */
     --muted: 11 20% 93%;
     --muted-foreground: 11 15% 45%;
+    --inverse-on-surface-text: 0 0% 100%;
+    --on-surface-text: 220.65 13.19% 46.08%;
 
     /* Accent: Deeper Rose */
     --accent: 11 45% 60%;
@@ -68,7 +47,6 @@
 
     --radius: 0.625rem;
 
-    /* Custom Colors - All based on #CC998D */
     --champagne: 11 38% 68%;
     --champagne-light: 11 38% 82%;
     --champagne-dark: 11 38% 50%;
@@ -80,27 +58,53 @@
     --sage: 11 15% 75%;
     --dusty-rose: 11 38% 68%;
 
-    /* Gradients */
-    --gradient-romantic: linear-gradient(135deg, hsl(11 30% 98%) 0%, hsl(11 35% 95%) 50%, hsl(11 25% 97%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(11 38% 72%) 0%, hsl(11 38% 60%) 100%);
-    --gradient-blush: linear-gradient(180deg, hsl(11 35% 95%) 0%, hsl(11 30% 98%) 100%);
-    --gradient-overlay: linear-gradient(180deg, hsla(11 15% 15% / 0) 0%, hsla(11 15% 15% / 0.4) 100%);
+    --gradient-romantic: linear-gradient(
+      135deg,
+      hsl(11 30% 98%) 0%,
+      hsl(11 35% 95%) 50%,
+      hsl(11 25% 97%) 100%
+    );
+    --gradient-gold: linear-gradient(
+      135deg,
+      hsl(11 38% 72%) 0%,
+      hsl(11 38% 60%) 100%
+    );
+    --gradient-blush: linear-gradient(
+      180deg,
+      hsl(11 35% 95%) 0%,
+      hsl(11 30% 98%) 100%
+    );
+    --gradient-overlay: linear-gradient(
+      180deg,
+      hsla(11 15% 15% / 0) 0%,
+      hsla(11 15% 15% / 0.4) 100%
+    );
 
-    /* Shadows */
     --shadow-soft: 0 4px 20px -4px hsla(11 15% 15% / 0.08);
     --shadow-elegant: 0 8px 40px -8px hsla(11 15% 15% / 0.12);
     --shadow-card: 0 2px 12px -2px hsla(11 15% 15% / 0.06);
     --shadow-glow: 0 0 40px hsla(11 38% 68% / 0.25);
 
-    /* ====================== */
-    /* TYPOGRAPHY */
-    /* ====================== */
-  
-    --font-display: "Abril Fatface", serif;  
-    --font-elegant: "Lora", serif;  
-    --font-body: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;  
+    /* Display font - Elegant serif for headings */
+    --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 
-    /* Sidebar */
+    /* Elegant font - For special text */
+    --font-elegant: "Playfair Display", Georgia, serif;
+
+    /* Body font - Optimized for Vietnamese content */
+    --font-body: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    /* Vietnamese font - Primary for Vietnamese text */
+    --font-vietnamese: "Be Vietnam Pro", "Inter", system-ui, sans-serif;
+
+    /* Script font - For decorative text */
+    --font-script: "Dancing Script", cursive;
+
+    /* Monospace */
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      monospace;
+
     --sidebar-background: 11 25% 97%;
     --sidebar-foreground: 11 15% 25%;
     --sidebar-primary: 11 38% 68%;
@@ -109,52 +113,163 @@
     --sidebar-accent-foreground: 11 15% 25%;
     --sidebar-border: 11 25% 90%;
     --sidebar-ring: 11 38% 68%;
+
+    --template-primary: var(--primary);
+    --template-secondary: var(--secondary);
+    --template-background: var(--background);
+    --template-foreground: var(--foreground);
+    --template-accent: var(--accent);
+    --template-muted: var(--muted);
+    --template-card: var(--card);
+    --template-gradient: var(--gradient-gold);
   }
 
   .dark {
-    /* ... (giữ nguyên phần dark theme) ... */
     --background: 30 15% 8%;
     --foreground: 40 20% 95%;
-    /* ... (các biến khác giữ nguyên) ... */
+    --card: 30 15% 12%;
+    --card-foreground: 40 20% 95%;
+    --popover: 30 15% 12%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 11 45% 75%;
+    --primary-foreground: 30 15% 8%;
+    --secondary: 30 10% 20%;
+    --secondary-foreground: 40 20% 95%;
+    --muted: 30 10% 20%;
+    --muted-foreground: 30 10% 65%;
+    --accent: 11 40% 65%;
+    --accent-foreground: 30 15% 8%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 40 20% 95%;
+    --border: 30 10% 25%;
+    --input: 30 10% 25%;
+    --ring: 11 45% 75%;
 
-    /* Font vẫn giống light theme */
-    --font-display: "Abril Fatface", serif;
-    --font-elegant: "Lora", serif;
-    --font-body: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-display: "Cormorant Garamond", Georgia, serif;
+    --font-elegant: "Playfair Display", Georgia, serif;
+    --font-body: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: normal;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-foreground font-body antialiased;
-    /* Tối ưu hiển thị font chữ cho tiếng Việt */
-    font-feature-settings: "kern", "liga", "clig", "calt", "ss01";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ccmp" 1;
+    font-variant-ligatures: common-ligatures;
+    font-kerning: normal;
+    line-height: 1.7;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
-  /* Áp dụng font cho headings */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
-    /* Đảm bảo heading tiếng Việt không bị nhảy hàng */
+  h1,
+  .h1 {
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h2,
+  .h2 {
+    @apply font-display text-3xl md:text-4xl lg:text-5xl font-medium;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  h3,
+  .h3 {
+    @apply font-display text-2xl md:text-3xl lg:text-4xl font-medium;
     line-height: 1.3;
-    font-weight: 700;
   }
 
-  /* Tùy chỉnh đặc biệt cho font display (Abril Fatface) nếu cần */
-  .font-display {
-    letter-spacing: -0.02em; /* Hơi khít lại một chút cho sang trọng */
+  h4,
+  .h4 {
+    @apply font-display text-xl md:text-2xl lg:text-3xl font-medium;
+    line-height: 1.35;
   }
 
-  /* Tùy chỉnh cho font body/elegant (Lora) */
-  .font-elegant, .font-body {
+  h5,
+  .h5 {
+    @apply font-display text-lg md:text-xl lg:text-2xl font-medium;
+    line-height: 1.4;
+  }
+
+  h6,
+  .h6 {
+    @apply font-display text-base md:text-lg lg:text-xl font-medium;
+    line-height: 1.5;
+  }
+
+  p {
+    @apply font-body leading-relaxed;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     letter-spacing: 0.01em;
-    line-height: 1.7; /* Tăng line-height cho dễ đọc tiếng Việt */
+    word-spacing: 0.02em;
+    margin-bottom: 1em;
+  }
+
+  .vietnamese-text {
+    font-family: var(--font-vietnamese);
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: normal;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ccmp" 1;
+    word-break: keep-all;
+  }
+
+  .elegant-text {
+    font-family: var(--font-elegant);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+  }
+
+  .script-text {
+    font-family: var(--font-script);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  ul,
+  ol {
+    @apply font-body leading-relaxed ml-5 mb-4;
+  }
+
+  li {
+    @apply mb-2;
+  }
+
+  a {
+    @apply text-primary transition-colors duration-200;
+    text-decoration: none;
+  }
+
+  a:hover {
+    @apply text-accent;
+  }
+
+  code {
+    @apply font-mono text-sm bg-muted px-1.5 py-0.5 rounded;
+  }
+
+  blockquote {
+    @apply border-l-4 border-primary pl-4 italic text-muted-foreground my-6;
+  }
+
+  hr {
+    @apply border-border my-8;
   }
 }
 
@@ -163,12 +278,17 @@
     background: var(--gradient-romantic);
   }
 
+  /* Gold gradient */
   .gold-gradient {
     background: var(--gradient-gold);
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(11 38% 60%) 0%, hsl(11 45% 72%) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(11 38% 60%) 0%,
+      hsl(11 45% 72%) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -177,12 +297,14 @@
   .elegant-border {
     border: 1px solid hsl(var(--border));
     box-shadow: var(--shadow-soft);
+    border-radius: var(--radius);
   }
 
   .glass-card {
-    background: hsla(11 25% 99% / 0.8);
-    backdrop-filter: blur(12px);
-    border: 1px solid hsla(11 25% 85% / 0.5);
+    border: none;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3.25px);
   }
 
   .invitation-pattern {
@@ -193,17 +315,22 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin: 2rem 0;
   }
 
   .ornament-divider::before,
   .ornament-divider::after {
-    content: '';
+    content: "";
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / 0.3),
+      transparent
+    );
   }
 
-  /* Template-specific overrides for public wedding pages */
   .template-wrapper {
     --primary: var(--template-primary, 11 38% 68%);
     --secondary: var(--template-secondary, 11 30% 92%);
@@ -247,24 +374,223 @@
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239b7bb8' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
-  /* Wedding-specific colors (applied per-template) */
-  .wedding-gold {
-    --wedding-gold: var(--template-primary, 11 38% 68%);
-    --wedding-gold-light: var(--template-accent, 11 38% 82%);
-    --wedding-gold-dark: var(--template-primary, 11 38% 50%);
+  .wedding-button {
+    @apply inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .wedding-button-primary {
+    @apply wedding-button bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-soft hover:shadow-glow;
+  }
+
+  .wedding-button-secondary {
+    @apply wedding-button bg-secondary text-secondary-foreground border border-border hover:bg-secondary/80;
+  }
+
+  .wedding-button-outline {
+    @apply wedding-button border-2 border-primary bg-transparent text-primary hover:bg-primary/10;
+  }
+
+  .wedding-button-ghost {
+    @apply wedding-button hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .wedding-card {
+    @apply bg-card border border-border/20 rounded-2xl shadow-elegant p-6 transition-all duration-300 hover:shadow-card;
+  }
+
+  .feature-card {
+    @apply wedding-card text-center p-8;
+  }
+
+  .testimonial-card {
+    @apply wedding-card relative overflow-hidden;
+  }
+
+  .wedding-input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .wedding-textarea {
+    @apply wedding-input min-h-[100px] resize-y;
+  }
+
+  .wedding-select {
+    @apply wedding-input;
+  }
+
+  .floral-border {
+    @apply relative before:absolute before:inset-0 before:border-2 before:border-primary/20 before:rounded-2xl before:pointer-events-none;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .gold-filter {
+    filter: sepia(0.3) saturate(1.2) hue-rotate(-5deg);
   }
 }
 
+@layer utilities {
+  /* ====================== */
+  /* TEXT UTILITIES */
+  /* ====================== */
 
-/* ====================== */
-/* FALLBACK FONT SYSTEM   */
-/* ====================== */
-/* Đảm bảo nếu font chính không load được, vẫn có font thay thế tốt */
-@supports not (font-variation-settings: normal) {
-  body {
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  .text-balance {
+    text-wrap: balance;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: Georgia, "Times New Roman", Times, serif;
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .text-nowrap {
+    white-space: nowrap;
+  }
+
+  .optimize-vietnamese {
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ccmp" 1;
+    letter-spacing: normal;
+    word-break: keep-all;
+  }
+
+  .bg-grid-pattern {
+    background-image: linear-gradient(
+        to right,
+        hsl(var(--border)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .bg-dots-pattern {
+    background-image: radial-gradient(
+      hsl(var(--muted-foreground) / 0.2) 1px,
+      transparent 1px
+    );
+    background-size: 20px 20px;
+  }
+
+  .scrollbar-wedding {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) hsl(var(--muted));
+  }
+
+  .scrollbar-wedding::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-wedding::-webkit-scrollbar-track {
+    @apply bg-muted rounded-full;
+  }
+
+  .scrollbar-wedding::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-full;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+    background-size: 200% 100%;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@supports not (font-variation-settings: normal) {
+  .font-body,
+  .vietnamese-text {
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  }
+}
+
+@media print {
+  body {
+    @apply bg-white text-black;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .wedding-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
   }
 }

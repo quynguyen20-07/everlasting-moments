@@ -21,19 +21,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Heart, Loader2, User, Palette, Music } from "lucide-react";
+import { TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
 import { useWeddingStore } from "@/stores/weddingStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Heart, Loader2, User, Palette, Music } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
-import { TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
 
 const createWeddingSchema = z.object({
   // Basic info
@@ -68,11 +68,9 @@ interface CreateWeddingDialogProps {
 }
 
 const FONT_OPTIONS = [
-  { value: "Playfair Display", label: "Playfair Display" },
-  { value: "Cormorant Garamond", label: "Cormorant Garamond" },
-  { value: "Abril Fatface", label: "Abril Fatface" },
-  { value: "Inter", label: "Inter" },
-  { value: "Lora", label: "Lora" },
+  { value: "display", label: "Display (Decorative)" },
+  { value: "serif", label: "Classic Serif" },
+  { value: "sans", label: "Modern Sans" },
 ];
 
 const MUSIC_OPTIONS = [
@@ -138,7 +136,8 @@ export const CreateWeddingDialog = ({
           secondaryColor: data.secondaryColor,
           fontHeading: data.fontHeading,
           fontBody: data.fontBody,
-          backgroundMusic: data.backgroundMusic === "none" ? undefined : data.backgroundMusic,
+          backgroundMusic:
+            data.backgroundMusic === "none" ? undefined : data.backgroundMusic,
         },
       });
 

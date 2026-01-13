@@ -1,3 +1,4 @@
+import animation from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,9 +20,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Abril Fatface", "serif"],
-        elegant: ["Lora", "serif"],
-        body: ["ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-display)"],
+        elegant: ["var(--font-elegant)"],
+        body: ["var(--font-body)"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -141,5 +142,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animation],
 } satisfies Config;

@@ -9,24 +9,24 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft hover:shadow-elegant",
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft hover:shadow-elegant font-display",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 font-display",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground font-display",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 font-display",
+        ghost: "hover:bg-accent hover:text-accent-foreground font-display",
+        link: "text-primary underline-offset-4 hover:underline font-display",
         elegant:
-          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant hover:shadow-glow font-display tracking-wide",
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant hover:shadow-glow tracking-wide font-display",
         romantic:
-          "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90 shadow-soft hover:shadow-elegant",
+          "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90 shadow-soft hover:shadow-elegant font-display",
         blush:
-          "bg-secondary text-secondary-foreground hover:bg-blush border border-blush/50 shadow-soft",
-        gold: "bg-gradient-to-r from-champagne-dark to-champagne text-primary-foreground hover:opacity-90 shadow-elegant font-display tracking-wider",
+          "bg-secondary text-secondary-foreground hover:bg-blush border border-blush/50 shadow-soft font-display",
+        gold: "bg-gradient-to-r from-champagne-dark to-champagne text-primary-foreground hover:opacity-90 hover:text-white shadow-elegant font-display tracking-wider font-display",
         "outline-elegant":
-          "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300",
+          "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-display",
       },
       size: {
         default: "h-10 px-4 py-2",

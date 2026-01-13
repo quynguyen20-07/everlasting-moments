@@ -31,7 +31,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Huy hiệu */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -41,7 +41,7 @@ const Hero = () => {
             <span className="text-sm font-medium text-secondary-foreground">
               Tạo Thiệp Cưới Đẹp Mắt
             </span>
-          </motion.div>
+          </motion.div> */}
 
           {/* Tiêu đề chính */}
           <motion.h1
@@ -62,7 +62,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-elegant"
+            className="text-lg md:text-xl text-on-surface-text max-w-2xl mx-auto mb-10 font-elegant"
           >
             Tạo những thiệp cưới kỹ thuật số tuyệt đẹp, nắm bắt được bản chất
             của ngày đặc biệt của bạn. Chia sẻ câu chuyện tình yêu của bạn, quản
