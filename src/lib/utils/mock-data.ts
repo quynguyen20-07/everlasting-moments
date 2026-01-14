@@ -113,7 +113,7 @@ export const coupleData = {
 };
 
 // Re-export TEMPLATES_LIST from wedding-templates for backward compatibility
-export { TEMPLATES_THEME_LIST as TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
+export { TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
 
 // Re-export styleLabels
 export const styleLabels = templateStyleLabels;

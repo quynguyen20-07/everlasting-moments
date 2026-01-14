@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Eye, Heart, Sparkles } from "lucide-react";
-import { TEMPLATES_THEME_LIST, styleLabels } from "@/lib/templates/wedding-templates";
+import { TEMPLATES_LIST, styleLabels } from "@/lib/templates/wedding-templates";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
