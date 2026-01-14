@@ -1,14 +1,13 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useSpring, animate } from "framer-motion";
 import {
   TemplateLayout,
   TemplateTheme,
-  TEMPLATES_THEME_LIST,
   createWeddingTemplate,
 } from "@/lib/templates/wedding-templates";
-import { COLOR_SCHEMES, coupleData, DEFAULT_COLORS, getCountdown } from "@/lib/utils";
+import { COLOR_SCHEMES, coupleData, DEFAULT_COLORS } from "@/lib/utils";
 import { ITimeCountdown } from "@/types";
 import TemplateHeroCard from "./TemplateHeroCard";
 
@@ -26,31 +25,89 @@ const TemplateRowSlider = ({
   onTemplateClick,
 }: TemplateRowSliderProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartIndex = useRef(0);
 
-  // Get visible indices (prev, current, next) with infinite loop
+  // Card dimensions
+  const CARD_WIDTH = 280;
+  const CARD_GAP = 24;
+  const SIDE_SCALE = 0.75;
+
+  // Motion values for smooth dragging
+  const x = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 300, damping: 30 });
+
+  // Get normalized index with infinite loop
+  const normalizeIndex = useCallback((index: number) => {
+    const total = themes.length;
+    return ((index % total) + total) % total;
+  }, [themes.length]);
+
+  // Get visible indices (5 items: -2, -1, 0, 1, 2 positions)
   const getVisibleIndices = useCallback(() => {
     const total = themes.length;
-    const prev = (activeIndex - 1 + total) % total;
-    const next = (activeIndex + 1) % total;
-    return { prev, current: activeIndex, next };
-  }, [activeIndex, themes.length]);
+    return [-2, -1, 0, 1, 2].map(offset => normalizeIndex(activeIndex + offset));
+  }, [activeIndex, normalizeIndex, themes.length]);
 
-  const handlePrev = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev - 1 + themes.length) % themes.length);
-    setTimeout(() => setIsAnimating(false), 400);
+  const handleSlide = useCallback((direction: number) => {
+    setActiveIndex(prev => normalizeIndex(prev + direction));
+  }, [normalizeIndex]);
+
+  // Click on side items to center them
+  const handleItemClick = useCallback((clickedIndex: number) => {
+    const visibleIndices = getVisibleIndices();
+    const positions = [-2, -1, 0, 1, 2];
+    
+    const positionIndex = visibleIndices.indexOf(clickedIndex);
+    if (positionIndex !== -1) {
+      const offset = positions[positionIndex];
+      if (offset !== 0) {
+        setActiveIndex(prev => normalizeIndex(prev + offset));
+      } else {
+        // Center item clicked - trigger template click
+        onTemplateClick(getTemplate(themes[clickedIndex]).id);
+      }
+    }
+  }, [getVisibleIndices, normalizeIndex, themes, onTemplateClick]);
+
+  // Drag handlers
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    isDragging.current = true;
+    dragStartIndex.current = activeIndex;
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    dragStartX.current = clientX;
+    x.set(0);
   };
 
-  const handleNext = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev + 1) % themes.length);
-    setTimeout(() => setIsAnimating(false), 400);
+  const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging.current) return;
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const deltaX = clientX - dragStartX.current;
+    x.set(deltaX);
   };
 
-  const { prev, current, next } = getVisibleIndices();
+  const handleDragEnd = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    
+    const currentX = x.get();
+    const threshold = CARD_WIDTH / 3;
+    
+    if (Math.abs(currentX) > threshold) {
+      const direction = currentX > 0 ? -1 : 1;
+      const steps = Math.round(Math.abs(currentX) / (CARD_WIDTH + CARD_GAP));
+      const actualSteps = Math.max(1, Math.min(steps, 2));
+      setActiveIndex(prev => normalizeIndex(prev + direction * actualSteps));
+    }
+    
+    animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
+  };
+
+  const visibleIndices = getVisibleIndices();
+  const positions = [-2, -1, 0, 1, 2];
 
   const getColors = (theme: TemplateTheme) => {
     return COLOR_SCHEMES[theme.id as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS;
@@ -58,6 +115,17 @@ const TemplateRowSlider = ({
 
   const getTemplate = (theme: TemplateTheme) => {
     return createWeddingTemplate(layout, theme);
+  };
+
+  // Calculate position and scale for each item
+  const getItemStyle = (position: number) => {
+    const isCenter = position === 0;
+    const scale = isCenter ? 1 : SIDE_SCALE;
+    const offsetX = position * (CARD_WIDTH * SIDE_SCALE + CARD_GAP);
+    const zIndex = 10 - Math.abs(position);
+    const opacity = Math.abs(position) <= 1 ? (isCenter ? 1 : 0.7) : 0.4;
+    
+    return { scale, offsetX, zIndex, opacity };
   };
 
   return (
@@ -79,72 +147,89 @@ const TemplateRowSlider = ({
           variant="outline"
           size="icon"
           className="absolute left-0 z-30 rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
-          onClick={handlePrev}
-          disabled={isAnimating}
+          onClick={() => handleSlide(-1)}
         >
           <ChevronLeft className="w-5 h-5" />
         </Button>
 
-        {/* Cards Container */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 overflow-hidden px-12 md:px-16 py-4">
-          {/* Previous Card (Left) */}
-          <motion.div
-            key={`prev-${themes[prev].id}`}
-            className="hidden md:block flex-shrink-0 opacity-60 hover:opacity-80 transition-opacity duration-300"
-            initial={{ x: -50, opacity: 0, scale: 0.75 }}
-            animate={{ x: 0, opacity: 0.6, scale: 0.75 }}
-            transition={{ duration: 0.4 }}
-            style={{ transformOrigin: "center right" }}
-          >
-            <TemplateHeroCard
-              colors={getColors(themes[prev])}
-              template={getTemplate(themes[prev])}
-              coupleData={coupleData}
-              countdown={countdown}
-              date="2026-01-08T10:00:00Z"
-              onClick={() => onTemplateClick(getTemplate(themes[prev]).id)}
-            />
-          </motion.div>
-
-          {/* Center Card (Active) */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`active-${themes[current].id}`}
-              className="flex-shrink-0 z-10"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <TemplateHeroCard
-                colors={getColors(themes[current])}
-                template={getTemplate(themes[current])}
-                coupleData={coupleData}
-                countdown={countdown}
-                date="2026-01-08T10:00:00Z"
-                onClick={() => onTemplateClick(getTemplate(themes[current]).id)}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Next Card (Right) */}
-          <motion.div
-            key={`next-${themes[next].id}`}
-            className="hidden md:block flex-shrink-0 opacity-60 hover:opacity-80 transition-opacity duration-300"
-            initial={{ x: 50, opacity: 0, scale: 0.75 }}
-            animate={{ x: 0, opacity: 0.6, scale: 0.75 }}
-            transition={{ duration: 0.4 }}
-            style={{ transformOrigin: "center left" }}
-          >
-            <TemplateHeroCard
-              colors={getColors(themes[next])}
-              template={getTemplate(themes[next])}
-              coupleData={coupleData}
-              countdown={countdown}
-              date="2026-01-08T10:00:00Z"
-              onClick={() => onTemplateClick(getTemplate(themes[next]).id)}
-            />
-          </motion.div>
+        {/* Cards Container with Drag */}
+        <div
+          ref={containerRef}
+          className="relative flex items-center justify-center overflow-hidden px-12 md:px-16 py-8 cursor-grab active:cursor-grabbing select-none"
+          style={{ 
+            width: '100%',
+            minHeight: '500px'
+          }}
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
+          {/* Cards */}
+          <div className="relative flex items-center justify-center" style={{ width: CARD_WIDTH, height: 'auto' }}>
+            {positions.map((position, idx) => {
+              const themeIndex = visibleIndices[idx];
+              const theme = themes[themeIndex];
+              const { scale, offsetX, zIndex, opacity } = getItemStyle(position);
+              const isCenter = position === 0;
+              
+              // Hide far items on mobile
+              const hideOnMobile = Math.abs(position) > 1;
+              
+              return (
+                <motion.div
+                  key={`${layout.id}-${theme.id}-${position}`}
+                  className={`absolute ${hideOnMobile ? 'hidden md:block' : ''}`}
+                  style={{
+                    x: springX,
+                    zIndex,
+                  }}
+                  initial={false}
+                  animate={{
+                    x: offsetX,
+                    scale,
+                    opacity,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isDragging.current) {
+                      handleItemClick(themeIndex);
+                    }
+                  }}
+                >
+                  <div 
+                    className={`transition-shadow duration-300 ${isCenter ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'}`}
+                    style={{ 
+                      pointerEvents: isCenter ? 'auto' : 'auto',
+                    }}
+                  >
+                    <TemplateHeroCard
+                      colors={getColors(theme)}
+                      template={getTemplate(theme)}
+                      coupleData={coupleData}
+                      countdown={countdown}
+                      date="2026-01-08T10:00:00Z"
+                      onClick={() => {
+                        if (isCenter) {
+                          onTemplateClick(getTemplate(theme).id);
+                        } else {
+                          handleItemClick(themeIndex);
+                        }
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Right Arrow */}
@@ -152,8 +237,7 @@ const TemplateRowSlider = ({
           variant="outline"
           size="icon"
           className="absolute right-0 z-30 rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
-          onClick={handleNext}
-          disabled={isAnimating}
+          onClick={() => handleSlide(1)}
         >
           <ChevronRight className="w-5 h-5" />
         </Button>
@@ -165,10 +249,9 @@ const TemplateRowSlider = ({
           <button
             key={theme.id}
             onClick={() => {
-              if (!isAnimating && index !== activeIndex) {
-                setIsAnimating(true);
+              const diff = index - activeIndex;
+              if (diff !== 0) {
                 setActiveIndex(index);
-                setTimeout(() => setIsAnimating(false), 400);
               }
             }}
             className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
@@ -192,11 +275,11 @@ const TemplateRowSlider = ({
         <span
           className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
           style={{
-            backgroundColor: `hsl(${themes[current].primaryHsl} / 0.15)`,
-            color: `hsl(${themes[current].primaryHsl})`,
+            backgroundColor: `hsl(${themes[activeIndex].primaryHsl} / 0.15)`,
+            color: `hsl(${themes[activeIndex].primaryHsl})`,
           }}
         >
-          {themes[current].name}
+          {themes[activeIndex].name}
         </span>
       </div>
     </div>
