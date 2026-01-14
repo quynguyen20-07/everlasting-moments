@@ -1,20 +1,15 @@
-import {
-  COLOR_SCHEMES,
-  coupleData,
-  DEFAULT_COLORS,
-  getCountdown,
-  TEMPLATES_LIST,
-  formatDateStr,
-  formatLunarVietnamese,
-} from "@/lib/utils";
+import { getCountdown } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Eye, Sparkles, Star } from "lucide-react";
-import { SetStateAction, useEffect, useState } from "react";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ITimeCountdown } from "@/types";
 import { motion } from "framer-motion";
-
-import TemplateHeroCard from "./TemplateHeroCard";
+import {
+  TEMPLATE_LAYOUTS,
+  TEMPLATES_THEME_LIST,
+} from "@/lib/templates/wedding-templates";
+import TemplateRowSlider from "./TemplateRowSlider";
 
 const Templates = () => {
   const navigate = useNavigate();
@@ -78,60 +73,23 @@ const Templates = () => {
           </p>
         </motion.div>
 
-        {/* Templates Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {TEMPLATES_LIST.map((template, index) => {
-            const colors =
-              COLOR_SCHEMES[template.id as keyof typeof COLOR_SCHEMES] ||
-              DEFAULT_COLORS;
-            return (
-              <motion.div
-                key={template.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
-              >
-                {/* Template Card */}
-                <TemplateHeroCard
-                  colors={colors}
-                  template={template}
-                  coupleData={coupleData}
-                  countdown={countdown}
-                  date={"2026-01-08T10:00:00Z"}
-                  onClick={() => handleTemplateClick(template.id)}
-                  // compact
-                />
-
-                {/* Template Info */}
-                <div className="mt-4 px-2">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-display text-lg font-semibold text-foreground">
-                      {template.name}
-                    </h3>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm text-muted-foreground">4.9</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center gap-1">
-                      <Eye className="w-3.5 h-3.5" />
-                      {"1.2K"} lượt xem
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-3 text-xs"
-                      onClick={() => handleTemplateClick(template.id)}
-                    >
-                      Chi tiết
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Template Rows - Each layout = 1 row with theme slider */}
+        <div className="space-y-16">
+          {TEMPLATE_LAYOUTS.map((layout, index) => (
+            <motion.div
+              key={layout.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+            >
+              <TemplateRowSlider
+                layout={layout}
+                themes={TEMPLATES_THEME_LIST}
+                countdown={countdown}
+                onTemplateClick={handleTemplateClick}
+              />
+            </motion.div>
+          ))}
         </div>
 
         {/* CTA Section */}
