@@ -15,19 +15,19 @@ const Index = () => {
         <title>True Loves - Tạo Thiệp Cưới Kỹ Thuật Số Đẹp Mắt</title>
         <meta
           name="description"
-          content="Create stunning digital wedding invitations that capture the essence of your special day. Share your love story, manage RSVPs, and delight your guests."
+          content="Tạo những thiệp cưới kỹ thuật số tuyệt đẹp, nắm bắt được bản chất của ngày đặc biệt của bạn. Chia sẻ câu chuyện tình yêu của bạn, quản lý RSVPs, và làm hài lòng khách mời với một trải nghiệm khó quên."
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#fdfaf8]">
         <Navbar />
         <main>
           <Hero />
-          <Features />
           <Templates />
+          <Features />
           <HowItWorks />
-          <Testimonials />
           <CTA />
+          <Testimonials />
         </main>
         <Footer />
       </div>

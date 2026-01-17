@@ -20,7 +20,7 @@ import Demo from "@/pages/Demo";
 import Auth from "@/pages/Auth";
 
 import TemplateDetailPage from "./pages/TemplateDetailPage";
-import TemplatesPage from "./components/landing/Templates";
+import TemplatesPage from "./components/landing/TemplatesPage";
 import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();

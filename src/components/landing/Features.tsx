@@ -4,18 +4,13 @@ import {
   Users,
   Camera,
   MessageCircle,
-  Gift,
-  MapPin,
-  Share2,
-  Palette,
-  Globe,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const features = [
   {
     icon: Heart,
-    title: "Câu Chuyện Tình Yêu",
+    title: "Chuyện Tình Yêu",
     description:
       "Chia sẻ hành trình đẹp của bạn với một dòng thời gian được cá nhân hóa",
   },
@@ -40,60 +35,50 @@ const features = [
     title: "Lời Chúc Khách Mời",
     description: "Cho phép khách để lại những lời chúc tốt đẹp và phúc lành",
   },
-  {
-    icon: Gift,
-    title: "Danh Sách Quà Tặng",
-    description: "Chia sẻ chi tiết ngân hàng và sở thích quà tặng với mã QR",
-  },
-  {
-    icon: MapPin,
-    title: "Bản Đồ Địa Điểm",
-    description: "Giúp khách mời tìm đường bằng bản đồ vị trí tích hợp",
-  },
-  {
-    icon: Share2,
-    title: "Chia Sẻ Dễ Dàng",
-    description: "Chia sẻ qua mạng xã hội, WhatsApp hoặc liên kết tùy chỉnh",
-  },
-  {
-    icon: Palette,
-    title: "Chủ Đề Tùy Chỉnh",
-    description: "Chọn từ các mẫu thanh lịch và tùy chỉnh màu sắc",
-  },
-  {
-    icon: Globe,
-    title: "Đa Ngôn Ngữ",
-    description: "Hỗ trợ tiếng Việt, tiếng Anh và nhiều ngôn ngữ khác",
-  },
 ];
 
 const Features = () => {
   return (
-    <section className="py-24 bg-cream-dark/50">
-      <div className="container mx-auto px-4">
-        {/* Tiêu Đề Phần */}
+    <section className="py-20 relative overflow-hidden">
+      {/* Gradient Background */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, #c4a99b 0%, #d4b9ab 50%, #e8d4c8 100%)'
+        }}
+      />
+      
+      {/* Decorative wave at top */}
+      <div className="absolute top-0 left-0 right-0 h-20 bg-[#fdfaf8]" style={{
+        clipPath: 'ellipse(60% 100% at 50% 0%)'
+      }} />
+
+      <div className="container mx-auto px-4 relative z-10 pt-8">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-2xl mx-auto mb-12"
         >
-          <span className="text-primary font-medium text-sm tracking-wider uppercase mb-4 block">
-            Tính Năng
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-semibold mb-6">
-            Mọi Thứ Bạn Cần Cho
-            <span className="text-gradient-gold"> Thiệp Mời Hoàn Hảo</span>
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-white mb-2">
+            Mọi thứ bạn cần
           </h2>
-          <p className="text-muted-foreground font-elegant text-lg">
+          <h3 className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-2">
+            cho
+          </h3>
+          <h3 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-white">
+            Thiệp mời hoàn hảo
+          </h3>
+          <p className="text-white/80 font-elegant text-base mt-4 max-w-xl mx-auto">
             Nền tảng của chúng tôi cung cấp tất cả các công cụ để tạo ra một
             trải nghiệm thiệp mời cưới kỹ thuật số đáng nhớ
           </p>
         </motion.div>
 
-        {/* Lưới Tính Năng */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* Features Grid */}
+        <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -101,21 +86,25 @@ const Features = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative p-6 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-elegant transition-all duration-300"
+              className="flex items-center gap-3 px-6 py-4 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors duration-300">
-                <feature.icon className="w-6 h-6 text-primary" />
+              <div className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
+                <feature.icon className="w-5 h-5 text-white" />
               </div>
-              <h3 className="font-display text-lg font-semibold mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {feature.description}
-              </p>
+              <div>
+                <h4 className="font-display text-base font-semibold text-white">
+                  {feature.title}
+                </h4>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Decorative wave at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-[#fdfaf8]" style={{
+        clipPath: 'ellipse(60% 100% at 50% 100%)'
+      }} />
     </section>
   );
 };
