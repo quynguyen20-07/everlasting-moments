@@ -19,8 +19,8 @@ import { useEffect } from "react";
 import Demo from "@/pages/Demo";
 import Auth from "@/pages/Auth";
 
-import TemplateDetailPage from "./pages/TemplateDetailPage";
 import TemplatesPage from "./components/landing/TemplatesPage";
+import TemplateDetailPage from "./pages/TemplateDetailPage";
 import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
