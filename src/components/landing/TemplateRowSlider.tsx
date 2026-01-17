@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   TemplateLayout,
   TemplateTheme,
-  TEMPLATES_THEME_LIST,
   createWeddingTemplate,
 } from "@/lib/templates/wedding-templates";
-import { COLOR_SCHEMES, coupleData, DEFAULT_COLORS, getCountdown } from "@/lib/utils";
+import { COLOR_SCHEMES, coupleData, DEFAULT_COLORS } from "@/lib/utils";
 import { ITimeCountdown } from "@/types";
 import TemplateHeroCard from "./TemplateHeroCard";
 
@@ -17,6 +16,8 @@ interface TemplateRowSliderProps {
   themes: TemplateTheme[];
   countdown: ITimeCountdown;
   onTemplateClick: (templateId: string) => void;
+  autoPlay?: boolean;
+  autoPlayInterval?: number;
 }
 
 const TemplateRowSlider = ({
@@ -24,9 +25,13 @@ const TemplateRowSlider = ({
   themes,
   countdown,
   onTemplateClick,
+  autoPlay = false,
+  autoPlayInterval = 5000,
 }: TemplateRowSliderProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   // Get visible indices (prev, current, next) with infinite loop
   const getVisibleIndices = useCallback(() => {
@@ -36,18 +41,41 @@ const TemplateRowSlider = ({
     return { prev, current: activeIndex, next };
   }, [activeIndex, themes.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setActiveIndex((prev) => (prev - 1 + themes.length) % themes.length);
     setTimeout(() => setIsAnimating(false), 400);
-  };
+  }, [isAnimating, themes.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setActiveIndex((prev) => (prev + 1) % themes.length);
     setTimeout(() => setIsAnimating(false), 400);
+  }, [isAnimating, themes.length]);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (autoPlay && !isPaused) {
+      autoPlayRef.current = setInterval(() => {
+        handleNext();
+      }, autoPlayInterval);
+    }
+
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+      }
+    };
+  }, [autoPlay, autoPlayInterval, isPaused, handleNext]);
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
   };
 
   const { prev, current, next } = getVisibleIndices();
@@ -61,38 +89,32 @@ const TemplateRowSlider = ({
   };
 
   return (
-    <div className="w-full">
-      {/* Layout Title */}
-      <div className="text-center mb-6">
-        <h3 className="font-display text-2xl md:text-3xl font-semibold text-foreground">
-          {layout.nameVi}
-        </h3>
-        <p className="text-muted-foreground font-elegant text-sm mt-1">
-          {layout.descriptionVi}
-        </p>
-      </div>
-
+    <div 
+      className="w-full"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {/* Slider Container */}
       <div className="relative flex items-center justify-center">
         {/* Left Arrow */}
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-0 z-30 rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
+          className="absolute left-2 md:left-4 z-30 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
           onClick={handlePrev}
           disabled={isAnimating}
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-5 h-5 text-[#4a3f3a]" />
         </Button>
 
         {/* Cards Container */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 overflow-hidden px-12 md:px-16 py-4">
+        <div className="flex items-center justify-center gap-2 md:gap-6 overflow-hidden px-12 md:px-20 py-4">
           {/* Previous Card (Left) */}
           <motion.div
             key={`prev-${themes[prev].id}`}
-            className="hidden md:block flex-shrink-0 opacity-60 hover:opacity-80 transition-opacity duration-300"
+            className="hidden md:block flex-shrink-0 opacity-50 transition-opacity duration-300"
             initial={{ x: -50, opacity: 0, scale: 0.75 }}
-            animate={{ x: 0, opacity: 0.6, scale: 0.75 }}
+            animate={{ x: 0, opacity: 0.5, scale: 0.8 }}
             transition={{ duration: 0.4 }}
             style={{ transformOrigin: "center right" }}
           >
@@ -130,9 +152,9 @@ const TemplateRowSlider = ({
           {/* Next Card (Right) */}
           <motion.div
             key={`next-${themes[next].id}`}
-            className="hidden md:block flex-shrink-0 opacity-60 hover:opacity-80 transition-opacity duration-300"
+            className="hidden md:block flex-shrink-0 opacity-50 transition-opacity duration-300"
             initial={{ x: 50, opacity: 0, scale: 0.75 }}
-            animate={{ x: 0, opacity: 0.6, scale: 0.75 }}
+            animate={{ x: 0, opacity: 0.5, scale: 0.8 }}
             transition={{ duration: 0.4 }}
             style={{ transformOrigin: "center left" }}
           >
@@ -151,16 +173,16 @@ const TemplateRowSlider = ({
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-0 z-30 rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
+          className="absolute right-2 md:right-4 z-30 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
           onClick={handleNext}
           disabled={isAnimating}
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-5 h-5 text-[#4a3f3a]" />
         </Button>
       </div>
 
       {/* Theme Dots Indicator */}
-      <div className="flex items-center justify-center gap-2 mt-4">
+      <div className="flex items-center justify-center gap-1.5 mt-6">
         {themes.map((theme, index) => (
           <button
             key={theme.id}
@@ -171,33 +193,14 @@ const TemplateRowSlider = ({
                 setTimeout(() => setIsAnimating(false), 400);
               }
             }}
-            className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
               index === activeIndex
-                ? "border-primary scale-125"
-                : "border-border hover:border-primary/50"
+                ? "w-6 bg-[#c4a99b]"
+                : "bg-[#c4a99b]/30 hover:bg-[#c4a99b]/50"
             }`}
-            style={{
-              backgroundColor:
-                index === activeIndex
-                  ? `hsl(${theme.primaryHsl})`
-                  : "transparent",
-            }}
             title={theme.name}
           />
         ))}
-      </div>
-
-      {/* Active Theme Name */}
-      <div className="text-center mt-3">
-        <span
-          className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
-          style={{
-            backgroundColor: `hsl(${themes[current].primaryHsl} / 0.15)`,
-            color: `hsl(${themes[current].primaryHsl})`,
-          }}
-        >
-          {themes[current].name}
-        </span>
       </div>
     </div>
   );

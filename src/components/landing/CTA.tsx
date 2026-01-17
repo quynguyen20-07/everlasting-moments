@@ -1,56 +1,59 @@
-import { ArrowRight, Heart, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const CTA = () => {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Trang trí nền */}
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-blush-light" />
-      <div className="absolute top-0 left-0 w-96 h-96 bg-champagne-light/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blush/30 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="py-16 bg-[#f8f1ed]">
+      <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-3xl mx-auto text-center"
+          transition={{ duration: 0.6 }}
+          className="relative rounded-3xl overflow-hidden"
         >
-          {/* Yếu tố trang trí */}
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-card border border-border shadow-elegant mb-8"
-          >
-            <Heart className="w-10 h-10 text-primary animate-heartbeat" />
-          </motion.div>
+          {/* Background Image */}
+          <div className="relative h-[500px] md:h-[600px]">
+            <img
+              src="/images/co-dau-chu-re.jfif"
+              alt="Couple"
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            
+            {/* Content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+              <p className="text-white/80 font-elegant text-sm tracking-widest uppercase mb-4">
+                TESTIMONIALS
+              </p>
+              <h2 className="font-display text-3xl md:text-5xl lg:text-6xl text-white mb-2">
+                The <span className="italic">love</span> in
+              </h2>
+              <h2 className="font-display text-3xl md:text-5xl lg:text-6xl text-white">
+                their words
+              </h2>
+            </div>
 
-          <h2 className="font-display text-4xl md:text-6xl font-semibold mb-6">
-            Sẵn sàng tạo ra
-            <span className="text-gradient-gold"> Thiệp Mời Hoàn Hảo?</span>
-          </h2>
-
-          <p className="text-lg md:text-xl text-muted-foreground font-elegant mb-10 max-w-xl mx-auto">
-            Tham gia cùng hàng ngàn cặp đôi hạnh phúc đã chia sẻ câu chuyện tình
-            yêu của họ với những thiệp mời kỹ thuật số đẹp mắt của chúng tôi.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="gold" size="xl" asChild>
-              <Link to="/auth">
-                <Sparkles className="w-5 h-5" />
-                Bắt đầu miễn phí
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </Button>
-            <p className="text-sm text-muted-foreground">
-              Không cần thẻ tín dụng
-            </p>
+            {/* Quote Box */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-lg"
+            >
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <p className="text-[#4a3f3a] font-elegant text-center italic leading-relaxed">
+                  "We have been to so many weddings with incredible energy and so when planning our wedding we really prioritized the music. Di Audio truly exceeded our expectations."
+                </p>
+                <div className="text-center mt-4">
+                  <p className="font-display font-semibold text-[#4a3f3a]">
+                    Phương & Tùng
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

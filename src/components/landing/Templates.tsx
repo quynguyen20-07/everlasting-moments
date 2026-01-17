@@ -1,6 +1,6 @@
 import { getCountdown } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ITimeCountdown } from "@/types";
@@ -36,7 +36,7 @@ const Templates = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <section id="templates" className="py-20 bg-[#fdfaf8]">
       {isTemplatePage && (
         <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="container mx-auto px-4 py-4">
@@ -50,36 +50,31 @@ const Templates = () => {
         </div>
       )}
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-secondary-foreground mb-4">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-elegant text-sm">Các Mẫu Thiệp Premium</span>
-          </div>
-
-          <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-            Bộ Sưu Tập Thiệp Cưới
-            <span className="text-gradient-gold"> Cao Cấp</span>
-          </h1>
-          <p className="text-muted-foreground font-elegant text-base md:text-lg">
-            Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách riêng
-            biệt, phù hợp với mọi phong cách cưới
+          <p className="text-[#c4a99b] font-elegant text-sm tracking-widest uppercase mb-3">
+            Bộ sưu tập thiệp cưới
           </p>
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-[#4a3f3a] mb-4">
+            Cao cấp
+          </h2>
         </motion.div>
 
         {/* Template Rows - Each layout = 1 row with theme slider */}
         <div className="space-y-16">
-          {TEMPLATE_LAYOUTS.map((layout, index) => (
+          {TEMPLATE_LAYOUTS.slice(0, 2).map((layout, index) => (
             <motion.div
               key={layout.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
             >
               <TemplateRowSlider
@@ -87,37 +82,14 @@ const Templates = () => {
                 themes={TEMPLATES_THEME_LIST}
                 countdown={countdown}
                 onTemplateClick={handleTemplateClick}
+                autoPlay={true}
+                autoPlayInterval={5000}
               />
             </motion.div>
           ))}
         </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center mt-16 p-8 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-border"
-        >
-          <h2 className="font-display text-2xl md:text-3xl font-semibold mb-4">
-            Chưa tìm thấy mẫu ưng ý?
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Liên hệ với chúng tôi để thiết kế mẫu thiệp độc quyền theo phong
-            cách riêng của bạn
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="gap-2">
-              <Sparkles className="w-5 h-5" />
-              Yêu cầu thiết kế riêng
-            </Button>
-            <Button variant="outline" size="lg">
-              Xem tất cả mẫu
-            </Button>
-          </div>
-        </motion.div>
       </div>
-    </main>
+    </section>
   );
 };
 
