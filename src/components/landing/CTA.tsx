@@ -1,64 +1,56 @@
 import { motion } from "framer-motion";
 
 const CTA = () => {
+  const testimonials = {
+    quote:
+      "Âm nhạc chính là linh hồn của đám cưới, và DJ Austo đã tạo nên bầu không khí hoàn hảo, giúp ngày cưới của chúng tôi trở thành một trải nghiệm đáng nhớ",
+    author: "Cô dâu, Thị phiến",
+    product: "SẢN PHẨM: TRUE LOVE",
+  };
+
   return (
-    <section className="py-16 bg-[#f8f1ed]">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative rounded-2xl overflow-hidden"
-        >
-          {/* Background Image */}
-          <div className="relative h-[500px] md:h-[600px]">
-            <img
-              src="/images/co-dau-chu-re.jfif"
-              alt="Couple"
-              className="w-full h-full object-cover"
-            />
+    <section className="py-20 relative bg-[#F9F6F3] overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-16"
+      >
+        <div className="inline-flex items-center gap-6 mb-4">
+          <div className="h-px w-12 bg-[#D4A8A8]/50"></div>
+          <span className="text-[#c4a99b] font-elegant text-sm tracking-widest uppercase mb-3">
+            Cảm nhận khách hàng
+          </span>
+          <div className="h-px w-12 bg-[#D4A8A8]/50"></div>
+        </div>
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-[#4A3F3A]">
+          Lời chia sẻ yêu thương
+        </h2>
+      </motion.div>
 
-            {/* Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-              <p className="text-white/80 font-elegant text-sm tracking-widest uppercase mb-4">
-                TESTIMONIALS
-              </p>
-              <h2 className="font-display text-3xl md:text-5xl lg:text-6xl text-white mb-2">
-                The <span className="italic">love</span> in
-              </h2>
-              <h2 className="font-display text-3xl md:text-5xl lg:text-6xl text-white">
-                their words
-              </h2>
-            </div>
-
-            {/* Quote Box */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-lg"
-            >
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-                <p className="text-[#4a3f3a] font-elegant text-center italic leading-relaxed">
-                  "We have been to so many weddings with incredible energy and
-                  so when planning our wedding we really prioritized the music.
-                  Di Audio truly exceeded our expectations."
-                </p>
-                <div className="text-center mt-4">
-                  <p className="font-display font-semibold text-[#4a3f3a]">
-                    Phương & Tùng
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="mt-12 flex justify-center"
+      >
+        <motion.div className="w-2/3 md:w-1/3 overflow-hidden bg-transparent flex items-center justify-center">
+          <motion.img
+            src="/images/love-words.png"
+            alt="Love words"
+            className="w-full h-auto object-contain"
+            animate={{ y: [0, -3, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
