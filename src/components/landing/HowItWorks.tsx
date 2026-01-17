@@ -38,9 +38,9 @@ const HowItWorks = () => {
           className="flex justify-center gap-8 mb-8"
         >
           {steps.map((step, i) => (
-            <div 
+            <div
               key={i}
-              className="w-12 h-12 rounded-full bg-[#f8f1ed] flex items-center justify-center"
+              className="w-12 h-12 rounded-2xl bg-[#f8f1ed] flex items-center justify-center"
             >
               <step.icon className="w-5 h-5 text-[#c4a99b]" />
             </div>
@@ -86,7 +86,7 @@ const HowItWorks = () => {
               <h3 className="font-display text-xl font-semibold text-[#4a3f3a] mb-3">
                 {step.title}
               </h3>
-              
+
               {/* Description */}
               <p className="text-[#7a6b64] text-sm max-w-xs mx-auto leading-relaxed">
                 {step.description}

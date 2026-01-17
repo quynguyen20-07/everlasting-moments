@@ -1,6 +1,9 @@
-import { motion } from "framer-motion";
+import type {
+  WeddingTemplate,
+  TemplateTheme,
+} from "@/lib/templates/wedding-templates";
 import { Check, Heart } from "lucide-react";
-import type { WeddingTemplate, TemplateTheme } from "@/lib/templates/wedding-templates";
+import { motion } from "framer-motion";
 
 interface TemplateCardProps {
   template: WeddingTemplate;
@@ -8,7 +11,11 @@ interface TemplateCardProps {
   onSelect?: (template: WeddingTemplate) => void;
 }
 
-export function TemplateCard({ template, isSelected, onSelect }: TemplateCardProps) {
+export function TemplateCard({
+  template,
+  isSelected,
+  onSelect,
+}: TemplateCardProps) {
   const theme = template.theme;
   const primaryHsl = theme.colors.primary;
   const secondaryHsl = theme.colors.secondary;
@@ -22,9 +29,10 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
       onClick={() => onSelect?.(template)}
       className={`
         relative cursor-pointer rounded-2xl overflow-hidden border-2 transition-all duration-300
-        ${isSelected 
-          ? 'border-primary shadow-elegant ring-2 ring-primary/20' 
-          : 'border-border hover:border-primary/30 hover:shadow-soft'
+        ${
+          isSelected
+            ? "border-primary shadow-elegant ring-2 ring-primary/20"
+            : "border-border hover:border-primary/30 hover:shadow-soft"
         }
       `}
     >
@@ -43,7 +51,7 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
             className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-px"
             style={{ background: theme.gradient }}
           />
-          
+
           {/* Heart Icon */}
           <Heart
             className="w-8 h-8 mb-4"
@@ -73,7 +81,7 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
 
           {/* Decorative Elements */}
           <div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-xs"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-4 py-2 rounded-2xl text-xs"
             style={{
               background: `hsl(${secondaryHsl})`,
               color: `hsl(${primaryHsl})`,
@@ -108,7 +116,7 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
             animate={{ opacity: 1 }}
             className="absolute inset-0 bg-primary/10 flex items-center justify-center"
           >
-            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center">
               <Check className="w-6 h-6 text-primary-foreground" />
             </div>
           </motion.div>
@@ -123,21 +131,21 @@ export function TemplateCard({ template, isSelected, onSelect }: TemplateCardPro
         <p className="text-sm text-muted-foreground line-clamp-2">
           {template.descriptionVi}
         </p>
-        
+
         {/* Color Swatches */}
         <div className="flex gap-1.5 mt-3">
           <div
-            className="w-5 h-5 rounded-full border border-border/50"
+            className="w-5 h-5 rounded-2xl border border-border/50"
             style={{ backgroundColor: `hsl(${theme.colors.primary})` }}
             title="Màu chính"
           />
           <div
-            className="w-5 h-5 rounded-full border border-border/50"
+            className="w-5 h-5 rounded-2xl border border-border/50"
             style={{ backgroundColor: `hsl(${theme.colors.secondary})` }}
             title="Màu phụ"
           />
           <div
-            className="w-5 h-5 rounded-full border border-border/50"
+            className="w-5 h-5 rounded-2xl border border-border/50"
             style={{ backgroundColor: `hsl(${theme.colors.accent})` }}
             title="Màu nhấn"
           />

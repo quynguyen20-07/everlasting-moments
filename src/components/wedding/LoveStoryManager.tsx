@@ -190,7 +190,7 @@ export const LoveStoryManager = ({
       {sortedStories.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-secondary mx-auto flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-secondary mx-auto flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-primary fill-primary" />
             </div>
             <h3 className="font-display text-lg font-semibold mb-2">
@@ -223,7 +223,7 @@ export const LoveStoryManager = ({
                   className="relative pl-14"
                 >
                   {/* Timeline dot */}
-                  <div className="absolute left-4 top-6 w-5 h-5 rounded-full bg-primary border-4 border-background shadow-sm" />
+                  <div className="absolute left-4 top-6 w-5 h-5 rounded-2xl bg-primary border-4 border-background shadow-sm" />
 
                   <Card className="hover:shadow-md transition-shadow">
                     <CardContent className="p-4">

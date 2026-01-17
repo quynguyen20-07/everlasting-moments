@@ -10,24 +10,24 @@ const Hero = () => {
       <div className="absolute inset-0">
         {/* Gradient background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#f8f1ed] via-[#fdfaf8] to-[#f8f1ed]" />
-        
+
         {/* Decorative palm leaves - left */}
-        <div 
+        <div
           className="absolute top-0 left-0 w-1/3 h-full opacity-20"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Cpath d='M-50,0 Q100,200 50,400 Q0,600 -50,800' stroke='%23c4a99b' fill='none' stroke-width='2'/%3E%3Cpath d='M0,50 Q150,250 100,450 Q50,650 0,850' stroke='%23c4a99b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E")`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
           }}
         />
-        
+
         {/* Decorative palm leaves - right */}
-        <div 
+        <div
           className="absolute top-0 right-0 w-1/3 h-full opacity-20"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Cpath d='M450,0 Q300,200 350,400 Q400,600 450,800' stroke='%23c4a99b' fill='none' stroke-width='2'/%3E%3Cpath d='M400,50 Q250,250 300,450 Q350,650 400,850' stroke='%23c4a99b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E")`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
           }}
         />
       </div>
@@ -75,9 +75,9 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
-            <Button 
-              size="lg" 
-              className="bg-[#4a3f3a] hover:bg-[#3a2f2a] text-white rounded-full px-8 py-6 text-base font-medium"
+            <Button
+              size="lg"
+              className="bg-[#4a3f3a] hover:bg-[#3a2f2a] text-white rounded-2xl px-8 py-6 text-base font-medium"
               asChild
             >
               <Link to="/auth">
@@ -85,15 +85,13 @@ const Hero = () => {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
-            <Button 
+            <Button
               variant="outline"
-              size="lg" 
-              className="border-[#c4a99b] text-[#c4a99b] hover:bg-[#c4a99b]/10 rounded-full px-8 py-6 text-base font-medium"
+              size="lg"
+              className="border-[#c4a99b] text-[#c4a99b] hover:bg-[#c4a99b]/10 rounded-2xl px-8 py-6 text-base font-medium"
               asChild
             >
-              <Link to="/demo/blush-romance">
-                Xem Demo
-              </Link>
+              <Link to="/demo/blush-romance">Xem Demo</Link>
             </Button>
           </motion.div>
 
@@ -109,7 +107,10 @@ const Hero = () => {
             </p>
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
-                <Heart key={i} className="w-5 h-5 fill-[#c4a99b] text-[#c4a99b]" />
+                <Heart
+                  key={i}
+                  className="w-5 h-5 fill-[#c4a99b] text-[#c4a99b]"
+                />
               ))}
             </div>
           </motion.div>
@@ -126,9 +127,9 @@ const Hero = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-[#c4a99b]/50 flex items-start justify-center p-2"
+          className="w-6 h-10 rounded-2xl border-2 border-[#c4a99b]/50 flex items-start justify-center p-2"
         >
-          <motion.div className="w-1.5 h-1.5 rounded-full bg-[#c4a99b]" />
+          <motion.div className="w-1.5 h-1.5 rounded-2xl bg-[#c4a99b]" />
         </motion.div>
       </motion.div>
     </section>

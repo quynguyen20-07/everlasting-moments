@@ -51,7 +51,7 @@ export const WeddingCard = ({
       className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-secondary/30 transition-colors"
     >
       <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
+        <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center flex-shrink-0">
           <Heart className="w-8 h-8 text-primary fill-primary" />
         </div>
         <div className="min-w-0">
@@ -83,7 +83,7 @@ export const WeddingCard = ({
             </Badge>
             {wedding.themeSettings?.primaryColor && (
               <span
-                className="w-3 h-3 rounded-full border"
+                className="w-3 h-3 rounded-2xl border"
                 style={{ backgroundColor: wedding.themeSettings.primaryColor }}
               />
             )}

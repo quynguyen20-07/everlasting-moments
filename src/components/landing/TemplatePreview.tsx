@@ -66,9 +66,9 @@ const TemplatePreview = ({ template, onClose }: TemplatePreviewProps) => {
             >
               {/* Header Photo Circle */}
               <div
-                className={`w-32 h-32 rounded-full ${template.accent} mb-8 flex items-center justify-center`}
+                className={`w-32 h-32 rounded-2xl ${template.accent} mb-8 flex items-center justify-center`}
               >
-                <div className="w-20 h-20 rounded-full bg-card/80 backdrop-blur-sm" />
+                <div className="w-20 h-20 rounded-2xl bg-card/80 backdrop-blur-sm" />
               </div>
 
               {/* Dummy Content */}
@@ -86,8 +86,8 @@ const TemplatePreview = ({ template, onClose }: TemplatePreviewProps) => {
 
               {/* Dummy Footer */}
               <div className="mt-auto w-full flex gap-4 justify-center">
-                <div className="w-12 h-12 rounded-full bg-foreground/5" />
-                <div className="w-12 h-12 rounded-full bg-foreground/5" />
+                <div className="w-12 h-12 rounded-2xl bg-foreground/5" />
+                <div className="w-12 h-12 rounded-2xl bg-foreground/5" />
               </div>
             </motion.div>
 

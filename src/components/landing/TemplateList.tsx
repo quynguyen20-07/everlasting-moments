@@ -1,6 +1,6 @@
+import { TEMPLATES_LIST, styleLabels } from "@/lib/templates/wedding-templates";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Eye, Heart, Sparkles } from "lucide-react";
-import { TEMPLATES_LIST, styleLabels } from "@/lib/templates/wedding-templates";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -33,7 +33,7 @@ const TemplateList = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-secondary-foreground mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-secondary text-secondary-foreground mb-6">
             <Sparkles className="w-4 h-4" />
             <span className="font-elegant text-sm">Các Mẫu Thiệp Premium</span>
           </div>
@@ -71,7 +71,7 @@ const TemplateList = () => {
 
                   {/* Heart Icon */}
                   <div
-                    className={`w-16 h-16 rounded-full ${template.accent} mb-6 flex items-center justify-center`}
+                    className={`w-16 h-16 rounded-2xl ${template.accent} mb-6 flex items-center justify-center`}
                   >
                     <Heart
                       className="w-8 h-8"
@@ -90,7 +90,7 @@ const TemplateList = () => {
                     Minh & Hương
                   </p>
                   <div
-                    className="w-16 h-0.5 mx-auto my-3 rounded-full"
+                    className="w-16 h-0.5 mx-auto my-3 rounded-2xl"
                     style={{ backgroundColor: `hsl(${template.primaryHsl})` }}
                   />
                   <p
@@ -104,7 +104,7 @@ const TemplateList = () => {
 
                   {/* Style Badge */}
                   <div
-                    className={`absolute bottom-8 px-4 py-2 rounded-full text-xs font-medium ${
+                    className={`absolute bottom-8 px-4 py-2 rounded-2xl text-xs font-medium ${
                       template.accent
                     } ${
                       // template.isDark ? "text-white" : ""
@@ -144,7 +144,7 @@ const TemplateList = () => {
                 {/* Color Swatch */}
                 <div className="flex justify-center gap-2 mt-3">
                   <div
-                    className="w-5 h-5 rounded-full border border-border shadow-sm"
+                    className="w-5 h-5 rounded-2xl border border-border shadow-sm"
                     style={{ backgroundColor: `hsl(${template.primaryHsl})` }}
                   />
                 </div>

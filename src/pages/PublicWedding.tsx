@@ -6,10 +6,10 @@ import {
   TEMPLATES_LIST,
 } from "@/lib/utils";
 import EventsTimelineSection from "@/components/wedding-ui/EventsTimelineSection";
-import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
-import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
+import GuestWishesSection from "@/components/wedding-ui/GuestWishesSection";
 import BankAccountSection from "@/components/wedding-ui/BankAccountSection";
+import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import LoveStorySection from "@/components/wedding-ui/LoveStorySection";
 import GallerySection from "@/components/wedding-ui/GallerySection";
 import FooterSection from "@/components/wedding-ui/FooterSection";
@@ -20,14 +20,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
 import ShareModal from "@/components/wedding/ShareModal";
 import { getWeddingBySlugApi } from "@/lib/api/wedding";
-import { TemplateProvider } from "@/components/public";
-import { submitRSVPApi } from "@/lib/api/guest";
-import { addWishApi } from "@/lib/api/wish";
 import { ColorType, TemplateType, Wish } from "@/types";
+import { TemplateProvider } from "@/components/public";
 import Hero from "@/components/wedding-ui/Hero";
+import { submitRSVPApi } from "@/lib/api/guest";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet-async";
+import { addWishApi } from "@/lib/api/wish";
 import { Pause, Play } from "lucide-react";
 import type { Wedding } from "@/types";
 import { motion } from "framer-motion";
@@ -39,7 +39,7 @@ const templatesData = Object.fromEntries(
       ...t,
       colorName: t.name.toLowerCase(),
     },
-  ])
+  ]),
 );
 
 export default function PublicWedding() {
@@ -78,7 +78,7 @@ export default function PublicWedding() {
       { id: 5, alt: "Ảnh cưới 5", src: "/images/wedding04.jpg" },
       { id: 6, alt: "Ảnh cưới 6", src: "/images/wedding05.jpg" },
     ],
-    []
+    [],
   );
 
   useEffect(() => {
@@ -218,7 +218,7 @@ export default function PublicWedding() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center px-4"
         >
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-muted flex items-center justify-center">
             <svg
               className="w-12 h-12 text-muted-foreground"
               fill="none"
@@ -241,7 +241,7 @@ export default function PublicWedding() {
           </p>
           <a
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 gold-gradient text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 gold-gradient text-primary-foreground rounded-2xl font-medium hover:opacity-90 transition-opacity"
           >
             <svg
               className="w-5 h-5"
@@ -266,7 +266,7 @@ export default function PublicWedding() {
   const bride = wedding.weddingDetail?.bride;
   const groom = wedding.weddingDetail?.groom;
   const mainEvent = wedding.weddingDetail?.weddingEvents?.find(
-    (e) => e.type === "ceremony" || e.type === "reception"
+    (e) => e.type === "ceremony" || e.type === "reception",
   );
 
   // Handle RSVP submission
@@ -288,9 +288,10 @@ export default function PublicWedding() {
 
       toast({
         title: "Đã Xác Nhận!",
-        description: data.attendanceStatus === "confirmed" 
-          ? "Cảm ơn bạn đã xác nhận sẽ tham dự." 
-          : "Cảm ơn bạn đã phản hồi.",
+        description:
+          data.attendanceStatus === "confirmed"
+            ? "Cảm ơn bạn đã xác nhận sẽ tham dự."
+            : "Cảm ơn bạn đã phản hồi.",
       });
     } catch (error) {
       console.error("RSVP submission error:", error);
@@ -311,11 +312,12 @@ export default function PublicWedding() {
       });
 
       // Add to local state (pending approval)
-      setWishes(prev => [...prev, newWish]);
+      setWishes((prev) => [...prev, newWish]);
 
       toast({
         title: "Đã Gửi Lời Chúc!",
-        description: "Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.",
+        description:
+          "Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.",
       });
     } catch (error) {
       console.error("Wish submission error:", error);
@@ -361,7 +363,7 @@ export default function PublicWedding() {
           }${
             mainEvent?.eventDate
               ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString(
-                  "vi-VN"
+                  "vi-VN",
                 )}`
               : ""
           }`}
@@ -450,7 +452,7 @@ export default function PublicWedding() {
         <Button
           variant="outline"
           size="icon"
-          className="fixed bottom-6 right-6 z-40 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+          className="fixed bottom-6 right-6 z-40 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
           style={{
             borderColor: colors?.primary,
             background: "white",

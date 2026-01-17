@@ -43,7 +43,7 @@ export function TemplateGallery({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-secondary-foreground mb-4"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-secondary text-secondary-foreground mb-4"
         >
           <Sparkles className="w-4 h-4" />
           <span className="font-elegant text-sm">Các Mẫu Thiệp Premium</span>
@@ -64,7 +64,8 @@ export function TemplateGallery({
           transition={{ delay: 0.2 }}
           className="font-elegant text-lg text-muted-foreground max-w-xl mx-auto"
         >
-          Mỗi mẫu thiệp được thiết kế tinh tế với bố cục riêng biệt, có thể kết hợp với nhiều bảng màu khác nhau
+          Mỗi mẫu thiệp được thiết kế tinh tế với bố cục riêng biệt, có thể kết
+          hợp với nhiều bảng màu khác nhau
         </motion.p>
       </div>
 
@@ -80,7 +81,7 @@ export function TemplateGallery({
             key={style}
             onClick={() => setFilter(style)}
             className={`
-              px-4 py-2 rounded-full text-sm font-medium transition-all
+              px-4 py-2 rounded-2xl text-sm font-medium transition-all
               ${
                 filter === style
                   ? "gold-gradient text-primary-foreground shadow-soft"

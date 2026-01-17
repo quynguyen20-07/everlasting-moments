@@ -15,7 +15,7 @@ const Auth = () => {
   const { login, register, isAuthenticated, user } = useAuthStore();
 
   const [mode, setMode] = useState<"signin" | "signup">(
-    searchParams.get("mode") === "signup" ? "signup" : "signin"
+    searchParams.get("mode") === "signup" ? "signup" : "signin",
   );
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -205,8 +205,8 @@ const Auth = () => {
               {isLoading
                 ? "Vui lòng chờ..."
                 : mode === "signup"
-                ? "Tạo tài khoản"
-                : "Đăng nhập"}
+                  ? "Tạo tài khoản"
+                  : "Đăng nhập"}
             </Button>
           </form>
 
@@ -231,7 +231,7 @@ const Auth = () => {
           transition={{ duration: 0.8 }}
           className="max-w-lg text-center"
         >
-          <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-card shadow-elegant flex items-center justify-center">
+          <div className="w-32 h-32 mx-auto mb-8 rounded-2xl bg-card shadow-elegant flex items-center justify-center">
             <Heart className="w-16 h-16 text-primary fill-primary animate-heartbeat" />
           </div>
           <h2 className="font-display text-4xl font-semibold mb-4">

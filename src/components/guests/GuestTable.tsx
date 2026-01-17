@@ -1,28 +1,3 @@
-// Guest Table Component with filters and actions
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
   MoreVertical,
   Edit,
@@ -34,10 +9,35 @@ import {
   UserCheck,
   Clock,
   UserX,
-} from 'lucide-react';
-import type { Guest } from '@/types/graphql';
-import { useState, useMemo } from 'react';
-import { downloadGuestsCsv } from '@/lib/api/guest';
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+// Guest Table Component with filters and actions
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { downloadGuestsCsv } from "@/lib/api/guest";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import type { Guest } from "@/types/graphql";
+import { useState, useMemo } from "react";
 
 interface GuestTableProps {
   guests: Guest[];
@@ -48,30 +48,30 @@ interface GuestTableProps {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'Tất cả trạng thái' },
-  { value: 'confirmed', label: 'Xác nhận' },
-  { value: 'pending', label: 'Chờ phản hồi' },
-  { value: 'declined', label: 'Từ chối' },
+  { value: "all", label: "Tất cả trạng thái" },
+  { value: "confirmed", label: "Xác nhận" },
+  { value: "pending", label: "Chờ phản hồi" },
+  { value: "declined", label: "Từ chối" },
 ];
 
 const RELATIONSHIP_OPTIONS = [
-  { value: 'all', label: 'Tất cả quan hệ' },
-  { value: 'family', label: 'Gia đình' },
-  { value: 'friend', label: 'Bạn bè' },
-  { value: 'colleague', label: 'Đồng nghiệp' },
-  { value: 'other', label: 'Khác' },
+  { value: "all", label: "Tất cả quan hệ" },
+  { value: "family", label: "Gia đình" },
+  { value: "friend", label: "Bạn bè" },
+  { value: "colleague", label: "Đồng nghiệp" },
+  { value: "other", label: "Khác" },
 ];
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case 'confirmed':
+    case "confirmed":
       return (
         <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
           <UserCheck className="w-3 h-3 mr-1" />
           Xác nhận
         </Badge>
       );
-    case 'declined':
+    case "declined":
       return (
         <Badge className="bg-red-100 text-red-700 hover:bg-red-100">
           <UserX className="w-3 h-3 mr-1" />
@@ -95,9 +95,9 @@ export function GuestTable({
   onDelete,
   onAdd,
 }: GuestTableProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [relationshipFilter, setRelationshipFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [relationshipFilter, setRelationshipFilter] = useState("all");
 
   const filteredGuests = useMemo(() => {
     return guests.filter((guest) => {
@@ -112,11 +112,11 @@ export function GuestTable({
 
       // Status filter
       const matchesStatus =
-        statusFilter === 'all' || guest.attendanceStatus === statusFilter;
+        statusFilter === "all" || guest.attendanceStatus === statusFilter;
 
       // Relationship filter
       const matchesRelationship =
-        relationshipFilter === 'all' ||
+        relationshipFilter === "all" ||
         guest.relationship === relationshipFilter;
 
       return matchesSearch && matchesStatus && matchesRelationship;
@@ -207,7 +207,7 @@ export function GuestTable({
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8">
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-2xl animate-spin" />
                     Đang tải...
                   </div>
                 </TableCell>
@@ -243,13 +243,17 @@ export function GuestTable({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="capitalize">{guest.relationship || '-'}</span>
+                    <span className="capitalize">
+                      {guest.relationship || "-"}
+                    </span>
                   </TableCell>
                   <TableCell className="text-center">
                     {guest.numberOfGuests}
                   </TableCell>
-                  <TableCell>{getStatusBadge(guest.attendanceStatus)}</TableCell>
-                  <TableCell>{guest.tableNumber || '-'}</TableCell>
+                  <TableCell>
+                    {getStatusBadge(guest.attendanceStatus)}
+                  </TableCell>
+                  <TableCell>{guest.tableNumber || "-"}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -285,7 +289,8 @@ export function GuestTable({
 
       {/* Summary */}
       <div className="text-sm text-muted-foreground text-right">
-        Hiển thị {filteredGuests.length} / {guests.filter((g) => g.isActive).length} khách mời
+        Hiển thị {filteredGuests.length} /{" "}
+        {guests.filter((g) => g.isActive).length} khách mời
       </div>
     </div>
   );

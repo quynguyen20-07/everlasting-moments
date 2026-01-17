@@ -9,7 +9,7 @@ const CTA = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-3xl overflow-hidden"
+          className="relative rounded-2xl overflow-hidden"
         >
           {/* Background Image */}
           <div className="relative h-[500px] md:h-[600px]">
@@ -18,10 +18,10 @@ const CTA = () => {
               alt="Couple"
               className="w-full h-full object-cover"
             />
-            
+
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            
+
             {/* Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
               <p className="text-white/80 font-elegant text-sm tracking-widest uppercase mb-4">
@@ -45,7 +45,9 @@ const CTA = () => {
             >
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
                 <p className="text-[#4a3f3a] font-elegant text-center italic leading-relaxed">
-                  "We have been to so many weddings with incredible energy and so when planning our wedding we really prioritized the music. Di Audio truly exceeded our expectations."
+                  "We have been to so many weddings with incredible energy and
+                  so when planning our wedding we really prioritized the music.
+                  Di Audio truly exceeded our expectations."
                 </p>
                 <div className="text-center mt-4">
                   <p className="font-display font-semibold text-[#4a3f3a]">

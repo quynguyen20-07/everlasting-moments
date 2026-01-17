@@ -71,7 +71,7 @@ const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({
             >
               {/* Timeline Dot */}
               <div
-                className="absolute left-[1px] top-1/2 w-4 h-4 rounded-full z-10 shadow-lg"
+                className="absolute left-[1px] top-1/2 w-4 h-4 rounded-2xl z-10 shadow-lg"
                 style={{ background: colors?.primary }}
               />
 
@@ -89,7 +89,7 @@ const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({
                 >
                   <div className="flex items-start gap-4">
                     <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-md"
+                      className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-md"
                       style={{ background: `${colors?.primary}10` }}
                     >
                       <Clock

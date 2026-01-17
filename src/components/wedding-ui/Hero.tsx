@@ -39,11 +39,11 @@ const Hero: React.FC<HeroProps> = ({
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-2xl opacity-20 blur-3xl"
           style={{ background: colors?.primary }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-2xl opacity-10 blur-3xl"
           style={{ background: colors?.secondary }}
         />
 
@@ -252,7 +252,7 @@ const Hero: React.FC<HeroProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
               size="lg"
-              className="gap-3 px-8 py-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              className="gap-3 px-8 py-6 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               style={{
                 background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                 color: "white",
@@ -269,7 +269,7 @@ const Hero: React.FC<HeroProps> = ({
             <Button
               variant="outline"
               size="lg"
-              className="gap-3 px-8 py-6 rounded-full font-semibold backdrop-blur-sm hover:shadow-lg transition-all duration-300"
+              className="gap-3 px-8 py-6 rounded-2xl font-semibold backdrop-blur-sm hover:shadow-lg transition-all duration-300"
               style={{
                 borderColor: colors?.primary,
                 color: colors?.primary,

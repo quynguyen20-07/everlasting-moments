@@ -181,7 +181,7 @@ const Admin = () => {
               </div>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-2xl" />
               </Button>
             </div>
           </div>
@@ -199,7 +199,7 @@ const Admin = () => {
                 className="p-6 rounded-2xl bg-card border border-border shadow-soft"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center">
                     <stat.icon className="w-6 h-6 text-primary" />
                   </div>
                   <span className="text-sm font-medium text-green-600">
@@ -276,7 +276,7 @@ const Admin = () => {
                       <tr key={user.id} className="hover:bg-secondary/30">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center font-medium">
+                            <div className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center font-medium">
                               {user.name[0]}
                             </div>
                             <div>
@@ -395,7 +395,7 @@ const Admin = () => {
                       <tr key={wedding.id} className="hover:bg-secondary/30">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center">
                               <Heart className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex items-center gap-2">

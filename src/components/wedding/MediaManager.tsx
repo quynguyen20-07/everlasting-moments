@@ -1,7 +1,7 @@
+import type { MediaItemWithMeta, GalleryLayout } from "@/types/media";
 // Media Manager Component - CRUD for wedding gallery
 import { useState, useEffect, useCallback } from "react";
 import { useMediaStore } from "@/stores/mediaStore";
-import type { MediaItemWithMeta, GalleryLayout } from "@/types/media";
 
 // Alias for cleaner code
 type MediaItem = MediaItemWithMeta;
@@ -63,11 +63,31 @@ interface MediaManagerProps {
 }
 
 // Layout options
-const LAYOUT_OPTIONS: { value: GalleryLayout; label: string; icon: React.ReactNode }[] = [
-  { value: "grid-2", label: "Lưới 2 cột", icon: <Grid2X2 className="w-4 h-4" /> },
-  { value: "grid-3", label: "Lưới 3 cột", icon: <Grid3X3 className="w-4 h-4" /> },
-  { value: "masonry", label: "Masonry", icon: <LayoutGrid className="w-4 h-4" /> },
-  { value: "featured", label: "Nổi bật", icon: <Sparkles className="w-4 h-4" /> },
+const LAYOUT_OPTIONS: {
+  value: GalleryLayout;
+  label: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    value: "grid-2",
+    label: "Lưới 2 cột",
+    icon: <Grid2X2 className="w-4 h-4" />,
+  },
+  {
+    value: "grid-3",
+    label: "Lưới 3 cột",
+    icon: <Grid3X3 className="w-4 h-4" />,
+  },
+  {
+    value: "masonry",
+    label: "Masonry",
+    icon: <LayoutGrid className="w-4 h-4" />,
+  },
+  {
+    value: "featured",
+    label: "Nổi bật",
+    icon: <Sparkles className="w-4 h-4" />,
+  },
 ];
 
 // Sortable Media Item
@@ -101,7 +121,7 @@ function SortableMediaItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group bg-card rounded-xl overflow-hidden border shadow-sm ${
+      className={`relative group bg-card rounded-2xl overflow-hidden border shadow-sm ${
         isDragging ? "ring-2 ring-primary" : ""
       }`}
     >
@@ -193,7 +213,7 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -217,7 +237,7 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
         });
       }
     },
-    [media, reorderMedia, toast]
+    [media, reorderMedia, toast],
   );
 
   const handleAddMedia = async () => {
@@ -350,7 +370,11 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
                 {LAYOUT_OPTIONS.map((option) => (
                   <Button
                     key={option.value}
-                    variant={gallerySettings.layout === option.value ? "default" : "outline"}
+                    variant={
+                      gallerySettings.layout === option.value
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     onClick={() => setLayout(option.value)}
                     className="gap-2"
@@ -515,7 +539,10 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Hủy
             </Button>
             <Button onClick={handleEditMedia} disabled={isLoading}>

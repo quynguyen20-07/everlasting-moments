@@ -70,14 +70,14 @@ const ShareModal = ({
                         <div className="text-sm text-muted-foreground">
                           Liên kết đã được sao chép vào bộ nhớ tạm.
                         </div>
-                      </div>
+                      </div>,
                     );
                   },
                 },
               ].map((item, index) => (
                 <button
                   key={item.label}
-                  className="flex flex-col items-center gap-3 p-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                  className="flex flex-col items-center gap-3 p-4 rounded-2xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                   style={{
                     background: `${item.color}10`,
                     border: `1px solid ${item.color}30`,

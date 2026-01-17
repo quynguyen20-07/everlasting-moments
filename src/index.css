@@ -396,7 +396,7 @@
   }
 
   .wedding-button {
-    @apply inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-2xl px-8 py-3 text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50;
   }
 
   .wedding-button-primary {
@@ -508,11 +508,11 @@
   }
 
   .scrollbar-wedding::-webkit-scrollbar-track {
-    @apply bg-muted rounded-full;
+    @apply bg-muted rounded-2xl;
   }
 
   .scrollbar-wedding::-webkit-scrollbar-thumb {
-    @apply bg-primary rounded-full;
+    @apply bg-primary rounded-2xl;
   }
 
   .animate-float {

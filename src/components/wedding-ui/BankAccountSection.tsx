@@ -1,11 +1,16 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { ColorType } from "@/types";
-import { Gift, Copy, Check } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
+import { Gift, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { QRCodeSVG } from "qrcode.react";
+import { ColorType } from "@/types";
+import { useState } from "react";
 
 export interface BankAccountInfo {
   id: string;
@@ -77,17 +82,17 @@ export default function BankAccountSection({
     // VietQR standard format for generating QR
     const bankBin: Record<string, string> = {
       "MB Bank": "970422",
-      "Techcombank": "970407",
-      "Vietcombank": "970436",
-      "BIDV": "970418",
-      "VietinBank": "970415",
-      "ACB": "970416",
-      "Agribank": "970405",
-      "TPBank": "970423",
-      "Sacombank": "970403",
-      "VPBank": "970432",
+      Techcombank: "970407",
+      Vietcombank: "970436",
+      BIDV: "970418",
+      VietinBank: "970415",
+      ACB: "970416",
+      Agribank: "970405",
+      TPBank: "970423",
+      Sacombank: "970403",
+      VPBank: "970432",
     };
-    
+
     const bin = bankBin[account.bankName] || "970422";
     return `https://img.vietqr.io/image/${bin}-${account.accountNumber}-compact.png`;
   };
@@ -100,29 +105,30 @@ export default function BankAccountSection({
       className="flex flex-col items-center p-4"
     >
       {/* QR Code */}
-      <div 
+      <div
         className="w-48 h-48 mb-4 rounded-lg overflow-hidden border-2 flex items-center justify-center bg-white"
         style={{ borderColor: activeTab === "bride" ? "#dc2626" : "#2563eb" }}
       >
         {account.qrCodeUrl ? (
-          <img 
-            src={account.qrCodeUrl} 
+          <img
+            src={account.qrCodeUrl}
             alt={`QR Code ${label}`}
             className="w-full h-full object-contain"
           />
         ) : (
-          <img 
+          <img
             src={generateVietQRUrl(account)}
             alt={`VietQR ${label}`}
             className="w-full h-full object-contain"
             onError={(e) => {
               // Fallback to QRCodeSVG if VietQR fails
               const target = e.currentTarget;
-              target.style.display = 'none';
+              target.style.display = "none";
               const parent = target.parentElement;
               if (parent) {
-                const fallback = document.createElement('div');
-                fallback.className = 'flex items-center justify-center w-full h-full';
+                const fallback = document.createElement("div");
+                fallback.className =
+                  "flex items-center justify-center w-full h-full";
                 parent.appendChild(fallback);
               }
             }}
@@ -135,9 +141,7 @@ export default function BankAccountSection({
         <h4 className="font-display text-xl font-semibold text-foreground">
           {account.accountHolder}
         </h4>
-        <p className="text-muted-foreground text-sm">
-          {account.bankName}
-        </p>
+        <p className="text-muted-foreground text-sm">{account.bankName}</p>
         <p className="font-mono text-lg tracking-wider text-foreground">
           {account.accountNumber}
         </p>
@@ -181,24 +185,21 @@ export default function BankAccountSection({
             className="space-y-4"
           >
             <div className="flex justify-center">
-              <div 
-                className="w-16 h-16 rounded-full flex items-center justify-center"
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center"
                 style={{ backgroundColor: `${colors?.primary}20` }}
               >
-                <Gift 
-                  className="w-8 h-8" 
-                  style={{ color: colors?.primary }}
-                />
+                <Gift className="w-8 h-8" style={{ color: colors?.primary }} />
               </div>
             </div>
-            
-            <h3 
+
+            <h3
               className="font-display text-2xl md:text-3xl"
               style={{ color: colors?.primary }}
             >
               Hộp Quà Cưới
             </h3>
-            
+
             <p className="text-muted-foreground font-elegant">
               Thay cho tiền mặt, bạn có thể gửi quà mừng qua tài khoản ngân hàng
             </p>

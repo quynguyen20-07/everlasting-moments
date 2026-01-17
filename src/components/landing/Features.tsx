@@ -105,7 +105,7 @@ const Features = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="h-full"
               >
-                <div className="bg-white/25 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-6 hover:bg-white/35 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col">
+                <div className="bg-white/25 backdrop-blur-sm rounded-2xl border-2 border-white/30 p-6 hover:bg-white/35 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col">
                   <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center mb-6 mx-auto flex-shrink-0">
                     <feature.icon className="w-7 h-7 text-white" />
                   </div>

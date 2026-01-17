@@ -76,7 +76,7 @@ const AppContent = () => {
         <Route
           path="gallery"
           element={
-            <div className="bg-card rounded-xl border p-6">
+            <div className="bg-card rounded-2xl border p-6">
               <h1 className="text-2xl font-bold mb-4">Thư viện Ảnh</h1>
               <p className="text-muted-foreground">
                 Tính năng đang được phát triển...
@@ -87,7 +87,7 @@ const AppContent = () => {
         <Route
           path="settings"
           element={
-            <div className="bg-card rounded-xl border p-6">
+            <div className="bg-card rounded-2xl border p-6">
               <h1 className="text-2xl font-bold mb-4">Cài đặt</h1>
               <p className="text-muted-foreground">
                 Tính năng đang được phát triển...

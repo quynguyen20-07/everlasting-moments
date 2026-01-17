@@ -1,6 +1,3 @@
-// Delete Wedding Dialog - Confirmation modal for deleting wedding
-import { useState } from "react";
-import { Loader2, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +9,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useWeddingStore } from "@/stores/weddingStore";
+import { Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+// Delete Wedding Dialog - Confirmation modal for deleting wedding
+import { useState } from "react";
 
 interface DeleteWeddingDialogProps {
   weddingId: string | null;
@@ -33,7 +33,7 @@ export const DeleteWeddingDialog = ({
 
   const handleDelete = async () => {
     if (!weddingId) return;
-    
+
     setIsLoading(true);
     try {
       await deleteWedding(weddingId);
@@ -57,7 +57,7 @@ export const DeleteWeddingDialog = ({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <div className="mx-auto w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mb-2">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-destructive/10 flex items-center justify-center mb-2">
             <Trash2 className="w-6 h-6 text-destructive" />
           </div>
           <AlertDialogTitle className="text-center">

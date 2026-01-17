@@ -30,11 +30,11 @@ export const WeddingList = () => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedWeddingId, setSelectedWeddingId] = useState<string | null>(
-    null
+    null,
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<WeddingStatus | "all">(
-    "all"
+    "all",
   );
 
   useEffect(() => {
@@ -146,7 +146,7 @@ export const WeddingList = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-card rounded-2xl border border-border shadow-soft p-12 text-center"
         >
-          <div className="w-20 h-20 rounded-full bg-secondary mx-auto flex items-center justify-center mb-4">
+          <div className="w-20 h-20 rounded-2xl bg-secondary mx-auto flex items-center justify-center mb-4">
             <Heart className="w-10 h-10 text-primary fill-primary" />
           </div>
           <h3 className="font-display text-xl font-semibold mb-2">

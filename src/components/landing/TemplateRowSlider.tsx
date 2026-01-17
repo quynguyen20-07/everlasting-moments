@@ -1,14 +1,15 @@
-import { useRef, useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   TemplateLayout,
   TemplateTheme,
   createWeddingTemplate,
 } from "@/lib/templates/wedding-templates";
 import { COLOR_SCHEMES, coupleData, DEFAULT_COLORS } from "@/lib/utils";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import { ITimeCountdown } from "@/types";
+
 import TemplateHeroCard from "./TemplateHeroCard";
 
 interface TemplateRowSliderProps {
@@ -81,7 +82,9 @@ const TemplateRowSlider = ({
   const { prev, current, next } = getVisibleIndices();
 
   const getColors = (theme: TemplateTheme) => {
-    return COLOR_SCHEMES[theme.id as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS;
+    return (
+      COLOR_SCHEMES[theme.id as keyof typeof COLOR_SCHEMES] || DEFAULT_COLORS
+    );
   };
 
   const getTemplate = (theme: TemplateTheme) => {
@@ -89,7 +92,7 @@ const TemplateRowSlider = ({
   };
 
   return (
-    <div 
+    <div
       className="w-full"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -100,7 +103,7 @@ const TemplateRowSlider = ({
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-2 md:left-4 z-30 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
+          className="absolute left-2 md:left-4 z-30 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
           onClick={handlePrev}
           disabled={isAnimating}
         >
@@ -173,7 +176,7 @@ const TemplateRowSlider = ({
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-2 md:right-4 z-30 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
+          className="absolute right-2 md:right-4 z-30 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white border-[#c4a99b]/30"
           onClick={handleNext}
           disabled={isAnimating}
         >
@@ -193,7 +196,7 @@ const TemplateRowSlider = ({
                 setTimeout(() => setIsAnimating(false), 400);
               }
             }}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`w-2 h-2 rounded-2xl transition-all duration-300 ${
               index === activeIndex
                 ? "w-6 bg-[#c4a99b]"
                 : "bg-[#c4a99b]/30 hover:bg-[#c4a99b]/50"

@@ -1,4 +1,10 @@
-import { MessageCircle, Send, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import {
+  MessageCircle,
+  Send,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 import { formatDateStr } from "@/lib/utils";
 import { ColorScheme, Wish } from "@/types";
 import { motion } from "framer-motion";
@@ -30,14 +36,16 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
     guestName: "",
     message: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!formData.guestName.trim() || !formData.message.trim()) {
       setErrorMessage("Vui lòng nhập đầy đủ tên và lời chúc");
       setSubmitStatus("error");
@@ -58,14 +66,18 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
       });
     } catch (error) {
       setSubmitStatus("error");
-      setErrorMessage(error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại.");
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Có lỗi xảy ra. Vui lòng thử lại.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleChange = (field: keyof WishFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (submitStatus === "error") {
       setSubmitStatus("idle");
@@ -74,7 +86,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
   };
 
   // Filter only approved wishes
-  const approvedWishes = wishes.filter(wish => wish.isApproved);
+  const approvedWishes = wishes.filter((wish) => wish.isApproved);
 
   return (
     <section
@@ -128,7 +140,9 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
               >
                 <CheckCircle2 className="w-8 h-8 text-emerald-500 flex-shrink-0" />
                 <div>
-                  <h3 className="font-semibold text-emerald-700">Đã Gửi Lời Chúc!</h3>
+                  <h3 className="font-semibold text-emerald-700">
+                    Đã Gửi Lời Chúc!
+                  </h3>
                   <p className="text-emerald-600 text-sm">
                     Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.
                   </p>
@@ -188,7 +202,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   onChange={(e) => handleChange("guestName", e.target.value)}
                   required
                   disabled={isSubmitting}
-                  className="rounded-xl border-2 p-4"
+                  className="rounded-2xl border-2 p-4"
                   style={{
                     borderColor: `${colors?.primary}30`,
                     background: "white",
@@ -201,7 +215,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   onChange={(e) => handleChange("message", e.target.value)}
                   required
                   disabled={isSubmitting}
-                  className="rounded-xl border-2 p-4 resize-none"
+                  className="rounded-2xl border-2 p-4 resize-none"
                   style={{
                     borderColor: `${colors?.primary}30`,
                     background: "white",
@@ -211,7 +225,7 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="rounded-xl px-8 disabled:opacity-70"
+                  className="rounded-2xl px-8 disabled:opacity-70"
                   style={{
                     background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                     color: "white",
@@ -254,13 +268,15 @@ const GuestWishesSection: React.FC<GuestWishesSectionProps> = ({
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
                         style={{
                           background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                           color: "white",
                         }}
                       >
-                        <span className="font-bold">{wish.guestName[0]?.toUpperCase()}</span>
+                        <span className="font-bold">
+                          {wish.guestName[0]?.toUpperCase()}
+                        </span>
                       </div>
                       <div>
                         <p

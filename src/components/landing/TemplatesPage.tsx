@@ -1,14 +1,15 @@
-import { getCountdown } from "@/lib/utils";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ITimeCountdown } from "@/types";
-import { motion } from "framer-motion";
 import {
   TEMPLATE_LAYOUTS,
   TEMPLATES_THEME_LIST,
 } from "@/lib/templates/wedding-templates";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { getCountdown } from "@/lib/utils";
+import { ITimeCountdown } from "@/types";
+import { motion } from "framer-motion";
+
 import TemplateRowSlider from "./TemplateRowSlider";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -19,7 +20,7 @@ const TemplatesPage = () => {
   const targetTime = new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000);
 
   const [countdown, setCountdown] = useState<ITimeCountdown>(
-    getCountdown(targetTime)
+    getCountdown(targetTime),
   );
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const TemplatesPage = () => {
   return (
     <div className="min-h-screen bg-[#fdfaf8]">
       <Navbar />
-      
+
       <main className="pt-24 pb-16">
         {/* Header */}
         <div className="container mx-auto px-4">
@@ -47,9 +48,11 @@ const TemplatesPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-2xl mx-auto mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f8f1ed] text-[#c4a99b] mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#f8f1ed] text-[#c4a99b] mb-4">
               <Sparkles className="w-4 h-4" />
-              <span className="font-elegant text-sm">Các Mẫu Thiệp Premium</span>
+              <span className="font-elegant text-sm">
+                Các Mẫu Thiệp Premium
+              </span>
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl font-semibold text-[#4a3f3a] mb-4">
@@ -57,8 +60,8 @@ const TemplatesPage = () => {
               <span className="text-gradient-gold"> Cao Cấp</span>
             </h1>
             <p className="text-[#7a6b64] font-elegant text-base md:text-lg">
-              Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách riêng
-              biệt, phù hợp với mọi phong cách cưới
+              Mỗi mẫu thiệp được thiết kế tinh tế với bảng màu và phong cách
+              riêng biệt, phù hợp với mọi phong cách cưới
             </p>
           </motion.div>
 
@@ -80,7 +83,7 @@ const TemplatesPage = () => {
                     {layout.descriptionVi}
                   </p>
                 </div>
-                
+
                 <TemplateRowSlider
                   layout={layout}
                   themes={TEMPLATES_THEME_LIST}
@@ -108,17 +111,17 @@ const TemplatesPage = () => {
               cách riêng của bạn
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="gap-2 bg-[#c4a99b] hover:bg-[#b39888] text-white rounded-full"
+              <Button
+                size="lg"
+                className="gap-2 bg-[#c4a99b] hover:bg-[#b39888] text-white rounded-2xl"
               >
                 <Sparkles className="w-5 h-5" />
                 Yêu cầu thiết kế riêng
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="lg"
-                className="border-[#c4a99b] text-[#c4a99b] hover:bg-[#c4a99b]/10 rounded-full"
+                className="border-[#c4a99b] text-[#c4a99b] hover:bg-[#c4a99b]/10 rounded-2xl"
               >
                 Liên hệ tư vấn
               </Button>

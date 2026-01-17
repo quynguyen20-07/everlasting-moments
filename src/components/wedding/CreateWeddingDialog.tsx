@@ -180,7 +180,7 @@ export const CreateWeddingDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="mx-auto w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-2">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center mb-2">
             <Heart className="w-6 h-6 text-primary fill-primary" />
           </div>
           <DialogTitle className="text-center font-display text-xl">

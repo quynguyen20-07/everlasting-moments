@@ -113,7 +113,7 @@ export const Sidebar = () => {
 
   const toggleExpanded = (title: string) => {
     setExpandedItems((prev) =>
-      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
+      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title],
     );
   };
 
@@ -148,7 +148,7 @@ export const Sidebar = () => {
         className={cn(
           "fixed lg:static inset-y-0 left-0 z-50 w-[280px] bg-card border-r border-border",
           "flex flex-col h-screen lg:h-auto",
-          "lg:translate-x-0"
+          "lg:translate-x-0",
         )}
       >
         {/* Header */}
@@ -172,7 +172,7 @@ export const Sidebar = () => {
         {/* User Info */}
         <div className="p-4 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
               <span className="text-primary font-medium">
                 {user?.fullName?.charAt(0).toUpperCase()}
               </span>
@@ -198,7 +198,7 @@ export const Sidebar = () => {
                       className={cn(
                         "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm",
                         "hover:bg-muted transition-colors",
-                        isChildActive(item.children) && "bg-muted"
+                        isChildActive(item.children) && "bg-muted",
                       )}
                     >
                       <span className="flex items-center gap-3">
@@ -208,7 +208,7 @@ export const Sidebar = () => {
                       <ChevronDown
                         className={cn(
                           "w-4 h-4 transition-transform",
-                          expandedItems.includes(item.title) && "rotate-180"
+                          expandedItems.includes(item.title) && "rotate-180",
                         )}
                       />
                     </button>
@@ -228,7 +228,7 @@ export const Sidebar = () => {
                                   "block px-3 py-2 rounded-lg text-sm",
                                   "hover:bg-muted transition-colors",
                                   isActive(child.href) &&
-                                    "bg-primary/10 text-primary font-medium"
+                                    "bg-primary/10 text-primary font-medium",
                                 )}
                               >
                                 {child.title}
@@ -246,7 +246,7 @@ export const Sidebar = () => {
                       "flex items-center gap-3 px-3 py-2 rounded-lg text-sm",
                       "hover:bg-muted transition-colors",
                       isActive(item.href!) &&
-                        "bg-primary/10 text-primary font-medium"
+                        "bg-primary/10 text-primary font-medium",
                     )}
                   >
                     <item.icon className="w-5 h-5" />

@@ -28,17 +28,15 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
 
   return (
     <motion.div
-      className="w-[245px] relative overflow-hidden rounded-[3.6rem] hover:rounded-3xl  shadow-2xl hover:shadow-3xl transition-all duration-300 cursor-pointer group p-3 m-2"
+      className="w-[245px] relative overflow-hidden rounded-[3.6rem] hover:rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 cursor-pointer group p-3 m-2"
       style={{
         background: `linear-gradient(135deg, ${colors?.background} 0%, ${colors?.accent}15 100%)`,
-
         width: "100%",
         maxWidth: "297px",
         height: "607px",
         margin: "0 auto",
       }}
       whileHover={{ scale: 1.02, y: -5 }}
-      onClick={onClick}
     >
       {/* Mobile Frame - Visible by default, hidden on hover */}
       <img
@@ -50,11 +48,11 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-15 blur-3xl"
+          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-2xl opacity-15 blur-3xl"
           style={{ background: colors?.primary }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-10 blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-2xl opacity-10 blur-3xl"
           style={{ background: colors?.secondary }}
         />
       </div>
@@ -112,7 +110,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
             <motion.div
               className="relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 shadow-lg overflow-hidden"
               style={{ borderColor: `${colors?.primary}30` }}
-              whileHover={{ scale: 1.1 }}
+              // whileHover={{ scale: 1.1 }}
             >
               <div
                 className="absolute inset-0 z-0"
@@ -152,7 +150,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
             <motion.div
               className="relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 shadow-lg overflow-hidden"
               style={{ borderColor: `${colors?.primary}30` }}
-              whileHover={{ scale: 1.1 }}
+              // whileHover={{ scale: 1.1 }}
             >
               <div
                 className="absolute inset-0 z-0"
@@ -221,7 +219,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
           <div className="flex flex-col items-center justify-center gap-4 ">
             <Button
               size="sm"
-              className="text-xs gap-3 px-4 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              className="text-xs gap-3 px-4 py-3 rounded-2xl font-semibold shadow-lg"
               style={{
                 background: `linear-gradient(135deg, ${colors?.primary} 0%, ${colors?.secondary} 100%)`,
                 color: "white",
@@ -238,7 +236,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="text-xs gap-3 px-4 py-3 rounded-full font-semibold backdrop-blur-sm hover:shadow-lg transition-all duration-300"
+              className="text-xs gap-3 px-4 py-3 rounded-2xl font-semibold backdrop-blur-sm"
               style={{
                 borderColor: colors?.primary,
                 color: colors?.primary,
@@ -284,15 +282,16 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
                 size="sm"
                 className="
                 px-5 py-2.5
-                rounded-full font-medium
+                rounded-2xl font-medium
                 transition-all duration-200
                 transform hover:-translate-y-1
               "
-                onClick={() =>
+                onClick={() => {
+                  onClick();
                   document
                     .getElementById("rsvp")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
               >
                 <Users className="w-4 h-4" />
                 Xem chi tiết
@@ -305,7 +304,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
                 text-xs
                 gap-2
                 px-5 py-2.5
-                rounded-full
+                rounded-2xl
                 font-medium
                 transition-all duration-200
                 transform hover:-translate-y-1

@@ -1,6 +1,3 @@
-// Admin Dashboard Page - Overview and read-only management
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Heart,
   Users,
@@ -11,10 +8,13 @@ import {
   Globe,
   Clock,
   TrendingUp,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -22,18 +22,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { motion } from 'framer-motion';
-import { useWeddingStore } from '@/stores/weddingStore';
-import type { Wedding } from '@/types/graphql';
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useWeddingStore } from "@/stores/weddingStore";
+import { Button } from "@/components/ui/button";
+import type { Wedding } from "@/types/graphql";
+import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+// Admin Dashboard Page - Overview and read-only management
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 // Mock admin stats - in real app, these would come from an admin API
 const mockAdminStats = {
@@ -46,8 +46,8 @@ const mockAdminStats = {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { weddings, isLoading, fetchWeddings } = useWeddingStore();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     fetchWeddings();
@@ -56,49 +56,51 @@ export default function AdminDashboard() {
   const filteredWeddings = weddings.filter(
     (w) =>
       w.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      w.slug.toLowerCase().includes(searchQuery.toLowerCase())
+      w.slug.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const publishedCount = weddings.filter((w) => w.status === 'published').length;
-  const draftCount = weddings.filter((w) => w.status === 'draft').length;
+  const publishedCount = weddings.filter(
+    (w) => w.status === "published",
+  ).length;
+  const draftCount = weddings.filter((w) => w.status === "draft").length;
 
   const stats = [
     {
-      label: 'Tổng đám cưới',
+      label: "Tổng đám cưới",
       value: weddings.length,
       icon: Heart,
-      color: 'text-pink-600',
-      bg: 'bg-pink-100',
-      trend: '+12%',
+      color: "text-pink-600",
+      bg: "bg-pink-100",
+      trend: "+12%",
     },
     {
-      label: 'Đã xuất bản',
+      label: "Đã xuất bản",
       value: publishedCount,
       icon: Globe,
-      color: 'text-green-600',
-      bg: 'bg-green-100',
-      trend: '+8%',
+      color: "text-green-600",
+      bg: "bg-green-100",
+      trend: "+8%",
     },
     {
-      label: 'Tổng khách mời',
+      label: "Tổng khách mời",
       value: mockAdminStats.totalGuests.toLocaleString(),
       icon: Users,
-      color: 'text-blue-600',
-      bg: 'bg-blue-100',
-      trend: '+15%',
+      color: "text-blue-600",
+      bg: "bg-blue-100",
+      trend: "+15%",
     },
     {
-      label: 'Xác nhận RSVP',
+      label: "Xác nhận RSVP",
       value: mockAdminStats.totalRSVPs.toLocaleString(),
       icon: UserCheck,
-      color: 'text-purple-600',
-      bg: 'bg-purple-100',
-      trend: '+23%',
+      color: "text-purple-600",
+      bg: "bg-purple-100",
+      trend: "+23%",
     },
   ];
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('vi-VN');
+    return new Date(dateStr).toLocaleDateString("vi-VN");
   };
 
   return (
@@ -165,7 +167,7 @@ export default function AdminDashboard() {
                     className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
                         <Heart className="w-5 h-5 text-primary" />
                       </div>
                       <div>
@@ -178,10 +180,14 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-3">
                       <Badge
                         variant={
-                          wedding.status === 'published' ? 'default' : 'secondary'
+                          wedding.status === "published"
+                            ? "default"
+                            : "secondary"
                         }
                       >
-                        {wedding.status === 'published' ? 'Đã xuất bản' : 'Nháp'}
+                        {wedding.status === "published"
+                          ? "Đã xuất bản"
+                          : "Nháp"}
                       </Badge>
                       <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Eye className="w-4 h-4" />
@@ -246,24 +252,30 @@ export default function AdminDashboard() {
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Heart className="w-4 h-4 text-primary" />
-                              <span className="font-medium">{wedding.title}</span>
+                              <span className="font-medium">
+                                {wedding.title}
+                              </span>
                             </div>
                           </TableCell>
                           <TableCell className="text-muted-foreground">
                             /{wedding.slug}
                           </TableCell>
-                          <TableCell>{wedding.createdAt ? formatDate(wedding.createdAt) : '-'}</TableCell>
+                          <TableCell>
+                            {wedding.createdAt
+                              ? formatDate(wedding.createdAt)
+                              : "-"}
+                          </TableCell>
                           <TableCell>
                             <Badge
                               variant={
-                                wedding.status === 'published'
-                                  ? 'default'
-                                  : 'secondary'
+                                wedding.status === "published"
+                                  ? "default"
+                                  : "secondary"
                               }
                             >
-                              {wedding.status === 'published'
-                                ? 'Đã xuất bản'
-                                : 'Nháp'}
+                              {wedding.status === "published"
+                                ? "Đã xuất bản"
+                                : "Nháp"}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-center">
@@ -279,7 +291,10 @@ export default function AdminDashboard() {
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem
                                   onClick={() =>
-                                    window.open(`/weddings/${wedding.slug}`, '_blank')
+                                    window.open(
+                                      `/weddings/${wedding.slug}`,
+                                      "_blank",
+                                    )
                                   }
                                 >
                                   <Eye className="w-4 h-4 mr-2" />

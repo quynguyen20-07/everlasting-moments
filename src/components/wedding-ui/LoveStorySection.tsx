@@ -14,7 +14,7 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   stories,
 }) => {
   const sortedStories = [...stories].sort(
-    (a, b) => Number(a.storyDate) - Number(b.storyDate)
+    (a, b) => Number(a.storyDate) - Number(b.storyDate),
   );
 
   return (
@@ -73,7 +73,7 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                 >
                   {/* Dot */}
                   <div
-                    className="absolute left-4 top-6 w-5 h-5 rounded-full border-4 shadow-sm"
+                    className="absolute left-4 top-6 w-5 h-5 rounded-2xl border-4 shadow-sm"
                     style={{
                       background: colors?.primary,
                       borderColor: colors?.background ?? "#fff",
@@ -116,7 +116,7 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                         <img
                           src={story.imageUrl}
                           alt={story.title}
-                          className="mt-4 rounded-xl max-h-64 object-cover"
+                          className="mt-4 rounded-2xl max-h-64 object-cover"
                         />
                       )}
                     </CardContent>

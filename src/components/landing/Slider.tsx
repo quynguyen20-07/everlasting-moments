@@ -96,7 +96,7 @@ const Slider = ({
           <button
             onClick={prevSlide}
             disabled={isAnimating}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-8 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center hover:bg-white/40 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-8 z-20 w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center hover:bg-white/40 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-6 h-6 text-white" />
           </button>
@@ -104,7 +104,7 @@ const Slider = ({
           <button
             onClick={nextSlide}
             disabled={isAnimating}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-8 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center hover:bg-white/40 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-8 z-20 w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center hover:bg-white/40 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-6 h-6 text-white" />
           </button>
@@ -152,7 +152,7 @@ const Slider = ({
               key={index}
               onClick={() => goToSlide(index)}
               disabled={isAnimating}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-2xl transition-all duration-300 ${
                 index === currentIndex
                   ? "bg-white w-8"
                   : "bg-white/40 hover:bg-white/60"

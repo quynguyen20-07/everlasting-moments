@@ -1,5 +1,5 @@
-import { Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
 
 const testimonials = [
   {
@@ -79,16 +79,14 @@ const Testimonials = () => {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#f8f1ed] flex items-center justify-center font-display text-base font-semibold text-[#c4a99b]">
+                <div className="w-10 h-10 rounded-2xl bg-[#f8f1ed] flex items-center justify-center font-display text-base font-semibold text-[#c4a99b]">
                   {testimonial.avatar}
                 </div>
                 <div>
                   <p className="font-display font-semibold text-[#4a3f3a]">
                     {testimonial.name}
                   </p>
-                  <p className="text-sm text-[#7a6b64]">
-                    {testimonial.date}
-                  </p>
+                  <p className="text-sm text-[#7a6b64]">{testimonial.date}</p>
                 </div>
               </div>
             </motion.div>
