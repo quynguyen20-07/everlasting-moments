@@ -72,7 +72,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
             <span style={{ color: colors?.primary }}>
               {coupleData.bride.name}
             </span>
-            <span className="mx-2" style={{ color: colors?.muted }}>
+            <span className="mx-2" style={{ color: colors?.accent }}>
               &
             </span>
             <span style={{ color: colors?.primary }}>
@@ -84,7 +84,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
           <div className="mb-4 flex flex-col gap-1">
             <p
               className="font-serif text-xs tracking-widest"
-              style={{ color: colors?.muted }}
+              style={{ color: colors?.accent }}
             >
               CÙNG BẠN ĐẾN TRỌN ĐỜI
             </p>
@@ -98,7 +98,7 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
 
             <p
               className="font-display text-md font-normal italic"
-              style={{ color: colors?.muted }}
+              style={{ color: colors?.primary }}
             >
               {`Tức ${lunarDate}`}
             </p>
@@ -192,24 +192,25 @@ const TemplateHeroCard: React.FC<CardHeroProps> = ({
                 transition={{ delay: index * 0.1 }}
               >
                 <div
-                  className="p-1 rounded-lg backdrop-blur-sm border border-white/20"
+                  className="flex flex-col items-center justify-center p-1.5 rounded-lg backdrop-blur-sm border"
                   style={{
-                    background: `linear-gradient(135deg, ${colors?.accent}15 0%, transparent 100%)`,
-                    borderColor: `${colors?.primary}15`,
+                    background: `linear-gradient(135deg, ${colors?.accent}08 0%, transparent 100%)`,
+                    borderColor: `${colors?.primary}20`,
                   }}
                 >
-                  <div
-                    className="font-display text-xs md:text-md  font-bold mb-0.5"
-                    style={{ color: colors?.text }}
+                  <span
+                    className="font-display text-sm md:text-base font-bold leading-none"
+                    style={{ color: colors?.primary }}
                   >
                     {item.value.toString().padStart(2, "0")}
-                  </div>
-                  <div
-                    className="text-[8px] md:text-[10px] font-medium tracking-wide"
-                    style={{ color: colors?.muted }}
+                  </span>
+
+                  <span
+                    className="mt-0.5 text-[8px] md:text-[10px] font-medium tracking-wider uppercase"
+                    style={{ color: colors?.accent }}
                   >
                     {item.label}
-                  </div>
+                  </span>
                 </div>
               </motion.div>
             ))}

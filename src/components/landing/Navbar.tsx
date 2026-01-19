@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const navLinks = [
-  { name: "Tính Năng", href: "/#features" },
+  { name: "Trang chủ", href: "/" },
   { name: "Mẫu Thiệp", href: "/templates" },
   { name: "Giá Cả", href: "/pricing" },
 ];
@@ -42,7 +42,7 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-4 mt-4">
-        <nav className="bg-[#4a3f3a]/90 backdrop-blur-md rounded-2xl px-6 py-3 shadow-lg">
+        <nav className="rounded-[20px] bg-black/20 backdrop-blur-[3.25px] px-6 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)]">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
@@ -58,7 +58,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+                  className="text-sm font-medium text-white/80 hover:text-white transition-colors font-display"
                 >
                   {link.name}
                 </Link>

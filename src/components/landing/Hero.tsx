@@ -6,30 +6,68 @@ import { motion } from "framer-motion";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with palm tree overlay */}
+      {/* Background layers */}
       <div className="absolute inset-0">
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f8f1ed] via-[#fdfaf8] to-[#f8f1ed]" />
-
-        {/* Decorative palm leaves - left */}
-        <div
-          className="absolute top-0 left-0 w-1/3 h-full opacity-20"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Cpath d='M-50,0 Q100,200 50,400 Q0,600 -50,800' stroke='%23c4a99b' fill='none' stroke-width='2'/%3E%3Cpath d='M0,50 Q150,250 100,450 Q50,650 0,850' stroke='%23c4a99b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E")`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
+        {/* Decorative palm tree - left */}
+        <motion.div
+          className="absolute top-10 -left-80 w-1/3 h-full pointer-events-auto"
+          style={{ transformOrigin: "bottom center" }}
+          animate={{
+            rotate: [-1.5, 1.5, -1.5],
           }}
-        />
-
-        {/* Decorative palm leaves - right */}
-        <div
-          className="absolute top-0 right-0 w-1/3 h-full opacity-20"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Cpath d='M450,0 Q300,200 350,400 Q400,600 450,800' stroke='%23c4a99b' fill='none' stroke-width='2'/%3E%3Cpath d='M400,50 Q250,250 300,450 Q350,650 400,850' stroke='%23c4a99b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E")`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
+          whileHover={{
+            rotate: [-6, 6, -6],
+            transition: {
+              duration: 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
           }}
-        />
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <motion.img
+            src="/images/palm-tree.png"
+            alt="Palm tree left"
+            className="w-full h-full object-contain object-left"
+            style={{ opacity: 0.15 }}
+            animate={{ scaleX: -1 }}
+          />
+        </motion.div>
+
+        {/* Decorative palm tree - right */}
+        <motion.div
+          className="absolute top-10 -right-60 w-1/3 h-full pointer-events-auto"
+          style={{ transformOrigin: "bottom center" }}
+          animate={{
+            rotate: [1.5, -1.5, 1.5],
+          }}
+          whileHover={{
+            rotate: [6, -6, 6],
+            transition: {
+              duration: 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <motion.img
+            src="/images/palm-tree.png"
+            alt="Palm tree right"
+            className="w-full h-full object-contain object-right opacity-15"
+          />
+        </motion.div>
+
+        {/* Gradient background - đặt sau cây dừa */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f8f1ed]/80 via-[#fdfaf8]/70 to-[#f8f1ed]/80" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10 pt-24">

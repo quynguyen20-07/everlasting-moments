@@ -1,12 +1,13 @@
-import { getCountdown } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { ITimeCountdown } from "@/types";
-import { motion } from "framer-motion";
 import {
   TEMPLATE_LAYOUTS,
   TEMPLATES_THEME_LIST,
 } from "@/lib/templates/wedding-templates";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCountdown } from "@/lib/utils";
+import { ITimeCountdown } from "@/types";
+import { motion } from "framer-motion";
+
 import TemplateHeroCard from "./TemplateHeroCard";
 
 const GridTemplate = () => {
@@ -15,10 +16,9 @@ const GridTemplate = () => {
   const targetTime = new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000);
 
   const [countdown, setCountdown] = useState<ITimeCountdown>(
-    getCountdown(targetTime)
+    getCountdown(targetTime),
   );
 
-  // Auto-play: cycle through themes every 5 seconds
   const [activeThemeIndex, setActiveThemeIndex] = useState(0);
 
   useEffect(() => {
@@ -41,7 +41,6 @@ const GridTemplate = () => {
     navigate(`/templates/${templateId}`);
   };
 
-  // Get first 6 layouts for the grid (2 rows x 3 columns)
   const displayLayouts = TEMPLATE_LAYOUTS.slice(0, 6);
 
   const coupleData = {
@@ -50,26 +49,45 @@ const GridTemplate = () => {
   };
 
   const weddingDate = new Date(
-    new Date().getTime() + 15 * 24 * 60 * 60 * 1000
+    new Date().getTime() + 15 * 24 * 60 * 60 * 1000,
   ).toISOString();
 
-  // Get the current theme based on auto-play index
   const getCurrentTheme = (layoutIndex: number) => {
-    // Each card can have a different starting offset for variety
-    const themeIndex = (activeThemeIndex + layoutIndex) % TEMPLATES_THEME_LIST.length;
+    const themeIndex =
+      (activeThemeIndex + layoutIndex) % TEMPLATES_THEME_LIST.length;
     return TEMPLATES_THEME_LIST[themeIndex];
   };
 
   return (
-    <section id="templates" className="py-20 bg-[#fdfaf8]">
+    <section id="templates" className="py-20 bg-[#F5EBE8] relative">
+      {/* Wave Top */}
+      <svg
+        className="z-50 absolute top-0 left-0 w-full h-20 -translate-y-1"
+        viewBox="0 0 1440 80"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#f8f1ed"
+          d="
+        M0,40 
+        C200,0 400,80 600,40 
+        C800,0 1000,80 1200,40 
+        C1400,0 1440,20 1440,20 
+        L1440,0 
+        L0,0 
+        Z
+      "
+        />
+      </svg>
+
       {/* Header */}
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 z-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-12"
+          className="text-center max-w-2xl mx-auto mb-12 pt-8"
         >
           <p className="text-[#c4a99b] font-elegant text-sm tracking-widest uppercase mb-3">
             Bộ sưu tập thiệp cưới
@@ -102,16 +120,16 @@ const GridTemplate = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="flex justify-center"
               >
-              <TemplateHeroCard
+                <TemplateHeroCard
                   colors={colors}
-                  template={{
-                    name: layout.name,
-                    category: layout.style,
-                  } as any}
+                  template={{ name: layout.name }}
                   coupleData={coupleData}
                   countdown={countdown}
                   date={weddingDate}
                   onClick={() => handleTemplateClick(layout.id)}
+                  setShowShareModal={(show: boolean) => {
+                    console.log("Share modal state:", show);
+                  }}
                 />
               </motion.div>
             );

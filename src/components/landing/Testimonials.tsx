@@ -30,7 +30,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="py-24 bg-[#fdfaf8]">
+    <section className="py-24 bg-[#F5EBE8]">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div

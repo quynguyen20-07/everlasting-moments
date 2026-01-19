@@ -58,7 +58,7 @@ const Features = () => {
         preserveAspectRatio="none"
       >
         <path
-          fill="#FDFAF8"
+          fill="#F5EBE8"
           d="
         M0,40 
         C200,0 400,80 600,40 
@@ -134,7 +134,7 @@ const Features = () => {
         preserveAspectRatio="none"
       >
         <path
-          fill="#FDFAF8"
+          fill="#F5EBE8"
           d="
         M0,40 
         C200,80 400,0 600,40 
