@@ -29,24 +29,6 @@ const HowItWorks = () => {
   return (
     <section className="py-24 bg-[#F5EBE8]">
       <div className="container mx-auto px-4">
-        {/* Decorative Icons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex justify-center gap-8 mb-8"
-        >
-          {steps.map((step, i) => (
-            <div
-              key={i}
-              className="w-12 h-12 rounded-2xl bg-[#f8f1ed] flex items-center justify-center"
-            >
-              <step.icon className="w-5 h-5 text-[#c4a99b]" />
-            </div>
-          ))}
-        </motion.div>
-
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -78,6 +60,9 @@ const HowItWorks = () => {
               className="relative text-center"
             >
               {/* Step Number */}
+              <div className="flex justify-center">
+                <step.icon className="w-12 h-12 text-[#c4a99b] text-sm bg-white rounded-full p-3" />
+              </div>
               <div className="text-6xl font-display font-light text-[#e8d4c8] mb-4">
                 {step.step}
               </div>

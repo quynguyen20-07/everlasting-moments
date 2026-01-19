@@ -114,8 +114,9 @@ const Hero = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
             <Button
+              variant="blush"
               size="lg"
-              className="bg-[#4a3f3a] hover:bg-[#3a2f2a] text-white rounded-2xl px-8 py-6 text-base font-medium"
+              className="rounded-2xl px-8 py-6 text-base font-medium"
               asChild
             >
               <Link to="/auth">
@@ -124,9 +125,8 @@ const Hero = () => {
               </Link>
             </Button>
             <Button
-              variant="outline"
               size="lg"
-              className="border-[#c4a99b] text-[#c4a99b] hover:bg-[#c4a99b]/10 rounded-2xl px-8 py-6 text-base font-medium"
+              className="hover:text-white rounded-2xl px-8 py-6 text-base font-medium"
               asChild
             >
               <Link to="/demo/blush-romance">Xem Demo</Link>
