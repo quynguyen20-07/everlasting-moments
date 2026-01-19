@@ -1,6 +1,6 @@
 import Testimonials from "@/components/landing/Testimonials";
 import HowItWorks from "@/components/landing/HowItWorks";
-import Templates from "@/components/landing/Templates";
+import GridTemplate from "@/components/landing/GridTemplate";
 import Features from "@/components/landing/Features";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
@@ -23,7 +23,7 @@ const Index = () => {
         <Navbar />
         <main>
           <Hero />
-          <Templates />
+          <GridTemplate />
           <Features />
           <HowItWorks />
           <CTA />
