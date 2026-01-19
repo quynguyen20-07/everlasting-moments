@@ -507,7 +507,7 @@ export interface WeddingTemplate {
 // Generate combined templates from layouts and themes
 export function createWeddingTemplate(
   layout: TemplateLayout,
-  theme: TemplateTheme
+  theme: TemplateTheme,
 ): WeddingTemplate {
   return {
     id: `${layout.id}-${theme.id}`,
@@ -537,7 +537,7 @@ export const weddingTemplates: WeddingTemplate[] = TEMPLATE_LAYOUTS.map(
       TEMPLATES_THEME_LIST.find((t) => t.id === layout.defaultThemeId) ||
       TEMPLATES_THEME_LIST[0];
     return createWeddingTemplate(layout, theme);
-  }
+  },
 );
 
 // ============= LEGACY SUPPORT: TEMPLATES_LIST =============
@@ -578,7 +578,7 @@ export function getThemesByPattern(pattern: string): TemplateTheme[] {
 // Create a custom template with any layout + theme combination
 export function getCustomTemplate(
   layoutId: string,
-  themeId: string
+  themeId: string,
 ): WeddingTemplate | null {
   const layout = getLayoutById(layoutId);
   const theme = getThemeById(themeId);

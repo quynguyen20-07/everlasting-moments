@@ -1,5 +1,7 @@
 import { Wedding } from "@/types";
 
+import { TEMPLATES_THEME_LIST } from "../templates";
+
 export const mapWeddingToCoupleData = (wedding?: Wedding | null) => {
   if (!wedding) return null;
 
@@ -31,3 +33,7 @@ export const mapWeddingToCoupleData = (wedding?: Wedding | null) => {
     bankInfo: null,
   };
 };
+
+export const TEMPLATE_MAP = Object.fromEntries(
+  TEMPLATES_THEME_LIST.map((t) => [t.id, t]),
+);

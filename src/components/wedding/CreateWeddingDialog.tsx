@@ -21,8 +21,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Loader2, User, Palette, Music } from "lucide-react";
-import { TEMPLATES_LIST } from "@/lib/templates/wedding-templates";
+import { TEMPLATES_THEME_LIST } from "@/lib/templates/wedding-templates";
+import { Heart, Loader2, Music, Palette, User } from "lucide-react";
+import { hexToHsl, hslToHex, TEMPLATE_MAP } from "@/lib/utils";
 import { useWeddingStore } from "@/stores/weddingStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,8 +32,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { z } from "zod";
 
 const createWeddingSchema = z.object({
@@ -89,6 +90,12 @@ export const CreateWeddingDialog = ({
   const { createWedding } = useWeddingStore();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
+
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(
+    TEMPLATES_THEME_LIST[0]?.id || "",
+  );
+  const [primaryColor, setPrimaryColor] = useState<string>("");
+  const [secondaryColor, setSecondaryColor] = useState<string>("");
 
   const form = useForm<CreateWeddingFormData>({
     resolver: zodResolver(createWeddingSchema),
@@ -175,6 +182,16 @@ export const CreateWeddingDialog = ({
     else if (activeTab === "groom") setActiveTab("bride");
     else if (activeTab === "bride") setActiveTab("basic");
   };
+
+  useEffect(() => {
+    const template = TEMPLATE_MAP[selectedTemplateId];
+    if (template) {
+      const primaryHex = hslToHex(template.colors.primary);
+      const secondaryHex = hslToHex(template.colors.secondary);
+      setPrimaryColor(primaryHex);
+      setSecondaryColor(secondaryHex);
+    }
+  }, [selectedTemplateId]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -398,13 +415,15 @@ export const CreateWeddingDialog = ({
                 </div>
 
                 <FormField
-                  control={form.control}
                   name="template"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Mẫu thiệp *</FormLabel>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedTemplateId(value);
+                        }}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -413,9 +432,17 @@ export const CreateWeddingDialog = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {TEMPLATES_LIST.map((template) => (
+                          {TEMPLATES_THEME_LIST.map((template) => (
                             <SelectItem key={template.id} value={template.id}>
-                              {template.name}
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-4 h-4 rounded-full border"
+                                  style={{
+                                    backgroundColor: `hsl(${template.colors.primary})`,
+                                  }}
+                                />
+                                {template.name}
+                              </div>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -427,7 +454,6 @@ export const CreateWeddingDialog = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
-                    control={form.control}
                     name="primaryColor"
                     render={({ field }) => (
                       <FormItem>
@@ -437,13 +463,27 @@ export const CreateWeddingDialog = ({
                             <Input
                               type="color"
                               className="w-12 h-10 p-1 cursor-pointer"
-                              {...field}
+                              value={primaryColor}
+                              onChange={(e) => {
+                                const hexValue = e.target.value;
+                                setPrimaryColor(hexValue);
+                                field.onChange(hexToHsl(hexValue)); // Lưu HSL vào form
+                              }}
                             />
                             <Input
                               type="text"
                               placeholder="#F4B6C2"
-                              value={field.value}
-                              onChange={field.onChange}
+                              value={primaryColor}
+                              onChange={(e) => {
+                                const hexValue = e.target.value;
+                                if (
+                                  /^#[0-9A-Fa-f]{6}$/.test(hexValue) ||
+                                  /^#[0-9A-Fa-f]{3}$/.test(hexValue)
+                                ) {
+                                  setPrimaryColor(hexValue);
+                                  field.onChange(hexToHsl(hexValue)); // Lưu HSL vào form
+                                }
+                              }}
                               className="flex-1"
                             />
                           </div>
@@ -454,7 +494,6 @@ export const CreateWeddingDialog = ({
                   />
 
                   <FormField
-                    control={form.control}
                     name="secondaryColor"
                     render={({ field }) => (
                       <FormItem>
@@ -464,13 +503,27 @@ export const CreateWeddingDialog = ({
                             <Input
                               type="color"
                               className="w-12 h-10 p-1 cursor-pointer"
-                              {...field}
+                              value={secondaryColor}
+                              onChange={(e) => {
+                                const hexValue = e.target.value;
+                                setSecondaryColor(hexValue);
+                                field.onChange(hexToHsl(hexValue));
+                              }}
                             />
                             <Input
                               type="text"
                               placeholder="#F7E7CE"
-                              value={field.value}
-                              onChange={field.onChange}
+                              value={secondaryColor}
+                              onChange={(e) => {
+                                const hexValue = e.target.value;
+                                if (
+                                  /^#[0-9A-Fa-f]{6}$/.test(hexValue) ||
+                                  /^#[0-9A-Fa-f]{3}$/.test(hexValue)
+                                ) {
+                                  setSecondaryColor(hexValue);
+                                  field.onChange(hexToHsl(hexValue));
+                                }
+                              }}
                               className="flex-1"
                             />
                           </div>
@@ -490,7 +543,7 @@ export const CreateWeddingDialog = ({
                         <FormLabel>Font tiêu đề</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          defaultValue={FONT_OPTIONS[0].value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -518,7 +571,7 @@ export const CreateWeddingDialog = ({
                         <FormLabel>Font nội dung</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          defaultValue={FONT_OPTIONS[0].value}
                         >
                           <FormControl>
                             <SelectTrigger>
