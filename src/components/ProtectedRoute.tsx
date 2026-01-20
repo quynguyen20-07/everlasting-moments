@@ -1,6 +1,6 @@
 import { PageLoading } from "@/components/LoadingSpinner";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export const ProtectedRoute = ({
   children,
   requireAdmin = false,
 }: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading, user } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -34,7 +34,7 @@ export const PublicOnlyRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isAuthenticated, isLoading, user } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return <PageLoading />;

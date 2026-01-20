@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { useUIStore } from "@/stores/uiStore";
+import { useUI } from "@/hooks/useUI";
 import { Heart, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Header = () => {
-  const { setSidebarOpen } = useUIStore();
+  const { setSidebarOpen } = useUI();
 
   return (
     <header className="lg:hidden sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">

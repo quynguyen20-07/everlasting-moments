@@ -9,7 +9,6 @@ import GuestManagement from "@/pages/GuestManagement";
 import WishManagement from "@/pages/WishManagement";
 import AdminDashboard from "@/pages/AdminDashboard";
 import PublicWedding from "@/pages/PublicWedding";
-import { useAuthStore } from "@/stores/authStore";
 import { Toaster } from "@/components/ui/toaster";
 import WeddingList from "@/pages/WeddingList";
 import WeddingEdit from "@/pages/WeddingEdit";
@@ -18,20 +17,33 @@ import Index from "@/pages/Index";
 import { useEffect } from "react";
 import Demo from "@/pages/Demo";
 import Auth from "@/pages/Auth";
+import { useAuth } from "@/hooks/useAuth";
+import { UIProvider } from "@/hooks/useUI";
+import { setLogoutCallback } from "@/lib/graphql/client";
+import { setApiLogoutCallback } from "@/lib/api/client";
 
 import TemplatesPage from "./components/landing/TemplatesPage";
 import TemplateDetailPage from "./pages/TemplateDetailPage";
 import Dashboard from "./pages/Dashboard";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // App initialization wrapper to check auth on mount
 const AppContent = () => {
-  const { isLoading, checkAuth } = useAuthStore();
+  const { isLoading, logout } = useAuth();
 
+  // Set up logout callbacks for API clients
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    setLogoutCallback(logout);
+    setApiLogoutCallback(logout);
+  }, [logout]);
 
   // Show loading while checking auth status
   if (isLoading) {
@@ -117,13 +129,15 @@ const AppContent = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
-    </TooltipProvider>
+    <UIProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </TooltipProvider>
+    </UIProvider>
   </QueryClientProvider>
 );
 
