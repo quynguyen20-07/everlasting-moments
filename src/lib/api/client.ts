@@ -1,8 +1,15 @@
 // API Client - Axios instance with interceptors
 import axios from 'axios';
-import { useAuthStore } from '@/stores/authStore';
+import { getStoredToken } from '@/hooks/useAuth';
 
 const API_BASE_URL = '/api'; // Will be replaced with actual backend URL
+
+// Logout callback - will be set by the app
+let logoutCallback: (() => void) | null = null;
+
+export function setApiLogoutCallback(callback: () => void) {
+  logoutCallback = callback;
+}
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -14,7 +21,7 @@ export const apiClient = axios.create({
 // Request interceptor - Add auth token
 apiClient.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().token;
+    const token = getStoredToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,10 +35,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout();
+      if (logoutCallback) {
+        logoutCallback();
+      }
     }
     return Promise.reject(error);
   }
 );
-
-export default apiClient;

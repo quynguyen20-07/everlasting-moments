@@ -18,9 +18,9 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { useUIStore } from "@/stores/uiStore";
+import { useUI } from "@/hooks/useUI";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -105,11 +105,11 @@ const adminNavItems: NavItem[] = [
 export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout, user } = useAuthStore();
-  const { sidebarOpen, setSidebarOpen } = useUIStore();
+  const { logout, user } = useAuth();
+  const { sidebarOpen, setSidebarOpen } = useUI();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  const navItems = user.phone === "admin" ? adminNavItems : userNavItems;
+  const navItems = user?.phone === "admin" ? adminNavItems : userNavItems;
 
   const toggleExpanded = (title: string) => {
     setExpandedItems((prev) =>
@@ -260,7 +260,7 @@ export const Sidebar = () => {
 
         {/* Footer */}
         <div className="p-4 border-t border-border space-y-2">
-          {user.role !== "admin" && (
+          {user?.role !== "admin" && (
             <Button variant="outline" className="w-full justify-start" asChild>
               <Link to="/demo/blush-romance">
                 <Eye className="w-4 h-4 mr-2" />

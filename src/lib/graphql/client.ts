@@ -1,6 +1,7 @@
 import type { GraphQLResponse, GraphQLError } from "@/types/graphql";
+import { getStoredToken } from "@/hooks/useAuth";
+
 // GraphQL Client - Handles all GraphQL requests with auth
-import { useAuthStore } from "@/stores/authStore";
 
 // GraphQL endpoint - will be configured via environment variable
 const GRAPHQL_ENDPOINT = import.meta.env.VITE_API_DOMAIN + "/graphql";
@@ -19,6 +20,13 @@ interface RequestOptions {
   requireAuth?: boolean;
 }
 
+// Logout callback - will be set by the app
+let logoutCallback: (() => void) | null = null;
+
+export function setLogoutCallback(callback: () => void) {
+  logoutCallback = callback;
+}
+
 /**
  * Execute a GraphQL query or mutation
  */
@@ -33,7 +41,7 @@ export async function graphqlRequest<T>(
 
   // Add authorization header if required
   if (options.requireAuth) {
-    const token = useAuthStore.getState().token;
+    const token = getStoredToken();
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
@@ -51,7 +59,9 @@ export async function graphqlRequest<T>(
 
     // Handle 401 - Unauthorized
     if (response.status === 401) {
-      useAuthStore.getState().logout();
+      if (logoutCallback) {
+        logoutCallback();
+      }
       throw new GraphQLClientError([
         { message: "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại." },
       ]);
