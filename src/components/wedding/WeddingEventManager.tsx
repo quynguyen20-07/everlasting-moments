@@ -1,4 +1,20 @@
 import {
+  useAddWeddingEvent,
+  useCreateWedding,
+  useDeleteWedding,
+  useDeleteWeddingEvent,
+  useUpdateWedding,
+  useUpdateWeddingEvent,
+  useWedding,
+} from "@/hooks";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -7,16 +23,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Calendar, Edit, Heart, Loader2, MapPin, Plus, Trash2 } from "lucide-react";
+  Calendar,
+  Edit,
+  Heart,
+  Loader2,
+  MapPin,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { WeddingEventFormData, weddingEventSchema } from "@/validation";
 import { IWeddingEvent, WeddingEventInput } from "@/types";
-import { useWeddingStore } from "@/stores/weddingStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatDateFromTimestamp } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,12 +60,11 @@ const toDateInputValue = (date?: string | number) => {
 export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
   const { toast } = useToast();
 
-  const {
-    currentWedding,
-    addWeddingEvent,
-    updateWeddingEvent,
-    deleteWeddingEvent,
-  } = useWeddingStore();
+  const { data: currentWedding } = useWedding(weddingId);
+
+  const { mutateAsync: addWeddingEvent } = useAddWeddingEvent();
+  const { mutateAsync: updateWeddingEvent } = useUpdateWeddingEvent();
+  const { mutateAsync: deleteWeddingEvent } = useDeleteWeddingEvent();
 
   const events: IWeddingEvent[] =
     currentWedding.weddingDetail?.weddingEvents ?? [];
@@ -114,10 +129,14 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
       };
 
       if (editing) {
-        await updateWeddingEvent(weddingId, editing.id, payload);
+        await updateWeddingEvent({
+          weddingId,
+          eventId: editing.id,
+          event: payload,
+        });
         toast({ title: "Đã cập nhật sự kiện" });
       } else {
-        await addWeddingEvent(weddingId, payload);
+        await addWeddingEvent({ weddingId, event: payload });
         toast({ title: "Đã thêm sự kiện" });
       }
 
@@ -136,7 +155,7 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
   const handleDelete = async (eventId: string) => {
     try {
       setLoading(true);
-      await deleteWeddingEvent(weddingId, eventId);
+      await deleteWeddingEvent({ weddingId, eventId });
       toast({ title: "Đã xoá sự kiện" });
     } catch {
       toast({
@@ -162,7 +181,7 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
           </p>
         </div>
 
-        <Button 
+        <Button
           onClick={openCreate}
           className="rounded-full bg-[#C4A484] text-white hover:bg-[#A68B6A]"
         >
@@ -182,8 +201,8 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
           <p className="text-[#8B7355] mb-4 max-w-sm mx-auto text-sm">
             Thêm các sự kiện như lễ cưới, tiệc cưới, after party...
           </p>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={openCreate}
             className="rounded-full border-[#C4A484] text-[#C4A484] hover:bg-[#C4A484] hover:text-white"
           >
@@ -194,13 +213,15 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
       ) : (
         <div className="space-y-3">
           {events.map((e) => (
-            <div 
+            <div
               key={e.id}
               className="bg-[#FAF8F5] rounded-2xl border border-[#E8DDD5] p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-[#5D4A3C] mb-2">{e.title}</h3>
+                  <h3 className="font-semibold text-[#5D4A3C] mb-2">
+                    {e.title}
+                  </h3>
                   <p className="text-sm text-[#8B7355] mb-2">
                     ⏰ {e.startTime || "--"} - {e.endTime || "--"} • 📅{" "}
                     {formatDateFromTimestamp(e.eventDate)}
@@ -248,7 +269,9 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
               {editing ? "Cập nhật sự kiện" : "Thêm sự kiện"}
             </DialogTitle>
             <DialogDescription className="text-[#8B7355] text-sm">
-              {editing ? "Chỉnh sửa thông tin sự kiện" : "Thêm sự kiện mới vào lịch trình"}
+              {editing
+                ? "Chỉnh sửa thông tin sự kiện"
+                : "Thêm sự kiện mới vào lịch trình"}
             </DialogDescription>
           </DialogHeader>
 
@@ -259,9 +282,11 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Tiêu đề</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Tiêu đề
+                    </FormLabel>
                     <FormControl>
-                      <Input 
+                      <Input
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                         placeholder="VD: Lễ cưới"
@@ -277,7 +302,9 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Loại sự kiện</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Loại sự kiện
+                    </FormLabel>
                     <FormControl>
                       <select
                         {...field}
@@ -298,10 +325,12 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 name="eventDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Ngày</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Ngày
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        type="date" 
+                      <Input
+                        type="date"
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                       />
@@ -317,10 +346,12 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                   name="startTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[#5D4A3C] text-sm font-medium">Thời gian bắt đầu</FormLabel>
+                      <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                        Thời gian bắt đầu
+                      </FormLabel>
                       <FormControl>
-                        <Input 
-                          type="time" 
+                        <Input
+                          type="time"
                           {...field}
                           className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                         />
@@ -334,10 +365,12 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                   name="endTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[#5D4A3C] text-sm font-medium">Thời gian kết thúc</FormLabel>
+                      <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                        Thời gian kết thúc
+                      </FormLabel>
                       <FormControl>
-                        <Input 
-                          type="time" 
+                        <Input
+                          type="time"
                           {...field}
                           className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                         />
@@ -352,9 +385,11 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Địa điểm</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Địa điểm
+                    </FormLabel>
                     <FormControl>
-                      <Input 
+                      <Input
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                         placeholder="VD: Nhà hàng ABC, Quận 1"
@@ -370,10 +405,12 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Mô tả</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Mô tả
+                    </FormLabel>
                     <FormControl>
-                      <Textarea 
-                        rows={3} 
+                      <Textarea
+                        rows={3}
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484] resize-none"
                         placeholder="Mô tả chi tiết về sự kiện..."
@@ -393,8 +430,8 @@ export const WeddingEventManager = ({ weddingId }: { weddingId: string }) => {
                 >
                   Hủy
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={loading}
                   className="flex-1 rounded-full bg-[#C4A484] text-white hover:bg-[#A68B6A]"
                 >

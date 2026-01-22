@@ -6,29 +6,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Heart,
-  Eye,
-  Edit,
-  MoreVertical,
-  Globe,
-  GlobeLock,
-  Trash2,
   Copy,
   Download,
+  Edit,
+  Eye,
+  Globe,
+  GlobeLock,
+  Heart,
+  MoreVertical,
+  Trash2,
 } from "lucide-react";
 import type { ListWedding } from "@/lib/api/wedding";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatDateVN } from "@/lib/utils";
-// Wedding Card Component - Displays individual wedding in list
 import { Link } from "react-router-dom";
+// Wedding Card Component - Displays individual wedding in list
 import { motion } from "framer-motion";
 
 interface WeddingCardProps {
   wedding: ListWedding;
   index?: number;
   onPublishToggle: (id: string, publish: boolean) => void;
-  onDelete: (id: string) => void;
+  onDelete: (wedding: ListWedding) => void;
   onDuplicate?: (id: string) => void;
 }
 
@@ -148,7 +147,7 @@ export const WeddingCard = ({
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
-                onClick={() => onDelete(wedding.id)}
+                onClick={() => onDelete(wedding)}
               >
                 <Trash2 className="w-4 h-4 mr-2" /> Xóa thiệp cưới
               </DropdownMenuItem>

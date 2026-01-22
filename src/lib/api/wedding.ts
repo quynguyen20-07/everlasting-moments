@@ -65,7 +65,7 @@ export interface ListWedding {
 // ==================== List Weddings ====================
 export const getWeddingsApi = async (): Promise<ListWedding[]> => {
   const data = await graphqlRequest<{ weddings: ListWedding[] }>(
-    WEDDINGS_QUERY
+    WEDDINGS_QUERY,
   );
   return data.weddings;
 };
@@ -74,40 +74,40 @@ export const getWeddingsApi = async (): Promise<ListWedding[]> => {
 export const getWeddingApi = async (id: string): Promise<Wedding | null> => {
   const data = await graphqlRequest<{ wedding: Wedding | null }>(
     WEDDING_QUERY,
-    { id }
+    { id },
   );
   return data.wedding;
 };
 
 // ==================== Get Wedding by Slug ====================
 export const getWeddingBySlugApi = async (
-  slug: string
+  slug: string,
 ): Promise<Wedding | null> => {
   const data = await graphqlRequest<{ weddingBySlug: Wedding | null }>(
     WEDDING_BY_SLUG_QUERY,
-    { slug }
+    { slug },
   );
   return data.weddingBySlug;
 };
 
 // ==================== Get Public Wedding ====================
 export const getPublicWeddingApi = async (
-  slug: string
+  slug: string,
 ): Promise<Wedding | null> => {
   const data = await graphqlPublicRequest<{ publicWedding: Wedding | null }>(
     PUBLIC_WEDDING_QUERY,
-    { slug }
+    { slug },
   );
   return data.publicWedding;
 };
 
 // ==================== Get Wedding Detail ====================
 export const getWeddingDetailApi = async (
-  weddingId: string
+  weddingId: string,
 ): Promise<WeddingDetail | null> => {
   const data = await graphqlRequest<{ weddingDetail: WeddingDetail | null }>(
     WEDDING_DETAIL_QUERY,
-    { weddingId }
+    { weddingId },
   );
   return data.weddingDetail;
 };
@@ -115,11 +115,11 @@ export const getWeddingDetailApi = async (
 // ==================== Create Wedding ====================
 
 export const createWeddingApi = async (
-  input: CreateWeddingInput
+  input: CreateWeddingInput,
 ): Promise<Wedding> => {
   const data = await graphqlRequest<CreateWeddingResponse>(
     CREATE_WEDDING_MUTATION,
-    { ...input }
+    { ...input },
   );
   return data.createWedding;
 };
@@ -137,11 +137,11 @@ interface UpdateWeddingResponse {
 
 export const updateWeddingApi = async (
   id: string,
-  updates: UpdateWeddingInput
+  updates: UpdateWeddingInput,
 ): Promise<Wedding> => {
   const data = await graphqlRequest<UpdateWeddingResponse>(
     UPDATE_WEDDING_MUTATION,
-    { id, ...updates }
+    { id, ...updates },
   );
   return data.updateWedding;
 };
@@ -149,7 +149,7 @@ export const updateWeddingApi = async (
 // ==================== Update Wedding Status ====================
 export const updateWeddingStatusApi = async (
   id: string,
-  status: WeddingStatus
+  status: WeddingStatus,
 ): Promise<Wedding> => {
   return updateWeddingApi(id, { status });
 };
@@ -158,7 +158,7 @@ export const updateWeddingStatusApi = async (
 export const publishWeddingApi = async (id: string): Promise<Wedding> => {
   const data = await graphqlRequest<{ publishWedding: Wedding }>(
     PUBLISH_WEDDING_MUTATION,
-    { id }
+    { id },
   );
   return data.publishWedding;
 };
@@ -166,7 +166,7 @@ export const publishWeddingApi = async (id: string): Promise<Wedding> => {
 export const unpublishWeddingApi = async (id: string): Promise<Wedding> => {
   const data = await graphqlRequest<{ unpublishWedding: Wedding }>(
     UNPUBLISH_WEDDING_MUTATION,
-    { id }
+    { id },
   );
   return data.unpublishWedding;
 };
@@ -175,29 +175,29 @@ export const unpublishWeddingApi = async (id: string): Promise<Wedding> => {
 export const deleteWeddingApi = async (id: string): Promise<void> => {
   await graphqlRequest<{ deleteWedding: { id: string } }>(
     DELETE_WEDDING_MUTATION,
-    { id }
+    { id },
   );
 };
 
 // ==================== Bride & Groom ====================
 export const updateBrideApi = async (
   weddingId: string,
-  bride: BrideGroomInput
+  bride: BrideGroomInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ updateBride: WeddingDetail }>(
     UPDATE_BRIDE_MUTATION,
-    { weddingId, bride }
+    { weddingId, bride },
   );
   return data.updateBride;
 };
 
 export const updateGroomApi = async (
   weddingId: string,
-  groom: BrideGroomInput
+  groom: BrideGroomInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ updateGroom: WeddingDetail }>(
     UPDATE_GROOM_MUTATION,
-    { weddingId, groom }
+    { weddingId, groom },
   );
   return data.updateGroom;
 };
@@ -205,11 +205,11 @@ export const updateGroomApi = async (
 // ==================== Love Story ====================
 export const addLoveStoryApi = async (
   weddingId: string,
-  story: LoveStoryInput
+  story: LoveStoryInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ addLoveStory: WeddingDetail }>(
     ADD_LOVE_STORY_MUTATION,
-    { weddingId, story }
+    { weddingId, story },
   );
   return data.addLoveStory;
 };
@@ -217,22 +217,22 @@ export const addLoveStoryApi = async (
 export const updateLoveStoryApi = async (
   weddingId: string,
   storyId: string,
-  story: LoveStoryInput
+  story: LoveStoryInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ updateLoveStory: WeddingDetail }>(
     UPDATE_LOVE_STORY_MUTATION,
-    { weddingId, storyId, story }
+    { weddingId, storyId, story },
   );
   return data.updateLoveStory;
 };
 
 export const deleteLoveStoryApi = async (
   weddingId: string,
-  storyId: string
+  storyId: string,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ deleteLoveStory: WeddingDetail }>(
     DELETE_LOVE_STORY_MUTATION,
-    { weddingId, storyId }
+    { weddingId, storyId },
   );
   return data.deleteLoveStory;
 };
@@ -240,11 +240,11 @@ export const deleteLoveStoryApi = async (
 // ==================== Wedding Events ====================
 export const addWeddingEventApi = async (
   weddingId: string,
-  event: WeddingEventInput
+  event: WeddingEventInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ addWeddingEvent: WeddingDetail }>(
     ADD_WEDDING_EVENT_MUTATION,
-    { weddingId, event }
+    { weddingId, event },
   );
 
   return data.addWeddingEvent;
@@ -253,11 +253,11 @@ export const addWeddingEventApi = async (
 export const updateWeddingEventApi = async (
   weddingId: string,
   eventId: string,
-  event: WeddingEventInput
+  event: WeddingEventInput,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ updateWeddingEvent: WeddingDetail }>(
     UPDATE_WEDDING_EVENT_MUTATION,
-    { weddingId, eventId, event }
+    { weddingId, eventId, event },
   );
 
   return data.updateWeddingEvent;
@@ -265,11 +265,11 @@ export const updateWeddingEventApi = async (
 
 export const deleteWeddingEventApi = async (
   weddingId: string,
-  eventId: string
+  eventId: string,
 ): Promise<WeddingDetail> => {
   const data = await graphqlRequest<{ deleteWeddingEvent: WeddingDetail }>(
     DELETE_WEDDING_EVENT_MUTATION,
-    { weddingId, eventId }
+    { weddingId, eventId },
   );
 
   return data.deleteWeddingEvent;

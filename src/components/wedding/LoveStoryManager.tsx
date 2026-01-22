@@ -32,8 +32,12 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
+import {
+  useAddLoveStory,
+  useDeleteLoveStory,
+  useUpdateLoveStory,
+} from "@/hooks";
 import { LoveStoryFormData, loveStorySchema } from "@/validation";
-import { useWeddingStore } from "@/stores/weddingStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
@@ -55,7 +59,9 @@ export const LoveStoryManager = ({
   stories,
 }: LoveStoryManagerProps) => {
   const { toast } = useToast();
-  const { addLoveStory, updateLoveStory, deleteLoveStory } = useWeddingStore();
+  const { mutateAsync: addLoveStory } = useAddLoveStory();
+  const { mutateAsync: updateLoveStory } = useUpdateLoveStory();
+  const { mutateAsync: deleteLoveStory } = useDeleteLoveStory();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -106,13 +112,17 @@ export const LoveStoryManager = ({
       };
 
       if (editingStory) {
-        await updateLoveStory(weddingId, editingStory.id, storyInput);
+        await updateLoveStory({
+          weddingId,
+          storyId: editingStory.id,
+          story: storyInput,
+        });
         toast({
           title: "Đã cập nhật",
           description: "Câu chuyện đã được cập nhật thành công.",
         });
       } else {
-        await addLoveStory(weddingId, storyInput);
+        await addLoveStory({ weddingId, story: storyInput });
         toast({
           title: "Đã thêm",
           description: "Câu chuyện mới đã được thêm vào timeline.",
@@ -139,7 +149,7 @@ export const LoveStoryManager = ({
 
     setIsLoading(true);
     try {
-      await deleteLoveStory(weddingId, deletingStoryId);
+      await deleteLoveStory({ weddingId, storyId: deletingStoryId });
       toast({
         title: "Đã xóa",
         description: "Câu chuyện đã được xóa khỏi timeline.",
@@ -177,7 +187,7 @@ export const LoveStoryManager = ({
             Thêm các mốc quan trọng trong hành trình tình yêu của bạn
           </p>
         </div>
-        <Button 
+        <Button
           onClick={handleOpenCreate}
           className="rounded-full bg-[#C4A484] text-white hover:bg-[#A68B6A]"
         >
@@ -196,10 +206,11 @@ export const LoveStoryManager = ({
             Chưa có câu chuyện nào
           </h3>
           <p className="text-[#8B7355] mb-4 max-w-sm mx-auto text-sm">
-            Hãy thêm các mốc quan trọng như ngày gặp nhau, lần đầu hẹn hò, ngày cầu hôn...
+            Hãy thêm các mốc quan trọng như ngày gặp nhau, lần đầu hẹn hò, ngày
+            cầu hôn...
           </p>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handleOpenCreate}
             className="rounded-full border-[#C4A484] text-[#C4A484] hover:bg-[#C4A484] hover:text-white"
           >
@@ -304,10 +315,12 @@ export const LoveStoryManager = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Tiêu đề *</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Tiêu đề *
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="VD: Lần đầu gặp gỡ" 
+                      <Input
+                        placeholder="VD: Lần đầu gặp gỡ"
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                       />
@@ -322,10 +335,12 @@ export const LoveStoryManager = ({
                 name="storyDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Ngày diễn ra</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Ngày diễn ra
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        type="date" 
+                      <Input
+                        type="date"
                         {...field}
                         className="rounded-xl border-[#E8DDD5] bg-[#FAF8F5] focus:border-[#C4A484] focus:ring-[#C4A484]"
                       />
@@ -340,7 +355,9 @@ export const LoveStoryManager = ({
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">Nội dung *</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      Nội dung *
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Kể về khoảnh khắc đặc biệt này..."
@@ -359,7 +376,9 @@ export const LoveStoryManager = ({
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">URL hình ảnh (tùy chọn)</FormLabel>
+                    <FormLabel className="text-[#5D4A3C] text-sm font-medium">
+                      URL hình ảnh (tùy chọn)
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="url"
@@ -406,13 +425,16 @@ export const LoveStoryManager = ({
       >
         <AlertDialogContent className="bg-white rounded-[20px] border-[#E8DDD5]">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-[#5D4A3C]">Xóa câu chuyện?</AlertDialogTitle>
+            <AlertDialogTitle className="text-[#5D4A3C]">
+              Xóa câu chuyện?
+            </AlertDialogTitle>
             <AlertDialogDescription className="text-[#8B7355]">
-              Bạn có chắc chắn muốn xóa câu chuyện này? Hành động này không thể hoàn tác.
+              Bạn có chắc chắn muốn xóa câu chuyện này? Hành động này không thể
+              hoàn tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel 
+            <AlertDialogCancel
               disabled={isLoading}
               className="rounded-full border-[#E8DDD5] text-[#8B7355] hover:bg-[#F5EDE6]"
             >

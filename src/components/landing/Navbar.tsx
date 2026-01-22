@@ -9,8 +9,8 @@ import { Heart, Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks";
 import { useState } from "react";
 
 const navLinks = [
@@ -21,7 +21,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {

@@ -1,14 +1,13 @@
 import { Eye, Heart, Menu, MessageCircle, Plus, Users } from "lucide-react";
 import { WeddingCard } from "@/components/wedding/WeddingCard";
-import { useWeddingStore } from "@/stores/weddingStore";
-import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useWeddings } from "@/hooks";
 import { useState } from "react";
 
 const Dashboard = () => {
-  const { weddings } = useWeddingStore();
+  const { data: weddings, isLoading, refetch: fetchWedding } = useWeddings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const stats = [
@@ -72,7 +71,7 @@ const Dashboard = () => {
             <h2 className="font-display text-xl font-semibold">Thiệp cưới</h2>
           </div>
           <div className="p-6">
-            {weddings.map((wedding, index) => (
+            {weddings?.map((wedding, index) => (
               <WeddingCard
                 key={wedding.id}
                 wedding={wedding}

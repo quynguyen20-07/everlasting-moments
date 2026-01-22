@@ -1,7 +1,7 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { useUIStore } from "@/stores/uiStore";
 import { Outlet } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useUI } from "@/hooks";
 
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
@@ -21,7 +21,7 @@ export const DashboardLayout = ({
   showCreateButton = false,
   showSearch = false,
 }: DashboardLayoutProps) => {
-  const { sidebarOpen } = useUIStore();
+  const { sidebarOpen } = useUI();
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,7 +31,7 @@ export const DashboardLayout = ({
         <main
           className={cn(
             "flex-1 min-h-[calc(100vh-3.5rem)] lg:min-h-screen",
-            "transition-all duration-300"
+            "transition-all duration-300",
           )}
         >
           <ErrorBoundary>

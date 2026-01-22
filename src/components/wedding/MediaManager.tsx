@@ -1,7 +1,6 @@
 import type { MediaItemWithMeta, GalleryLayout } from "@/types/media";
 // Media Manager Component - CRUD for wedding gallery
 import { useState, useEffect, useCallback } from "react";
-import { useMediaStore } from "@/stores/mediaStore";
 
 // Alias for cleaner code
 type MediaItem = MediaItemWithMeta;
@@ -57,6 +56,14 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import {
+  useAddMedia,
+  useDeleteMedia,
+  useGallerySettings,
+  useMedia,
+  useUpdateMedia,
+  useReorderMedia,
+} from "@/hooks/useMedia"; // Import từ useMedia.ts
 
 interface MediaManagerProps {
   weddingId: string;
@@ -183,18 +190,20 @@ function SortableMediaItem({
 
 export default function MediaManager({ weddingId }: MediaManagerProps) {
   const { toast } = useToast();
+  const { data: media = [], isLoading } = useMedia(weddingId); // Sử dụng hook từ useMedia.ts
+
+  const { mutateAsync: addMedia, isPending: isAdding } = useAddMedia();
+  const { mutateAsync: updateMedia, isPending: isUpdating } = useUpdateMedia();
+  const { mutateAsync: deleteMedia, isPending: isDeleting } = useDeleteMedia();
+  const { mutateAsync: reorderMedia, isPending: isReordering } =
+    useReorderMedia();
+
+  // Sử dụng gallerySettings hook từ useMedia.ts
   const {
-    media,
-    gallerySettings,
-    isLoading,
-    fetchMedia,
-    addMedia,
-    updateMedia,
-    deleteMedia,
-    reorderMedia,
+    settings: gallerySettings,
     setLayout,
-    setGallerySettings,
-  } = useMediaStore();
+    updateSettings,
+  } = useGallerySettings();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -216,28 +225,29 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
     }),
   );
 
-  useEffect(() => {
-    fetchMedia(weddingId);
-  }, [weddingId, fetchMedia]);
-
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
 
-      if (over && active.id !== over.id) {
-        const oldIndex = media.findIndex((m) => m.id === active.id);
-        const newIndex = media.findIndex((m) => m.id === over.id);
+      if (over && active.id !== over.id && media) {
+        const oldIndex = media.findIndex((m: MediaItem) => m.id === active.id);
+        const newIndex = media.findIndex((m: MediaItem) => m.id === over.id);
 
-        const newOrder = arrayMove(media, oldIndex, newIndex);
-        reorderMedia(newOrder.map((m) => m.id));
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newOrder = arrayMove(media, oldIndex, newIndex);
+          const mediaIds = newOrder.map((m: MediaItem) => m.id);
 
-        toast({
-          title: "Đã sắp xếp lại",
-          description: "Thứ tự ảnh đã được cập nhật",
-        });
+          // Gọi reorderMedia với đúng tham số
+          reorderMedia({ weddingId, mediaIds });
+
+          toast({
+            title: "Đã sắp xếp lại",
+            description: "Thứ tự ảnh đã được cập nhật",
+          });
+        }
       }
     },
-    [media, reorderMedia, toast],
+    [media, reorderMedia, weddingId, toast],
   );
 
   const handleAddMedia = async () => {
@@ -251,10 +261,13 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
     }
 
     try {
-      await addMedia(weddingId, {
-        type: "image",
-        url: newMediaUrl,
-        caption: newMediaCaption,
+      await addMedia({
+        weddingId,
+        input: {
+          type: "image",
+          url: newMediaUrl,
+          caption: newMediaCaption,
+        },
       });
 
       toast({
@@ -266,6 +279,7 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
       setNewMediaCaption("");
       setIsAddDialogOpen(false);
     } catch (error) {
+      console.error("Error adding media:", error);
       toast({
         title: "Lỗi",
         description: "Không thể thêm ảnh",
@@ -278,8 +292,12 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
     if (!selectedMedia) return;
 
     try {
-      await updateMedia(selectedMedia.id, {
-        caption: editCaption,
+      await updateMedia({
+        id: selectedMedia.id,
+        input: {
+          caption: editCaption,
+        },
+        weddingId,
       });
 
       toast({
@@ -289,7 +307,9 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
 
       setIsEditDialogOpen(false);
       setSelectedMedia(null);
+      setEditCaption("");
     } catch (error) {
+      console.error("Error updating media:", error);
       toast({
         title: "Lỗi",
         description: "Không thể cập nhật ảnh",
@@ -300,12 +320,13 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
 
   const handleDeleteMedia = async (id: string) => {
     try {
-      await deleteMedia(id);
+      await deleteMedia({ id, weddingId });
       toast({
         title: "Đã xóa",
         description: "Ảnh đã được xóa khỏi thư viện",
       });
     } catch (error) {
+      console.error("Error deleting media:", error);
       toast({
         title: "Lỗi",
         description: "Không thể xóa ảnh",
@@ -339,6 +360,9 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
         return "grid-cols-2 md:grid-cols-3";
     }
   };
+
+  const isLoadingMedia =
+    isLoading || isAdding || isUpdating || isDeleting || isReordering;
 
   return (
     <div className="space-y-6">
@@ -391,7 +415,7 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
               <Switch
                 checked={gallerySettings.showCaptions}
                 onCheckedChange={(checked) =>
-                  setGallerySettings({ showCaptions: checked })
+                  updateSettings({ showCaptions: checked })
                 }
               />
               <Label>Hiển thị chú thích</Label>
@@ -402,7 +426,7 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
               <Switch
                 checked={gallerySettings.enableLightbox}
                 onCheckedChange={(checked) =>
-                  setGallerySettings({ enableLightbox: checked })
+                  updateSettings({ enableLightbox: checked })
                 }
               />
               <Label>Xem ảnh lớn</Label>
@@ -434,11 +458,11 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={media.map((m) => m.id)}
+            items={media.map((m: MediaItem) => m.id)}
             strategy={rectSortingStrategy}
           >
             <div className={`grid ${getGridClass()} gap-4`}>
-              {media.map((item, index) => (
+              {media.map((item: MediaItem, index: number) => (
                 <div
                   key={item.id}
                   className={
@@ -503,8 +527,8 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               Hủy
             </Button>
-            <Button onClick={handleAddMedia} disabled={isLoading}>
-              {isLoading ? (
+            <Button onClick={handleAddMedia} disabled={isLoadingMedia}>
+              {isLoadingMedia ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
               ) : null}
               Thêm ảnh
@@ -545,8 +569,8 @@ export default function MediaManager({ weddingId }: MediaManagerProps) {
             >
               Hủy
             </Button>
-            <Button onClick={handleEditMedia} disabled={isLoading}>
-              {isLoading ? (
+            <Button onClick={handleEditMedia} disabled={isLoadingMedia}>
+              {isLoadingMedia ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
               ) : null}
               Lưu

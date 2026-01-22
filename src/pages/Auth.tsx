@@ -1,18 +1,18 @@
 import { ArrowLeft, Eye, EyeOff, Heart, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { login, register, isAuthenticated, user } = useAuthStore();
+  const { login, register, isAuthenticated, user } = useAuth();
 
   const [mode, setMode] = useState<"signin" | "signup">(
     searchParams.get("mode") === "signup" ? "signup" : "signin",

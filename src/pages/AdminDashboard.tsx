@@ -1,13 +1,13 @@
 import {
-  Heart,
-  Users,
-  UserCheck,
-  Eye,
-  Search,
-  MoreVertical,
-  Globe,
   Clock,
+  Eye,
+  Globe,
+  Heart,
+  MoreVertical,
+  Search,
   TrendingUp,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,15 +25,14 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useWeddingStore } from "@/stores/weddingStore";
 import { Button } from "@/components/ui/button";
-import type { Wedding } from "@/types/graphql";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-// Admin Dashboard Page - Overview and read-only management
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+// Admin Dashboard Page - Overview and read-only management
+import { useWeddings } from "@/hooks";
+import { useState } from "react";
 
 // Mock admin stats - in real app, these would come from an admin API
 const mockAdminStats = {
@@ -45,13 +44,9 @@ const mockAdminStats = {
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { weddings, isLoading, fetchWeddings } = useWeddingStore();
+  const { data: weddings, isLoading, refetch: fetchWedding } = useWeddings();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
-
-  useEffect(() => {
-    fetchWeddings();
-  }, [fetchWeddings]);
 
   const filteredWeddings = weddings.filter(
     (w) =>

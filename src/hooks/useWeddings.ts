@@ -1,5 +1,3 @@
-// Wedding Hooks - React Query based wedding management
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getWeddingsApi,
   getWeddingApi,
@@ -18,23 +16,25 @@ import {
   updateWeddingEventApi,
   deleteWeddingEventApi,
   type ListWedding,
-} from '@/lib/api/wedding';
+} from "@/lib/api/wedding";
 import type {
   Wedding,
   BrideGroomInput,
   LoveStoryInput,
   CreateWeddingInput,
   WeddingEventInput,
-} from '@/types';
+} from "@/types";
+// Wedding Hooks - React Query based wedding management
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Query Keys
 export const weddingKeys = {
-  all: ['weddings'] as const,
-  lists: () => [...weddingKeys.all, 'list'] as const,
+  all: ["weddings"] as const,
+  lists: () => [...weddingKeys.all, "list"] as const,
   list: (filters?: string) => [...weddingKeys.lists(), filters] as const,
-  details: () => [...weddingKeys.all, 'detail'] as const,
+  details: () => [...weddingKeys.all, "detail"] as const,
   detail: (id: string) => [...weddingKeys.details(), id] as const,
-  public: (slug: string) => [...weddingKeys.all, 'public', slug] as const,
+  public: (slug: string) => [...weddingKeys.all, "public", slug] as const,
 };
 
 // ==================== Queries ====================
@@ -103,8 +103,13 @@ export function useUpdateWedding() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: { title?: string; slug?: string; status?: string } }) =>
-      updateWeddingApi(id, updates),
+    mutationFn: ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: { title?: string; slug?: string; status?: string };
+    }) => updateWeddingApi(id, updates),
     onSuccess: (updated, { id }) => {
       queryClient.setQueryData(weddingKeys.detail(id), updated);
       queryClient.invalidateQueries({ queryKey: weddingKeys.lists() });
@@ -122,7 +127,7 @@ export function useDeleteWedding() {
     mutationFn: deleteWeddingApi,
     onSuccess: (_, deletedId) => {
       queryClient.setQueryData<ListWedding[]>(weddingKeys.lists(), (old) =>
-        old?.filter((w) => w.id !== deletedId)
+        old?.filter((w) => w.id !== deletedId),
       );
       queryClient.removeQueries({ queryKey: weddingKeys.detail(deletedId) });
     },
@@ -181,13 +186,21 @@ export function useUpdateBride() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, bride }: { weddingId: string; bride: BrideGroomInput }) =>
-      updateBrideApi(weddingId, bride),
+    mutationFn: ({
+      weddingId,
+      bride,
+    }: {
+      weddingId: string;
+      bride: BrideGroomInput;
+    }) => updateBrideApi(weddingId, bride),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -196,13 +209,21 @@ export function useUpdateGroom() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, groom }: { weddingId: string; groom: BrideGroomInput }) =>
-      updateGroomApi(weddingId, groom),
+    mutationFn: ({
+      weddingId,
+      groom,
+    }: {
+      weddingId: string;
+      groom: BrideGroomInput;
+    }) => updateGroomApi(weddingId, groom),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -213,13 +234,21 @@ export function useAddLoveStory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, story }: { weddingId: string; story: LoveStoryInput }) =>
-      addLoveStoryApi(weddingId, story),
+    mutationFn: ({
+      weddingId,
+      story,
+    }: {
+      weddingId: string;
+      story: LoveStoryInput;
+    }) => addLoveStoryApi(weddingId, story),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -228,13 +257,23 @@ export function useUpdateLoveStory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, storyId, story }: { weddingId: string; storyId: string; story: LoveStoryInput }) =>
-      updateLoveStoryApi(weddingId, storyId, story),
+    mutationFn: ({
+      weddingId,
+      storyId,
+      story,
+    }: {
+      weddingId: string;
+      storyId: string;
+      story: LoveStoryInput;
+    }) => updateLoveStoryApi(weddingId, storyId, story),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -243,13 +282,21 @@ export function useDeleteLoveStory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, storyId }: { weddingId: string; storyId: string }) =>
-      deleteLoveStoryApi(weddingId, storyId),
+    mutationFn: ({
+      weddingId,
+      storyId,
+    }: {
+      weddingId: string;
+      storyId: string;
+    }) => deleteLoveStoryApi(weddingId, storyId),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -260,13 +307,21 @@ export function useAddWeddingEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, event }: { weddingId: string; event: WeddingEventInput }) =>
-      addWeddingEventApi(weddingId, event),
+    mutationFn: ({
+      weddingId,
+      event,
+    }: {
+      weddingId: string;
+      event: WeddingEventInput;
+    }) => addWeddingEventApi(weddingId, event),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -275,13 +330,23 @@ export function useUpdateWeddingEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, eventId, event }: { weddingId: string; eventId: string; event: WeddingEventInput }) =>
-      updateWeddingEventApi(weddingId, eventId, event),
+    mutationFn: ({
+      weddingId,
+      eventId,
+      event,
+    }: {
+      weddingId: string;
+      eventId: string;
+      event: WeddingEventInput;
+    }) => updateWeddingEventApi(weddingId, eventId, event),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }
@@ -290,13 +355,21 @@ export function useDeleteWeddingEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weddingId, eventId }: { weddingId: string; eventId: string }) =>
-      deleteWeddingEventApi(weddingId, eventId),
+    mutationFn: ({
+      weddingId,
+      eventId,
+    }: {
+      weddingId: string;
+      eventId: string;
+    }) => deleteWeddingEventApi(weddingId, eventId),
     onSuccess: (updatedDetail, { weddingId }) => {
-      queryClient.setQueryData<Wedding | null>(weddingKeys.detail(weddingId), (old) => {
-        if (!old) return old;
-        return { ...old, weddingDetail: updatedDetail };
-      });
+      queryClient.setQueryData<Wedding | null>(
+        weddingKeys.detail(weddingId),
+        (old) => {
+          if (!old) return old;
+          return { ...old, weddingDetail: updatedDetail };
+        },
+      );
     },
   });
 }

@@ -24,17 +24,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TEMPLATES_THEME_LIST } from "@/lib/templates/wedding-templates";
 import { Heart, Loader2, Music, Palette, User } from "lucide-react";
 import { hexToHsl, hslToHex, TEMPLATE_MAP } from "@/lib/utils";
-import { useWeddingStore } from "@/stores/weddingStore";
+import { getStoredUser, useCreateWedding } from "@/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuthStore } from "@/stores/authStore";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { Button } from "../ui/button";
 
 const createWeddingSchema = z.object({
   // Basic info
@@ -86,8 +86,8 @@ export const CreateWeddingDialog = ({
 }: CreateWeddingDialogProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useAuthStore();
-  const { createWedding } = useWeddingStore();
+  const user = getStoredUser();
+  const { mutateAsync: createWedding } = useCreateWedding();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
 
