@@ -21,7 +21,8 @@ import { PageLoading } from "@/components/LoadingSpinner";
 import ShareModal from "@/components/wedding/ShareModal";
 import { getWeddingBySlugApi } from "@/lib/api/wedding";
 import { ColorType, TemplateType, Wish } from "@/types";
-import { TemplateProvider } from "@/components/public";
+import { TemplateProvider, useTemplate } from "@/components/public";
+import { VietnamTraditionalLayout } from "@/components/templates";
 import Hero from "@/components/wedding-ui/Hero";
 import { submitRSVPApi } from "@/lib/api/guest";
 import { Button } from "@/components/ui/button";
@@ -263,11 +264,7 @@ export default function PublicWedding() {
     );
   }
 
-  const bride = wedding.weddingDetail?.bride;
-  const groom = wedding.weddingDetail?.groom;
-  const mainEvent = wedding.weddingDetail?.weddingEvents?.find(
-    (e) => e.type === "ceremony" || e.type === "reception",
-  );
+  // Handler functions are moved to component level for reuse
 
   // Handle RSVP submission
   const handleRSVP = async (data: RSVPFormData) => {
@@ -352,6 +349,134 @@ export default function PublicWedding() {
 
   return (
     <TemplateProvider themeSettings={wedding.themeSettings}>
+      <PublicWeddingContent
+        wedding={wedding}
+        template={template}
+        colors={colors}
+        images={images}
+        wishes={wishes}
+        setWishes={setWishes}
+        showShareModal={showShareModal}
+        setShowShareModal={setShowShareModal}
+        isPlaying={isPlaying}
+        toggleMusic={toggleMusic}
+        handleRSVP={handleRSVP}
+        handleWish={handleWish}
+        handleGalleryClick={handleGalleryClick}
+      />
+    </TemplateProvider>
+  );
+}
+
+// Inner component to access useTemplate hook
+interface PublicWeddingContentProps {
+  wedding: Wedding;
+  template: TemplateType | undefined;
+  colors: ColorType | undefined;
+  images: { id: number; alt: string; src: string }[];
+  wishes: Wish[];
+  setWishes: React.Dispatch<React.SetStateAction<Wish[]>>;
+  showShareModal: boolean;
+  setShowShareModal: (open: boolean) => void;
+  isPlaying: boolean;
+  toggleMusic: () => void;
+  handleRSVP: (data: RSVPFormData) => Promise<void>;
+  handleWish: (data: WishFormData) => Promise<void>;
+  handleGalleryClick: (index: number) => void;
+}
+
+function PublicWeddingContent({
+  wedding,
+  template,
+  colors,
+  images,
+  wishes,
+  showShareModal,
+  setShowShareModal,
+  isPlaying,
+  toggleMusic,
+  handleRSVP,
+  handleWish,
+  handleGalleryClick,
+}: PublicWeddingContentProps) {
+  const { layout, theme } = useTemplate();
+  
+  const bride = wedding.weddingDetail?.bride;
+  const groom = wedding.weddingDetail?.groom;
+  const mainEvent = wedding.weddingDetail?.weddingEvents?.find(
+    (e) => e.type === "ceremony" || e.type === "reception",
+  );
+
+  // Gallery images for VietnamTraditionalLayout
+  const galleryImages = useMemo(() => 
+    images.map((img) => ({
+      id: String(img.id),
+      url: img.src,
+      caption: img.alt,
+    })),
+    [images]
+  );
+
+  // Render VietnamTraditionalLayout if layout is vietnam-traditional
+  if (layout.id === "vietnam-traditional") {
+    return (
+      <>
+        <Helmet>
+          <title>{`${groom?.fullName || "Chú Rể"} & ${
+            bride?.fullName || "Cô Dâu"
+          } - Thiệp Mời Cưới`}</title>
+          <meta
+            name="description"
+            content={`Thiệp mời đám cưới của ${groom?.fullName || "Chú Rể"} và ${
+              bride?.fullName || "Cô Dâu"
+            }${
+              mainEvent?.eventDate
+                ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString(
+                    "vi-VN",
+                  )}`
+                : ""
+            }`}
+          />
+        </Helmet>
+
+        <FallingHearts colors={colors} />
+
+        <VietnamTraditionalLayout
+          theme={theme}
+          bride={bride}
+          groom={groom}
+          weddingDate={mainEvent?.eventDate || wedding.weddingDate}
+          events={wedding.weddingDetail?.weddingEvents || []}
+          loveStories={wedding.weddingDetail?.loveStories || []}
+          galleryImages={galleryImages}
+          onImageClick={handleGalleryClick}
+        />
+
+        {/* Music Toggle */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed bottom-6 right-6 z-40 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+          style={{
+            borderColor: colors?.primary,
+            background: "white",
+            color: colors?.primary,
+          }}
+          onClick={toggleMusic}
+        >
+          {isPlaying ? (
+            <Pause className="w-5 h-5" />
+          ) : (
+            <Play className="w-5 h-5" />
+          )}
+        </Button>
+      </>
+    );
+  }
+
+  // Default layout rendering
+  return (
+    <>
       <Helmet>
         <title>{`${groom?.fullName || "Chú Rể"} & ${
           bride?.fullName || "Cô Dâu"
@@ -467,6 +592,6 @@ export default function PublicWedding() {
           )}
         </Button>
       </main>
-    </TemplateProvider>
+    </>
   );
 }
