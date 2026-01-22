@@ -480,6 +480,22 @@ export const TEMPLATE_LAYOUTS: TemplateLayout[] = [
     },
     defaultThemeId: "minimal-red",
   },
+  {
+    id: "vietnam-traditional",
+    name: "Vietnam Traditional",
+    nameVi: "Truyền Thống Việt Nam",
+    description:
+      "Traditional Vietnamese wedding layout with vertical storytelling and elegant cultural aesthetics",
+    descriptionVi:
+      "Bố cục website cưới truyền thống Việt Nam, kể chuyện theo chiều dọc, tinh tế và trang trọng",
+    preview: "/templates/vietnam-traditional.jpg",
+    style: "classic",
+    fonts: {
+      heading: "Playfair Display",
+      body: "Inter",
+    },
+    defaultThemeId: "cream-beige",
+  },
 ];
 
 // ============= COMBINED TEMPLATE (Layout + Theme) =============
