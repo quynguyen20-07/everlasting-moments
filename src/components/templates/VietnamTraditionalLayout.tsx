@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
-import { Heart, MapPin, Calendar, Clock } from "lucide-react";
+import { Heart, MapPin, Calendar } from "lucide-react";
 import type { IWeddingEvent, ILoveStory, BrideGroom } from "@/types/wedding";
 import type { TemplateTheme } from "@/lib/templates/wedding-templates";
+import type { ColorScheme } from "@/types";
+import RSVPSection, { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
+import BankAccountSection, { BankAccountInfo } from "@/components/wedding-ui/BankAccountSection";
 
 // Helper to format timestamp to Date
 const formatTimestamp = (timestamp: string | number): Date => {
@@ -35,10 +38,14 @@ export interface VietnamTraditionalLayoutProps {
   bride?: BrideGroom;
   groom?: BrideGroom;
   weddingDate?: string | number;
+  weddingId?: string;
   events?: IWeddingEvent[];
   loveStories?: ILoveStory[];
   galleryImages?: { id: string; url: string; caption?: string }[];
   onImageClick?: (index: number) => void;
+  onRSVPSubmit?: (data: RSVPFormData) => Promise<void>;
+  brideAccount?: BankAccountInfo;
+  groomAccount?: BankAccountInfo;
 }
 
 const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
@@ -46,10 +53,14 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
   bride,
   groom,
   weddingDate,
+  weddingId,
   events = [],
   loveStories = [],
   galleryImages = [],
   onImageClick,
+  onRSVPSubmit,
+  brideAccount,
+  groomAccount,
 }) => {
   const colors = theme.colors;
   const primaryColor = `hsl(${colors.primary})`;
@@ -58,6 +69,16 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
   const accentColor = `hsl(${colors.accent})`;
   const mutedColor = `hsl(${colors.muted})`;
   const cardColor = `hsl(${colors.card})`;
+
+  // Create ColorScheme for RSVPSection compatibility
+  const rsvpColors: ColorScheme = {
+    primary: primaryColor,
+    secondary: accentColor,
+    accent: `hsl(${colors.accent})`,
+    background: backgroundColor,
+    text: foregroundColor,
+    muted: mutedColor,
+  };
 
   // Get main ceremony event
   const mainEvent = events.find((e) => e.type === "ceremony") || events[0];
@@ -403,48 +424,30 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
         </section>
       )}
 
-      {/* ===== GIFT / MỪNG CƯỚI SECTION ===== */}
-      <section className="py-12 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-6"
-        >
-          <h2
-            className="font-serif text-2xl md:text-3xl italic"
-            style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
-          >
-            Mừng Cưới
-          </h2>
-        </motion.div>
+      {/* ===== RSVP SECTION ===== */}
+      {onRSVPSubmit && weddingId && (
+        <RSVPSection
+          colors={rsvpColors}
+          weddingId={weddingId}
+          onSubmit={onRSVPSubmit}
+        />
+      )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-md mx-auto p-6 rounded-2xl text-center"
-          style={{ backgroundColor: cardColor }}
-        >
-          <p className="text-sm mb-4" style={{ color: mutedColor }}>
-            Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm. Vì vậy, hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn.
-          </p>
-          <div className="flex justify-center gap-4">
-            <div
-              className="w-24 h-32 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: mutedColor }}
-            >
-              <span className="text-xs" style={{ color: foregroundColor }}>QR Cô Dâu</span>
-            </div>
-            <div
-              className="w-24 h-32 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: mutedColor }}
-            >
-              <span className="text-xs" style={{ color: foregroundColor }}>QR Chú Rể</span>
-            </div>
-          </div>
-        </motion.div>
-      </section>
+      {/* ===== BANK ACCOUNT / GIFT SECTION ===== */}
+      <BankAccountSection
+        colors={{
+          primary: primaryColor,
+          secondary: accentColor,
+          accent: accentColor,
+          background: backgroundColor,
+          text: foregroundColor,
+          muted: mutedColor,
+        }}
+        brideAccount={brideAccount}
+        groomAccount={groomAccount}
+        brideName={bride?.fullName}
+        groomName={groom?.fullName}
+      />
 
       {/* ===== THANK YOU / FOOTER ===== */}
       <section className="py-16 px-4 text-center">
