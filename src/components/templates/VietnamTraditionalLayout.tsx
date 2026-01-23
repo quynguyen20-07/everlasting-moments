@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { Heart, MapPin, Calendar } from "lucide-react";
 import type { IWeddingEvent, ILoveStory, BrideGroom } from "@/types/wedding";
 import type { TemplateTheme } from "@/lib/templates/wedding-templates";
-import type { ColorScheme } from "@/types";
+import type { ColorScheme, Wish } from "@/types";
 import RSVPSection, { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import BankAccountSection, { BankAccountInfo } from "@/components/wedding-ui/BankAccountSection";
+import GuestWishesSection, { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 
 // Helper to format timestamp to Date
 const formatTimestamp = (timestamp: string | number): Date => {
@@ -46,6 +47,8 @@ export interface VietnamTraditionalLayoutProps {
   onRSVPSubmit?: (data: RSVPFormData) => Promise<void>;
   brideAccount?: BankAccountInfo;
   groomAccount?: BankAccountInfo;
+  wishes?: Wish[];
+  onWishSubmit?: (data: WishFormData) => Promise<void>;
 }
 
 const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
@@ -61,6 +64,8 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
   onRSVPSubmit,
   brideAccount,
   groomAccount,
+  wishes = [],
+  onWishSubmit,
 }) => {
   const colors = theme.colors;
   const primaryColor = `hsl(${colors.primary})`;
@@ -422,6 +427,16 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
             ))}
           </div>
         </section>
+      )}
+
+      {/* ===== GUEST WISHES SECTION ===== */}
+      {onWishSubmit && weddingId && (
+        <GuestWishesSection
+          colors={rsvpColors}
+          wishes={wishes}
+          weddingId={weddingId}
+          onSubmit={onWishSubmit}
+        />
       )}
 
       {/* ===== RSVP SECTION ===== */}
