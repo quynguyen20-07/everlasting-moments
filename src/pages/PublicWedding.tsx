@@ -27,7 +27,7 @@ import Hero from "@/components/wedding-ui/Hero";
 import { submitRSVPApi } from "@/lib/api/guest";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Helmet } from "react-helmet-async";
+import { WeddingSEO } from "@/components/seo";
 import { addWishApi } from "@/lib/api/wish";
 import { Pause, Play } from "lucide-react";
 import type { Wedding } from "@/types";
@@ -421,23 +421,14 @@ function PublicWeddingContent({
   if (layout.id === "vietnam-traditional") {
     return (
       <>
-        <Helmet>
-          <title>{`${groom?.fullName || "Chú Rể"} & ${
-            bride?.fullName || "Cô Dâu"
-          } - Thiệp Mời Cưới`}</title>
-          <meta
-            name="description"
-            content={`Thiệp mời đám cưới của ${groom?.fullName || "Chú Rể"} và ${
-              bride?.fullName || "Cô Dâu"
-            }${
-              mainEvent?.eventDate
-                ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString(
-                    "vi-VN",
-                  )}`
-                : ""
-            }`}
-          />
-        </Helmet>
+        <WeddingSEO
+          brideName={bride?.fullName || "Cô Dâu"}
+          groomName={groom?.fullName || "Chú Rể"}
+          weddingDate={mainEvent?.eventDate || wedding.weddingDate}
+          eventLocation={mainEvent?.address}
+          canonicalUrl={typeof window !== 'undefined' ? window.location.href : undefined}
+          pageType="wedding"
+        />
 
         <FallingHearts colors={colors} />
 
@@ -477,31 +468,15 @@ function PublicWeddingContent({
   // Default layout rendering
   return (
     <>
-      <Helmet>
-        <title>{`${groom?.fullName || "Chú Rể"} & ${
-          bride?.fullName || "Cô Dâu"
-        } - Thiệp Mời Cưới`}</title>
-        <meta
-          name="description"
-          content={`Thiệp mời đám cưới của ${groom?.fullName || "Chú Rể"} và ${
-            bride?.fullName || "Cô Dâu"
-          }${
-            mainEvent?.eventDate
-              ? ` - ${new Date(mainEvent.eventDate).toLocaleDateString(
-                  "vi-VN",
-                )}`
-              : ""
-          }`}
-        />
-        <meta
-          property="og:title"
-          content={`${groom?.fullName || "Chú Rể"} & ${
-            bride?.fullName || "Cô Dâu"
-          }`}
-        />
-        <meta property="og:description" content={wedding.title} />
-        <meta property="og:type" content="website" />
-      </Helmet>
+      <WeddingSEO
+        brideName={bride?.fullName || "Cô Dâu"}
+        groomName={groom?.fullName || "Chú Rể"}
+        weddingDate={mainEvent?.eventDate || wedding.weddingDate}
+        eventLocation={mainEvent?.address}
+        description={wedding.title}
+        canonicalUrl={typeof window !== 'undefined' ? window.location.href : undefined}
+        pageType="wedding"
+      />
 
       <FallingHearts colors={colors} />
 
