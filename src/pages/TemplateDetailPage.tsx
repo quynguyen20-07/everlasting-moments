@@ -36,6 +36,7 @@ import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { ITimeCountdown, Wish } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { WeddingSEO } from "@/components/seo";
 
 const TemplateDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -227,19 +228,28 @@ const TemplateDetailPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-background"
-      style={
-        {
-          "--primary": colors.primary,
-          "--secondary": colors.secondary,
-          "--accent": colors.accent,
-          "--background": colors.background,
-          "--text": colors.text,
-          "--muted": colors.muted,
-        } as React.CSSProperties
-      }
-    >
+    <>
+      <WeddingSEO
+        brideName={coupleData.bride.name}
+        groomName={coupleData.groom.name}
+        weddingDate={targetTime.toISOString()}
+        description={`Xem trước mẫu thiệp cưới ${currentTheme.name} - True Loves`}
+        pageType="template"
+      />
+      
+      <div
+        className="min-h-screen bg-background"
+        style={
+          {
+            "--primary": colors.primary,
+            "--secondary": colors.secondary,
+            "--accent": colors.accent,
+            "--background": colors.background,
+            "--text": colors.text,
+            "--muted": colors.muted,
+          } as React.CSSProperties
+        }
+      >
       {/* Header with Theme Selector */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-[#e8d4c8]/50 shadow-sm">
         <div className="container mx-auto px-4 py-3">
@@ -436,7 +446,8 @@ const TemplateDetailPage = () => {
           <Play className="w-5 h-5 text-[#c4a99b]" />
         )}
       </Button>
-    </div>
+      </div>
+    </>
   );
 };
 
