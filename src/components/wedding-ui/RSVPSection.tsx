@@ -206,121 +206,6 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
                 }}
               />
             </div>
-
-            {/* Email */}
-            <div>
-              <label
-                className="block text-sm font-semibold mb-3"
-                style={{ color: colors?.text }}
-              >
-                Email
-              </label>
-              <Input
-                type="email"
-                placeholder="email@example.com"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                disabled={isSubmitting}
-                className="rounded-2xl border-2 p-4"
-                style={{
-                  borderColor: `${colors?.primary}30`,
-                  background: "white",
-                }}
-              />
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label
-                className="block text-sm font-semibold mb-3"
-                style={{ color: colors?.text }}
-              >
-                Số điện thoại
-              </label>
-              <Input
-                type="tel"
-                placeholder="0912 345 678"
-                value={formData.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-                disabled={isSubmitting}
-                className="rounded-2xl border-2 p-4"
-                style={{
-                  borderColor: `${colors?.primary}30`,
-                  background: "white",
-                }}
-              />
-            </div>
-
-            {/* Number of Guests */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-semibold mb-3"
-                style={{ color: colors?.text }}
-              >
-                Số người tham dự *
-              </label>
-              <Input
-                type="number"
-                min="1"
-                max="10"
-                value={formData.numberOfGuests}
-                onChange={(e) =>
-                  handleChange("numberOfGuests", parseInt(e.target.value) || 1)
-                }
-                required
-                disabled={isSubmitting}
-                className="rounded-2xl border-2 p-4"
-                style={{
-                  borderColor: `${colors?.primary}30`,
-                  background: "white",
-                }}
-              />
-            </div>
-
-            {/* Dietary Restrictions */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-semibold mb-3"
-                style={{ color: colors?.text }}
-              >
-                Yêu cầu ăn uống đặc biệt
-              </label>
-              <Input
-                placeholder="VD: Ăn chay, dị ứng hải sản..."
-                value={formData.dietaryRestrictions}
-                onChange={(e) =>
-                  handleChange("dietaryRestrictions", e.target.value)
-                }
-                disabled={isSubmitting}
-                className="rounded-2xl border-2 p-4"
-                style={{
-                  borderColor: `${colors?.primary}30`,
-                  background: "white",
-                }}
-              />
-            </div>
-
-            {/* Message */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-semibold mb-3"
-                style={{ color: colors?.text }}
-              >
-                Lời nhắn
-              </label>
-              <Textarea
-                placeholder="Gửi lời nhắn đến cô dâu chú rể..."
-                rows={3}
-                value={formData.message}
-                onChange={(e) => handleChange("message", e.target.value)}
-                disabled={isSubmitting}
-                className="rounded-2xl border-2 p-4 resize-none"
-                style={{
-                  borderColor: `${colors?.primary}30`,
-                  background: "white",
-                }}
-              />
-            </div>
           </div>
 
           {/* Attendance Buttons */}
@@ -329,7 +214,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               type="button"
               size="lg"
               disabled={isSubmitting}
-              className={`flex-1 rounded-2xl py-6 text-lg font-semibold transition-all ${
+              className={`flex-1 rounded-2xl py-1.5 md:py-6 text-lg font-semibold transition-all ${
                 formData.attendanceStatus === "confirmed"
                   ? "shadow-lg scale-105"
                   : ""
@@ -357,7 +242,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               type="button"
               size="lg"
               disabled={isSubmitting}
-              className={`flex-1 rounded-2xl py-6 text-lg font-semibold transition-all ${
+              className={`flex-1 rounded-2xl py-1.5 md:py-6 text-lg font-semibold transition-all ${
                 formData.attendanceStatus === "declined"
                   ? "shadow-lg scale-105"
                   : ""
@@ -365,7 +250,7 @@ const RSVPSection: React.FC<RSVPSectionProps> = ({
               style={{
                 background:
                   formData.attendanceStatus === "declined"
-                    ? `linear-gradient(135deg, ${colors?.muted} 0%, ${colors?.text}80 100%)`
+                    ? `linear-gradient(135deg, ${colors?.secondary} 0%, ${colors?.accent}30 100%)`
                     : `${colors?.accent}20`,
                 color:
                   formData.attendanceStatus === "declined"

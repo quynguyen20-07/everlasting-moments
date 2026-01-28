@@ -121,7 +121,6 @@ export default function BankAccountSection({
             alt={`VietQR ${label}`}
             className="w-full h-full object-contain"
             onError={(e) => {
-              // Fallback to QRCodeSVG if VietQR fails
               const target = e.currentTarget;
               target.style.display = "none";
               const parent = target.parentElement;
@@ -186,10 +185,10 @@ export default function BankAccountSection({
           >
             <div className="flex justify-center">
               <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                className="w-48 h-48 rounded-2xl flex items-center justify-center"
                 style={{ backgroundColor: `${colors?.primary}20` }}
               >
-                <Gift className="w-8 h-8" style={{ color: colors?.primary }} />
+                <Gift style={{ color: colors?.primary }} size={120} />
               </div>
             </div>
 
@@ -206,7 +205,7 @@ export default function BankAccountSection({
 
             <Button
               onClick={() => setIsOpen(true)}
-              className="gap-2"
+              className="gap-2 w-full"
               style={{
                 backgroundColor: colors?.primary,
                 color: "white",

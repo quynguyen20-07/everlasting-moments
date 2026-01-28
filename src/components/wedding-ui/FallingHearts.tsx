@@ -55,13 +55,15 @@ export default function FallingHearts({
     return {
       id: Date.now() + Math.random(),
       x: Math.random() * (width - 80) + 40,
-      size: lowEnd ? 16 + Math.random() * 10 : 24 + Math.random() * 20,
+      size: lowEnd ? 18 + Math.random() * 10 : 26 + Math.random() * 22,
       duration: lowEnd ? 5 + Math.random() * 3 : 6 + Math.random() * 5,
-      opacity: 0.2 + Math.random() * 0.4,
+      opacity: lowEnd
+        ? 0.25 + Math.random() * 0.35
+        : 0.35 + Math.random() * 0.45,
       rotation: Math.random() * 360,
       color: heartColors[Math.floor(Math.random() * heartColors.length)],
       sway: (Math.random() - 0.5) * (lowEnd ? 40 : 80),
-      scale: 0.8 + Math.random() * 0.4,
+      scale: lowEnd ? 0.9 + Math.random() * 0.3 : 1 + Math.random() * 0.35,
     };
   }, [heartColors, lowEnd]);
 
@@ -77,7 +79,7 @@ export default function FallingHearts({
           return [...prev, createHeart()];
         });
       },
-      lowEnd ? 900 : 700,
+      lowEnd ? 800 : 550,
     );
 
     return () => clearInterval(interval);
