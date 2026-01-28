@@ -5,9 +5,8 @@ import { ColorType } from "@/types";
 interface Heart {
   id: number;
   x: number;
-  delay: number;
-  duration: number;
   size: number;
+  duration: number;
   opacity: number;
   rotation: number;
   color: string;
@@ -20,101 +19,69 @@ interface FallingHeartsProps {
   isPlaying?: boolean;
 }
 
-// Helper function đơn giản để tạo màu
+/* ---------- helpers ---------- */
 const generateColorPalette = (baseColor?: string) => {
   if (!baseColor || !baseColor.startsWith("#")) {
     return ["#ff3366", "#ff6b9d", "#ff99c2", "#ff4d94", "#ff3380"];
   }
-
-  try {
-    // Tạo các biến thể đơn giản bằng cách thay đổi độ sáng
-    const colors = [baseColor];
-
-    // Thêm màu sáng hơn
-    colors.push(
-      baseColor.replace(/\d+/g, (match) => {
-        const num = parseInt(match);
-        return Math.min(255, num + 40).toString();
-      })
-    );
-
-    // Thêm màu tối hơn
-    colors.push(
-      baseColor.replace(/\d+/g, (match) => {
-        const num = parseInt(match);
-        return Math.max(0, num - 40).toString();
-      })
-    );
-
-    return [...colors, "#ff99c2", "#ff4d94"];
-  } catch {
-    return ["#ff3366", "#ff6b9d", "#ff99c2", "#ff4d94", "#ff3380"];
-  }
+  return [baseColor, "#ff6b9d", "#ff99c2", "#ff4d94"];
 };
 
-const FallingHearts = ({ colors, isPlaying = true }: FallingHeartsProps) => {
+const isLowEndDevice = () => {
+  if (typeof navigator === "undefined") return false;
+  return window.innerWidth < 768 || navigator.hardwareConcurrency <= 4;
+};
+
+/* ---------- component ---------- */
+export default function FallingHearts({
+  colors,
+  isPlaying = true,
+}: FallingHeartsProps) {
   const [hearts, setHearts] = useState<Heart[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const [lowEnd, setLowEnd] = useState(false);
 
-  // Tạo palette màu đơn giản
-  const heartColors = useMemo(() => {
-    return generateColorPalette(colors?.primary);
-  }, [colors?.primary]);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const createHeart = useCallback(
-    (id: number, customX?: number): Heart => {
-      const screenWidth = window.innerWidth;
-      return {
-        id,
-        x: customX ?? Math.random() * (screenWidth - 100) + 50,
-        delay: Math.random() * 3,
-        duration: 4 + Math.random() * 6,
-        size: isMobile ? 16 + Math.random() * 12 : 24 + Math.random() * 24,
-        opacity: 0.15 + Math.random() * 0.4,
-        rotation: Math.random() * 360,
-        color: heartColors[Math.floor(Math.random() * heartColors.length)],
-        sway: (Math.random() - 0.5) * 100,
-        scale: 0.8 + Math.random() * 0.4,
-      };
-    },
-    [isMobile, heartColors]
+  const heartColors = useMemo(
+    () => generateColorPalette(colors?.primary),
+    [colors?.primary],
   );
 
   useEffect(() => {
+    setLowEnd(isLowEndDevice());
+  }, []);
+
+  const createHeart = useCallback((): Heart => {
+    const width = window.innerWidth;
+
+    return {
+      id: Date.now() + Math.random(),
+      x: Math.random() * (width - 80) + 40,
+      size: lowEnd ? 16 + Math.random() * 10 : 24 + Math.random() * 20,
+      duration: lowEnd ? 5 + Math.random() * 3 : 6 + Math.random() * 5,
+      opacity: 0.2 + Math.random() * 0.4,
+      rotation: Math.random() * 360,
+      color: heartColors[Math.floor(Math.random() * heartColors.length)],
+      sway: (Math.random() - 0.5) * (lowEnd ? 40 : 80),
+      scale: 0.8 + Math.random() * 0.4,
+    };
+  }, [heartColors, lowEnd]);
+
+  /* spawn loop */
+  useEffect(() => {
     if (!isPlaying) return;
 
-    // Initial hearts
-    const initialHearts = Array.from({ length: isMobile ? 6 : 12 }, (_, i) =>
-      createHeart(i)
+    const maxHearts = lowEnd ? 8 : 16;
+    const interval = setInterval(
+      () => {
+        setHearts((prev) => {
+          if (prev.length >= maxHearts) return prev;
+          return [...prev, createHeart()];
+        });
+      },
+      lowEnd ? 900 : 700,
     );
-    setHearts(initialHearts);
-
-    // Add hearts interval
-    const interval = setInterval(() => {
-      if (!isPlaying) return;
-
-      const newId = Date.now() + Math.random();
-      const newHeart = createHeart(newId);
-      setHearts((prev) => {
-        const maxHearts = isMobile ? 15 : 25;
-        if (prev.length >= maxHearts) {
-          return [...prev.slice(1), newHeart];
-        }
-        return [...prev, newHeart];
-      });
-    }, 800);
 
     return () => clearInterval(interval);
-  }, [isPlaying, createHeart, isMobile]);
+  }, [isPlaying, createHeart, lowEnd]);
 
   if (!isPlaying) return null;
 
@@ -124,7 +91,7 @@ const FallingHearts = ({ colors, isPlaying = true }: FallingHeartsProps) => {
         {hearts.map((heart) => (
           <motion.div
             key={heart.id}
-            className="absolute"
+            className="absolute will-change-transform"
             initial={{
               x: heart.x,
               y: -heart.size,
@@ -134,52 +101,29 @@ const FallingHearts = ({ colors, isPlaying = true }: FallingHeartsProps) => {
             }}
             animate={{
               x: heart.x + heart.sway,
-              y: window.innerHeight + 100,
-              rotate: heart.rotation + 720,
-              opacity: [0, heart.opacity, heart.opacity, 0],
-              scale: [0, heart.scale, heart.scale * 0.9, 0],
+              y: window.innerHeight + 120,
+              rotate: heart.rotation + 360,
+              opacity: heart.opacity,
+              scale: heart.scale,
             }}
-            exit={{ opacity: 0 }}
             transition={{
-              x: {
-                duration: heart.duration,
-                ease: "easeInOut",
-                repeat: Infinity,
-                repeatType: "reverse",
-              },
-              y: {
-                duration: heart.duration,
-                ease: "linear",
-                repeat: Infinity,
-              },
-              rotate: {
-                duration: heart.duration * 0.8,
-                ease: "linear",
-                repeat: Infinity,
-              },
-              opacity: {
-                times: [0, 0.1, 0.8, 1],
-                duration: heart.duration,
-                repeat: Infinity,
-              },
-              scale: {
-                times: [0, 0.2, 0.8, 1],
-                duration: heart.duration,
-                repeat: Infinity,
-              },
+              duration: heart.duration,
+              ease: "linear",
+            }}
+            onAnimationComplete={() => {
+              setHearts((prev) => prev.filter((h) => h.id !== heart.id));
             }}
             style={{
-              left: 0,
               width: heart.size,
               height: heart.size,
-              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
             }}
           >
+            {/* SVG giữ nguyên – KHÔNG drop-shadow */}
             <svg
               viewBox="0 0 24 24"
               fill={heart.color}
-              style={{ opacity: heart.opacity }}
               className="w-full h-full"
+              style={{ opacity: heart.opacity }}
             >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
@@ -188,6 +132,4 @@ const FallingHearts = ({ colors, isPlaying = true }: FallingHeartsProps) => {
       </AnimatePresence>
     </div>
   );
-};
-
-export default FallingHearts;
+}
