@@ -1,7 +1,14 @@
 // Guest Statistics Cards Component
 import { Users, UserCheck, Clock, UserX, UsersRound } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import type { GuestStats } from '@/types/graphql';
+export interface GuestStats {
+  total: number;
+  confirmed: number;
+  pending: number;
+  declined: number;
+  totalGuests: number;
+}
+// Removed import type { GuestStats } from '@/types/graphql';
 import { motion } from 'framer-motion';
 
 interface GuestStatsCardsProps {

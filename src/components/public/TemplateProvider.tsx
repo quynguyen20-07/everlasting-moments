@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, ReactNode } from 'react';
-import type { ThemeSettings } from '@/types/graphql';
+import type { ThemeSettings } from '@/types/api.generated';
 import {
   weddingTemplates,
   getPatternSVG,
@@ -46,7 +46,7 @@ function findMatchingTemplate(themeSettings?: ThemeSettings | null): {
   // Default layout and theme
   const defaultLayout = TEMPLATE_LAYOUTS[0];
   const defaultTheme = TEMPLATES_THEME_LIST[0];
-  
+
   if (!themeSettings) {
     return {
       template: weddingTemplates[0],
@@ -58,11 +58,11 @@ function findMatchingTemplate(themeSettings?: ThemeSettings | null): {
   // Try to find theme by template ID (theme ID in legacy system)
   const templateId = themeSettings.template;
   const theme = getThemeById(templateId) || defaultTheme;
-  
+
   // For layout, try to match by primary color style hints or default
   const primaryColor = themeSettings.primaryColor?.toLowerCase();
   let layout = defaultLayout;
-  
+
   if (primaryColor?.includes('pink') || primaryColor?.includes('rose') || primaryColor?.includes('blush')) {
     layout = getLayoutById('romantic-garden') || defaultLayout;
   } else if (primaryColor?.includes('green') || primaryColor?.includes('sage') || primaryColor?.includes('olive')) {

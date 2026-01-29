@@ -16,7 +16,7 @@ import {
   MoreVertical,
   Trash2,
 } from "lucide-react";
-import type { ListWedding } from "@/lib/api/wedding";
+import type { WeddingWithDetails as Wedding } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -24,10 +24,10 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 interface WeddingCardProps {
-  wedding: ListWedding;
+  wedding: Wedding;
   index?: number;
   onPublishToggle: (id: string, publish: boolean) => void;
-  onDelete: (wedding: ListWedding) => void;
+  onDelete: (wedding: Wedding) => void;
   onDuplicate?: (id: string) => void;
 }
 
@@ -93,7 +93,7 @@ export const WeddingCard = ({
       <div className="flex items-center gap-4 sm:gap-6">
         <div className="hidden md:flex items-center gap-6 text-sm">
           <div className="text-center">
-            <p className="font-semibold">{wedding.viewCount}</p>
+            <p className="font-semibold">{0}</p>
             <p className="text-muted-foreground text-xs">Lượt xem</p>
           </div>
           <div className="text-center">

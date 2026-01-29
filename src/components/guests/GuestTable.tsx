@@ -32,11 +32,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { downloadGuestsCsv } from "@/lib/api/guest";
+// import { downloadGuestsCsv } from "@/lib/api/guest"; // Function removed
+const downloadGuestsCsv = (data: any[]) => {
+  const content = "data:text/csv;charset=utf-8," +
+    "Họ tên,Email,Số điện thoại,Số người,Trạng thái\n" +
+    data.map(g => `${g.fullName},${g.email || ''},${g.phone || ''},${g.numberOfGuests},${g.attendanceStatus}`).join("\n");
+  const encodedUri = encodeURI(content);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "guests.csv");
+  document.body.appendChild(link);
+  link.click();
+};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import type { Guest } from "@/types/graphql";
+import type { Guest } from "@/types/api.generated";
 import { useState, useMemo } from "react";
 
 interface GuestTableProps {
@@ -114,12 +125,9 @@ export function GuestTable({
       const matchesStatus =
         statusFilter === "all" || guest.attendanceStatus === statusFilter;
 
-      // Relationship filter
-      const matchesRelationship =
-        relationshipFilter === "all" ||
-        guest.relationship === relationshipFilter;
 
-      return matchesSearch && matchesStatus && matchesRelationship;
+
+      return matchesSearch && matchesStatus;
     });
   }, [guests, searchQuery, statusFilter, relationshipFilter]);
 
@@ -156,22 +164,7 @@ export function GuestTable({
             </SelectContent>
           </Select>
 
-          <Select
-            value={relationshipFilter}
-            onValueChange={setRelationshipFilter}
-          >
-            <SelectTrigger className="w-[180px]">
-              <Filter className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Quan hệ" />
-            </SelectTrigger>
-            <SelectContent>
-              {RELATIONSHIP_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+
         </div>
 
         <div className="flex gap-2">
@@ -195,10 +188,8 @@ export function GuestTable({
             <TableRow className="bg-muted/50">
               <TableHead>Họ tên</TableHead>
               <TableHead>Liên hệ</TableHead>
-              <TableHead>Quan hệ</TableHead>
               <TableHead className="text-center">Số người</TableHead>
               <TableHead>Trạng thái</TableHead>
-              <TableHead>Số bàn</TableHead>
               <TableHead className="text-right">Hành động</TableHead>
             </TableRow>
           </TableHeader>
@@ -227,11 +218,6 @@ export function GuestTable({
                   <TableCell>
                     <div>
                       <p className="font-medium">{guest.fullName}</p>
-                      {guest.message && (
-                        <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                          {guest.message}
-                        </p>
-                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -242,18 +228,12 @@ export function GuestTable({
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <span className="capitalize">
-                      {guest.relationship || "-"}
-                    </span>
-                  </TableCell>
                   <TableCell className="text-center">
                     {guest.numberOfGuests}
                   </TableCell>
                   <TableCell>
                     {getStatusBadge(guest.attendanceStatus)}
                   </TableCell>
-                  <TableCell>{guest.tableNumber || "-"}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

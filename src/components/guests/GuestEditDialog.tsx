@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { Guest } from '@/types/graphql';
+import type { Guest, UpdateGuestDto as GuestInput } from '@/types/api.generated';
 import { Loader2, Save } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -35,12 +35,8 @@ const guestSchema = z.object({
   fullName: z.string().min(1, 'Vui lòng nhập tên'),
   email: z.string().email('Email không hợp lệ').optional().or(z.literal('')),
   phone: z.string().optional(),
-  relationship: z.string().optional(),
   numberOfGuests: z.coerce.number().min(1).default(1),
   attendanceStatus: z.string().default('pending'),
-  tableNumber: z.string().optional(),
-  dietaryRestrictions: z.string().optional(),
-  message: z.string().optional(),
 });
 
 type GuestFormData = z.infer<typeof guestSchema>;
@@ -81,12 +77,8 @@ export function GuestEditDialog({
       fullName: '',
       email: '',
       phone: '',
-      relationship: '',
       numberOfGuests: 1,
       attendanceStatus: 'pending',
-      tableNumber: '',
-      dietaryRestrictions: '',
-      message: '',
     },
   });
 
@@ -96,24 +88,16 @@ export function GuestEditDialog({
         fullName: guest.fullName,
         email: guest.email || '',
         phone: guest.phone || '',
-        relationship: guest.relationship || '',
         numberOfGuests: guest.numberOfGuests,
         attendanceStatus: guest.attendanceStatus,
-        tableNumber: guest.tableNumber || '',
-        dietaryRestrictions: guest.dietaryRestrictions || '',
-        message: guest.message || '',
       });
     } else {
       form.reset({
         fullName: '',
         email: '',
         phone: '',
-        relationship: '',
         numberOfGuests: 1,
         attendanceStatus: 'pending',
-        tableNumber: '',
-        dietaryRestrictions: '',
-        message: '',
       });
     }
   }, [guest, form]);
@@ -178,46 +162,7 @@ export function GuestEditDialog({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="relationship"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quan hệ</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Chọn quan hệ" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {RELATIONSHIP_OPTIONS.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <FormField
-                control={form.control}
-                name="numberOfGuests"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Số người</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" min={1} max={10} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
 
             <div className="grid grid-cols-2 gap-4">
               <FormField
@@ -245,48 +190,10 @@ export function GuestEditDialog({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="tableNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Số bàn</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="VD: A1" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
             </div>
 
-            <FormField
-              control={form.control}
-              name="dietaryRestrictions"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Yêu cầu ăn uống</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="VD: Ăn chay, dị ứng..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ghi chú</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} rows={2} placeholder="Ghi chú thêm..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <DialogFooter>
               <Button

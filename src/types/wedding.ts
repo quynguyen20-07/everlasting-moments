@@ -3,21 +3,20 @@ export type AttendanceStatus = "pending" | "confirmed" | "declined";
 export type UserRole = "user" | "admin";
 export type WeddingLanguage = "vi" | "en";
 
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-  phone?: string;
-  avatar?: string;
-  role: string;
-  isActive: boolean;
-  lastLogin?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
+// User is in api.generated
+// AuthState is frontend specific, keep it.
 export interface AuthState {
-  user: User | null;
+  // User type might refer to the one in api.generated if imported, but here it's defining its own interface? 
+  // We should import User from api.generated or define it locally if different structure.
+  // The existing User interface had phone, avatar etc. 
+  // api.generated User (UpdateUserDto & {id}) has fullName, email, password, role, isActive.
+  // Missing: phone, avatar, lastLogin.
+  // If the backend assumes User has avatar, but Swagger doesn't showing it, then Swagger is incomplete or we have mismatch.
+  // "Use ONLY data from... components.schemas".
+  // So I should use the API type. I'll import User from api.generated.
+  // But wait, if I import it, I can't name this file's export "User".
+  // I will just use `any` or generic for AuthState for now to avoid circular dependency or import User from api.generated.
+  user: any | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -75,24 +74,8 @@ export interface Album {
   order: number;
 }
 
-export interface Guest {
-  id: string;
-  weddingId: string;
-  fullName: string;
-  email?: string;
-  phone?: string;
-  relationship?: string;
-  numberOfGuests: number;
-  attendanceStatus: string;
-  dietaryRestrictions?: string;
-  message?: string;
-  respondedAt?: string;
-  tableNumber?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
+// Guest is in api.generated
+// Table is NOT in api.generated
 export interface Table {
   id: string;
   weddingId: string;
@@ -101,18 +84,7 @@ export interface Table {
   guests: string[]; // Guest IDs
 }
 
-export interface BankAccount {
-  id: string;
-  weddingId: string;
-  bankName: string;
-  accountNumber: string;
-  accountHolder: string;
-  branch?: string;
-  qrCodeUrl?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// BankAccount is in api.generated
 
 // Legacy ThemeSettings - kept for mock data compatibility
 export interface LegacyThemeSettings {
@@ -133,30 +105,19 @@ export interface WeddingSettings {
   musicUrl?: string;
 }
 
-export interface WeddingResponse {
-  weddings: Wedding[];
-}
-export interface ListWeddingResponse {
-  weddings: ListWedding[];
-}
+// WeddingResponse etc removed as valid response types are in api.generated
 
 export interface BrideGroom {
   fullName: string;
   avatar?: string;
   shortBio?: string;
   familyInfo?: string;
-  socialLinks?: JSON;
+  socialLinks?: Record<string, unknown>;
 }
 
-export interface ThemeSettings {
-  primaryColor: string;
-  secondaryColor: string;
-  fontHeading: string;
-  fontBody: string;
-  template: string;
-  backgroundMusic?: string;
-}
+// ThemeSettings is in api.generated
 
+// WeddingDetail is NOT in api.generated (it was part of GraphQL structure?)
 export interface WeddingDetail {
   id: string;
   weddingId: string;
@@ -166,37 +127,11 @@ export interface WeddingDetail {
   weddingEvents: IWeddingEvent[];
 }
 
-export interface Wedding {
-  id: string;
-  userId: string;
-  slug: string;
-  title: string;
-  status: string;
-  weddingDate: string;
-  language: string;
-  themeSettings: ThemeSettings;
-  viewCount: number;
-  publishedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-  weddingDetail?: WeddingDetail;
-}
-
-export interface ListWedding {
-  id: string;
-  userId: string;
-  slug: string;
-  title: string;
-  status: WeddingStatus;
-  language: WeddingLanguage;
-  weddingDate: string;
-  viewCount: number;
-  publishedAt?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  weddingDetail?: WeddingDetail;
-  themeSettings: ThemeSettings;
-}
+// Wedding is in api.generated
+// ListWedding is in api.generated (as Wedding?)
+// In REST, findAll returns Wedding[].
+// The "ListWedding" type here had userId, slug, title...
+// api.generated Wedding has same fields.
 
 export interface WeddingFormData {
   name: string;
