@@ -3,10 +3,11 @@ import {
     UpdateBrideDto,
     Bride,
 } from '../../types/api.generated';
+import { CreateBridePayload } from '../../types/payloads';
 
 export const BrideApi = {
-    create: async (): Promise<Bride> => {
-        const response = await api.post<Bride>('/brides');
+    create: async (data: CreateBridePayload): Promise<Bride> => {
+        const response = await api.post<Bride>('/brides', data);
         return response.data;
     },
 

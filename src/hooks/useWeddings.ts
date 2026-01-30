@@ -3,6 +3,8 @@ import { BrideApi } from "@/lib/api/bride.api";
 import { GroomApi } from "@/lib/api/groom.api";
 import { LoveStoryApi } from "@/lib/api/love-story.api";
 import { EventApi } from "@/lib/api/event.api";
+import { ThemeSettingsApi } from "@/lib/api/theme-settings.api";
+import { slugify } from "@/lib/utils";
 
 import type {
   Wedding,
@@ -13,6 +15,7 @@ import type {
   UpdateEventDto as WeddingEventInput,
   // UpdateLoveStoryDto as LoveStoryInput,
 } from "@/types/api.generated";
+import type { CreateEventPayload, CreateLoveStoryPayload } from "@/types/payloads";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -68,11 +71,79 @@ export function usePublicWedding(slug: string | undefined) {
 /**
  * Create a new wedding
  */
+
+
+type CreateWeddingInput = {
+  title: string;
+  language?: "vi" | "en";
+  weddingDate: string;
+  bride: {
+    fullName: string;
+    shortBio?: string;
+    familyInfo?: string;
+    avatar?: string;
+  };
+  groom: {
+    fullName: string;
+    shortBio?: string;
+    familyInfo?: string;
+    avatar?: string;
+  };
+  themeSettings: {
+    template?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    fontHeading?: string;
+    fontBody?: string;
+    backgroundMusic?: string;
+  };
+};
+
+/**
+ * Create a new wedding
+ */
 export function useCreateWedding() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => WeddingApi.create(),
+    mutationFn: async (input: CreateWeddingInput) => {
+      // 1. Create Wedding
+      const slug = `${slugify(input.title)}-${Date.now()}`; // Ensure uniqueness
+      const wedding = await WeddingApi.create({
+        title: input.title,
+        slug,
+        weddingDate: input.weddingDate,
+        language: input.language,
+        status: "draft",
+      });
+
+      // 2. Create Related Entities in parallel
+      await Promise.all([
+        BrideApi.create({
+          weddingId: wedding.id,
+          fullName: input.bride.fullName,
+          shortBio: input.bride.shortBio,
+          familyInfo: input.bride.familyInfo,
+        }),
+        GroomApi.create({
+          weddingId: wedding.id,
+          fullName: input.groom.fullName,
+          shortBio: input.groom.shortBio,
+          familyInfo: input.groom.familyInfo,
+        }),
+        ThemeSettingsApi.create({
+          weddingId: wedding.id,
+          template: input.themeSettings.template,
+          primaryColor: input.themeSettings.primaryColor,
+          secondaryColor: input.themeSettings.secondaryColor,
+          fontHeading: input.themeSettings.fontHeading,
+          fontBody: input.themeSettings.fontBody,
+          backgroundMusic: input.themeSettings.backgroundMusic,
+        }),
+      ]);
+
+      return wedding;
+    },
     onSuccess: (newWedding) => {
       queryClient.setQueryData<Wedding[]>(weddingKeys.lists(), (old) => {
         if (!old) return [newWedding];
@@ -189,7 +260,8 @@ export function useUpdateGroom() {
 export function useAddLoveStory() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => LoveStoryApi.create(),
+    mutationFn: ({ weddingId, story }: { weddingId: string; story: UpdateLoveStoryDto }) =>
+      LoveStoryApi.create({ ...story, weddingId, title: story.title! }), // title is required in CreatePayload
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }
@@ -213,7 +285,8 @@ export function useDeleteLoveStory() {
 export function useAddWeddingEvent() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => EventApi.create(),
+    mutationFn: ({ weddingId, event }: { weddingId: string; event: WeddingEventInput }) =>
+      EventApi.create({ ...event, weddingId, title: event.title! }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }

@@ -3,10 +3,11 @@ import {
     UpdateEventDto,
     WeddingEvent,
 } from '../../types/api.generated';
+import { CreateEventPayload } from '../../types/payloads';
 
 export const EventApi = {
-    create: async (): Promise<WeddingEvent> => {
-        const response = await api.post<WeddingEvent>('/events');
+    create: async (data: CreateEventPayload): Promise<WeddingEvent> => {
+        const response = await api.post<WeddingEvent>('/events', data);
         return response.data;
     },
 

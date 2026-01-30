@@ -3,10 +3,11 @@ import {
     UpdateGroomDto,
     Groom,
 } from '../../types/api.generated';
+import { CreateGroomPayload } from '../../types/payloads';
 
 export const GroomApi = {
-    create: async (): Promise<Groom> => {
-        const response = await api.post<Groom>('/grooms');
+    create: async (data: CreateGroomPayload): Promise<Groom> => {
+        const response = await api.post<Groom>('/grooms', data);
         return response.data;
     },
 

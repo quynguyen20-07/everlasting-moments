@@ -3,14 +3,15 @@ import {
     UpdateWeddingDto,
     Wedding,
 } from '../../types/api.generated';
+import { CreateWeddingPayload } from '../../types/payloads';
 import { ThemeSettingsApi } from './theme-settings.api';
 import { BrideApi } from './bride.api';
 import { GroomApi } from './groom.api';
 import type { WeddingWithDetails } from '@/types';
 
 export const WeddingApi = {
-    create: async (): Promise<Wedding> => {
-        const response = await api.post<Wedding>('/weddings');
+    create: async (data: CreateWeddingPayload): Promise<Wedding> => {
+        const response = await api.post<Wedding>('/weddings', data);
         return response.data;
     },
 

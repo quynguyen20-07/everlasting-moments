@@ -4,3 +4,4 @@ export * from "./mock-data";
 export * from "./mapping";
 export * from "./countdown";
 export * from "./color";
+export * from "./slugify";

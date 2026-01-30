@@ -3,10 +3,11 @@ import {
     UpdateThemeSettingsDto,
     ThemeSettings,
 } from '../../types/api.generated';
+import { CreateThemeSettingsPayload } from '../../types/payloads';
 
 export const ThemeSettingsApi = {
-    create: async (): Promise<ThemeSettings> => {
-        const response = await api.post<ThemeSettings>('/theme-settings');
+    create: async (data: CreateThemeSettingsPayload): Promise<ThemeSettings> => {
+        const response = await api.post<ThemeSettings>('/theme-settings', data);
         return response.data;
     },
 
