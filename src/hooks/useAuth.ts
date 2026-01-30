@@ -99,10 +99,29 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: async (input: LoginDto) => {
       const data = await AuthApi.login(input);
-      // Login response only has tokens, so we need to fetch user profile
-      localStorage.setItem(TOKEN_KEY, data.accessToken);
-      localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
-      const userProfile = await AuthApi.getProfile();
+
+      console.log('Login response:', data); // Debug log
+
+      if (!data.tokens?.accessToken) {
+        throw new Error("No access token received");
+      }
+
+      // Login response has tokens nested
+      localStorage.setItem(TOKEN_KEY, data.tokens.accessToken);
+      localStorage.setItem(REFRESH_TOKEN_KEY, data.tokens.refreshToken);
+
+      // If user provided in response, use it, otherwise fetch profile
+      // But we just set the token, so we can fetch profile safely now if needed.
+      // However, since data.user is present, let's just use it to save a round trip if it's the full user object.
+      // But getProfile might return more details. Let's stick to getProfile for consistency OR uses data.user if it matches.
+      // The previous code always called getProfile after login.
+      // Given the user object is in response, we can probably use it.
+      // But strict adherence to "useAuth" logic:
+
+      // Ensure axios picks up the new token immediately if we make a request
+      // (Axios interceptor reads from localStorage, so it should be fine)
+
+      const userProfile = data.user || await AuthApi.getProfile();
       return { ...data, user: userProfile };
     },
     onSuccess: (data) => {

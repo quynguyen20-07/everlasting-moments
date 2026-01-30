@@ -144,8 +144,11 @@ export interface UpdateWishDto {
 
 // Response Types
 export interface LoginResponse {
-    accessToken: string;
-    refreshToken: string;
+    user: User;
+    tokens: {
+        accessToken: string;
+        refreshToken: string;
+    };
 }
 
 export interface LogoutResponse {
