@@ -57,7 +57,7 @@ export function useWedding(id: string | undefined) {
 export function usePublicWedding(slug: string | undefined) {
   return useQuery({
     queryKey: weddingKeys.public(slug!),
-    queryFn: () => WeddingApi.findOne(slug!),
+    queryFn: () => WeddingApi.findBySlug(slug!),
     enabled: !!slug,
     staleTime: 60 * 1000,
   });
