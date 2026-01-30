@@ -108,6 +108,7 @@ export interface WeddingSettings {
 // WeddingResponse etc removed as valid response types are in api.generated
 
 export interface BrideGroom {
+  id: string;
   fullName: string;
   avatar?: string;
   shortBio?: string;
@@ -117,21 +118,29 @@ export interface BrideGroom {
 
 // ThemeSettings is in api.generated
 
-// WeddingDetail is NOT in api.generated (it was part of GraphQL structure?)
+import {
+  Wedding,
+  Bride,
+  Groom,
+  LoveStory,
+  WeddingEvent,
+  ThemeSettings,
+} from "./api.generated";
+
 export interface WeddingDetail {
   id: string;
   weddingId: string;
-  bride: BrideGroom;
-  groom: BrideGroom;
-  loveStories: ILoveStory[];
-  weddingEvents: IWeddingEvent[];
+  bride: Bride;
+  groom: Groom;
+  loveStories: LoveStory[];
+  weddingEvents: WeddingEvent[];
 }
 
-// Wedding is in api.generated
-// ListWedding is in api.generated (as Wedding?)
-// In REST, findAll returns Wedding[].
-// The "ListWedding" type here had userId, slug, title...
-// api.generated Wedding has same fields.
+export type WeddingWithDetails = Wedding & {
+  weddingDetail?: WeddingDetail;
+  themeSettings?: ThemeSettings;
+};
+
 
 export interface WeddingFormData {
   name: string;

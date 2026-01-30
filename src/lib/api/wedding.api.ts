@@ -3,11 +3,16 @@ import {
     UpdateWeddingDto,
     Wedding,
 } from '../../types/api.generated';
-import { CreateWeddingPayload } from '../../types/payloads';
+import {
+    CreateWeddingPayload,
+} from '../../types/payloads';
+import { WeddingWithDetails } from '../../types/wedding';
+
 import { ThemeSettingsApi } from './theme-settings.api';
 import { BrideApi } from './bride.api';
 import { GroomApi } from './groom.api';
-import type { WeddingWithDetails } from '@/types';
+import { LoveStoryApi } from './love-story.api';
+import { EventApi } from './event.api';
 
 export const WeddingApi = {
     create: async (data: CreateWeddingPayload): Promise<Wedding> => {
@@ -16,19 +21,25 @@ export const WeddingApi = {
     },
 
     findAll: async (): Promise<WeddingWithDetails[]> => {
-        const [weddings, themes, brides, grooms] = await Promise.all([
+        const [weddings, themes, brides, grooms, loveStories, events] = await Promise.all([
             api.get<Wedding[]>('/weddings').then(r => r.data),
             ThemeSettingsApi.findAll(),
             BrideApi.findAll(),
-            GroomApi.findAll()
+            GroomApi.findAll(),
+            LoveStoryApi.findAll(),
+            EventApi.findAll()
         ]);
 
         return weddings.map(w => ({
             ...w,
             themeSettings: themes.find(t => t.weddingId === w.id),
             weddingDetail: {
-                bride: brides.find(b => b.weddingId === w.id),
-                groom: grooms.find(g => g.weddingId === w.id)
+                id: w.id,
+                weddingId: w.id,
+                bride: brides.find(b => b.weddingId === w.id)!,
+                groom: grooms.find(g => g.weddingId === w.id)!,
+                loveStories: loveStories.filter(l => l.weddingId === w.id),
+                weddingEvents: events.filter(e => e.weddingId === w.id),
             }
         }));
     },
@@ -39,19 +50,25 @@ export const WeddingApi = {
     },
 
     findOne: async (id: string): Promise<WeddingWithDetails> => {
-        const [wedding, themes, brides, grooms] = await Promise.all([
+        const [wedding, themes, brides, grooms, loveStories, events] = await Promise.all([
             api.get<Wedding>(`/weddings/${id}`).then(r => r.data),
-            ThemeSettingsApi.findAll(), // Inefficient but sticking to available API
+            ThemeSettingsApi.findAll(),
             BrideApi.findAll(),
-            GroomApi.findAll()
+            GroomApi.findAll(),
+            LoveStoryApi.findAll(),
+            EventApi.findAll()
         ]);
 
         return {
             ...wedding,
             themeSettings: themes.find(t => t.weddingId === wedding.id),
             weddingDetail: {
-                bride: brides.find(b => b.weddingId === wedding.id),
-                groom: grooms.find(g => g.weddingId === wedding.id)
+                id: wedding.id,
+                weddingId: wedding.id,
+                bride: brides.find(b => b.weddingId === wedding.id)!,
+                groom: grooms.find(g => g.weddingId === wedding.id)!,
+                loveStories: loveStories.filter(l => l.weddingId === wedding.id),
+                weddingEvents: events.filter(e => e.weddingId === wedding.id)
             }
         };
     },
