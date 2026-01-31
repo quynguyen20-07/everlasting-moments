@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 
 type WeddingGiftCardProps = {
   image: string;
+  onClick?: () => void;
 };
 
-const WeddingGiftCard = ({ image }: WeddingGiftCardProps) => {
+const WeddingGiftCard = ({ image, onClick }: WeddingGiftCardProps) => {
   return (
     <section className="relative w-full overflow-hidden py-20">
       {/* Gradient background */}
@@ -38,6 +39,7 @@ const WeddingGiftCard = ({ image }: WeddingGiftCardProps) => {
 
         {/* Image */}
         <motion.img
+          onClick={onClick}
           src={image}
           alt="Wedding gift"
           className="w-[260px] md:w-[320px] h-auto cursor-pointer"

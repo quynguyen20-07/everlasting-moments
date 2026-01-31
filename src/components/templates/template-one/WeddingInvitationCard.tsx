@@ -27,16 +27,21 @@ const WeddingInvitationCard = ({
         w-full
         min-h-[525px]
         bg-white
-        border-2 border-black
         p-6
-        shadow-lg
         flex
         items-center
         justify-center
+        shadow-[0px_4px_16px_0px_#00000040]
       "
     >
+      {/* Góc trái trên */}
+      <span className="pointer-events-none absolute top-3 left-3 w-1/3 h-1/3 border-t-2 border-l-2 border-gray-300" />
+
+      {/* Góc phải dưới */}
+      <span className="pointer-events-none absolute bottom-3 right-3 w-1/3 h-1/3 border-b-2 border-r-2 border-gray-300" />
+
       {/* Inner border */}
-      <div className="w-full h-full border border-black/70 px-6 py-10 text-center flex flex-col justify-between">
+      <div className="w-full h-full px-6 py-10 text-center flex flex-col justify-between">
         {/* Header */}
         <p className="font-['Aleo'] text-sm tracking-wide mb-6">
           TIỆC MỪNG LỄ THÀNH HÔN
@@ -80,13 +85,17 @@ const WeddingInvitationCard = ({
           </p>
 
           <div className="flex justify-center">
-            <svg width="120" height="20" viewBox="0 0 120 20" fill="none">
-              <path
-                d="M5 10 C30 0, 90 20, 115 10"
-                stroke="black"
-                strokeWidth="1"
-              />
-            </svg>
+            <motion.img
+              src="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769888849/Vowly/vkwwr3lsf6mvlizt5ibr.png"
+              alt="decorative divider"
+              className="w-[120px] h-auto opacity-80"
+              animate={{ y: [0, -2, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </div>
         </div>
       </div>

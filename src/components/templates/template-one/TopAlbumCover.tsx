@@ -6,7 +6,7 @@ type TopAlbumCoverProps = {
 
 const TopAlbumCover = ({ image }: TopAlbumCoverProps) => {
   return (
-    <section className="relative w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden py-6">
       {/* Background image */}
       <img
         src={image}

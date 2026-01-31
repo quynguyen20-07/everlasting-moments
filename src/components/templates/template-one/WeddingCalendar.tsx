@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 
 type WeddingCalendarProps = {
@@ -67,12 +68,20 @@ const WeddingCalendar = ({ date }: WeddingCalendarProps) => {
           return (
             <div key={day} className="flex justify-center items-center">
               {isActive ? (
-                <div className="relative">
-                  <Heart className="w-7 h-7 text-red-500 fill-red-500" />
-                  <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-semibold">
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{
+                    duration: 0.9,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="relative flex items-center justify-center"
+                >
+                  <Heart className="w-7 h-7 text-red-500 fill-red-500 translate-y-[3px]" />
+                  <span className="absolute text-white text-xs font-semibold">
                     {day}
                   </span>
-                </div>
+                </motion.div>
               ) : (
                 <span className="text-gray-800">{day}</span>
               )}

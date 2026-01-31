@@ -22,10 +22,10 @@ const GallerySection: React.FC<GallerySectionProps> = ({
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-2"
         >
-          <Camera
+          {/* <Camera
             className="w-14 h-14 mx-auto mb-6"
             style={{ color: colors?.primary }}
-          />
+          /> */}
 
           <h2
             className="

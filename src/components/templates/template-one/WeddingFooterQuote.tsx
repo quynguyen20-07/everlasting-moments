@@ -21,18 +21,20 @@ const WeddingFooterQuote = ({ text }: WeddingFooterQuoteProps) => {
         backdrop-blur-[1px]
         text-center
         rounded-xl
+        pb-[24px]
       "
     >
       <p
         className="
           font-['Allura']
           font-normal
-          text-[36px]
-          leading-[48px]
+          text-[32px] md:text-[36px]
+          leading-[42px]
           tracking-[0px]
           align-middle
           text-black
           whitespace-pre-line
+          mb-0
         "
       >
         {text}

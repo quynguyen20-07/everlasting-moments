@@ -50,7 +50,7 @@ const WeddingCountdown = ({ targetTime, colors }: CountdownProps) => {
         >
           <div
             className="
-              p-4 md:p-6
+              p-2 md:p-4
               rounded-2xl
               backdrop-blur-md
               border
@@ -70,7 +70,7 @@ const WeddingCountdown = ({ targetTime, colors }: CountdownProps) => {
               className="
                 font-['Playfair_Display']
                 font-normal
-                text-[44px]
+                text-[32px]
                 leading-[52px]
                 text-center
                 mb-1
@@ -85,7 +85,7 @@ const WeddingCountdown = ({ targetTime, colors }: CountdownProps) => {
               className="
                 font-['Playfair_Display']
                 font-normal
-                text-[14px]
+                text-[13px]
                 leading-[14px]
                 text-center
               "

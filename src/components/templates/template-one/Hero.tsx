@@ -1,7 +1,7 @@
 import { formatDateStr, formatLunarVietnamese } from "@/lib/utils";
-import { Bride, ColorScheme, Countdown, Groom } from "@/types";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { Bride, Groom } from "@/types";
 
 export type CoupleData = {
   bride: Bride;
@@ -9,20 +9,11 @@ export type CoupleData = {
 };
 
 export type HeroProps = {
-  colors: ColorScheme;
   coupleData: CoupleData;
-  countdown: Countdown;
   date: string;
-  setShowShareModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Hero: React.FC<HeroProps> = ({
-  colors,
-  coupleData,
-  countdown,
-  setShowShareModal,
-  date,
-}) => {
+const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
   return (
     <>
       <section
@@ -174,40 +165,6 @@ const Hero: React.FC<HeroProps> = ({
 
             <div className="px-4 mt-4 mb-12">
               <div className="flex items-center justify-center gap-3 md:gap-6">
-                {/* Bride */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.05 }}
-                  className="
-                  relative
-                  w-[calc(50vw-1rem)]
-                  h-[calc(65vw-1rem)]
-                  max-w-[190px]
-                  max-h-[260px]
-                  md:w-56 md:h-80
-                  rounded-t-[2.5rem]
-                  rounded-b-lg
-                  shadow-xl
-                  overflow-hidden
-                  flex-shrink-0
-                  bg-white
-                "
-                >
-                  <motion.img
-                    src="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/cenqoxr172ilzqrzjwsz.jpg"
-                    alt="Cô dâu"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  />
-                </motion.div>
-
                 {/* Groom */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.92 }}
@@ -230,10 +187,50 @@ const Hero: React.FC<HeroProps> = ({
                 "
                 >
                   <motion.img
-                    src="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/ql1zux8ckf7nhtxd5ckm.jpg"
+                    src={
+                      coupleData.groom?.avatar ||
+                      "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/ql1zux8ckf7nhtxd5ckm.jpg"
+                    }
                     alt="Chú Rể"
                     className="absolute inset-0 w-full h-full object-cover"
                     animate={{ y: [0, 6, 0] }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                </motion.div>
+
+                {/* Bride */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  whileHover={{ scale: 1.05 }}
+                  className="
+                  relative
+                  w-[calc(50vw-1rem)]
+                  h-[calc(65vw-1rem)]
+                  max-w-[190px]
+                  max-h-[260px]
+                  md:w-56 md:h-80
+                  rounded-t-[2.5rem]
+                  rounded-b-lg
+                  shadow-xl
+                  overflow-hidden
+                  flex-shrink-0
+                  bg-white
+                "
+                >
+                  <motion.img
+                    src={
+                      coupleData.bride?.avatar ||
+                      "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/cenqoxr172ilzqrzjwsz.jpg"
+                    }
+                    alt="Cô dâu"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    animate={{ y: [0, -6, 0] }}
                     transition={{
                       duration: 4,
                       repeat: Infinity,

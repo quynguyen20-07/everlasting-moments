@@ -2,21 +2,17 @@ import {
   useGetBride,
   useGetGroom,
   useGetWeddingEvents,
-  useGetWeddingStories,
   useWeddingImages,
 } from "@/hooks";
-import { formatDateVN, getWeddingCountdown } from "@/lib/utils";
 import { ColorType, Wedding, Wish } from "@/types";
-import { useTemplate } from "@/components/public";
 import { Button } from "@/components/ui/button";
-import { WeddingSEO } from "@/components/seo";
+import { useEffect, useState } from "react";
 import { Pause, Play } from "lucide-react";
-import { useEffect } from "react";
+import { formatDateVN } from "@/lib/utils";
 
-import VietnamTraditionalLayout from "../VietnamTraditionalLayout";
 import WeddingInvitationCard from "./WeddingInvitationCard";
 import WeddingFooterQuote from "./WeddingFooterQuote";
-import BankAccountSection from "./BankAccountSection";
+import BankAccountModal from "./BankAccountModal";
 import WeddingGiftCard from "./WeddingGiftCard";
 import WeddingCalendar from "./WeddingCalendar";
 import GallerySection from "./GallerySection";
@@ -25,7 +21,6 @@ import FallingHearts from "./FallingHearts";
 import WeddingCountdown from "./CountDown";
 import Hero from "./Hero";
 
-// Inner component to access useTemplate hook
 interface PublicWeddingContentProps {
   wedding: Wedding;
   colors: ColorType | undefined;
@@ -41,25 +36,19 @@ interface PublicWeddingContentProps {
 function PublicWeddingContent({
   wedding,
   colors,
-  setShowShareModal,
   isPlaying,
   toggleMusic,
   handleGalleryClick,
 }: PublicWeddingContentProps) {
-  const { layout, theme } = useTemplate();
-
   const { data: bride, refetch: isBrideRefetch } = useGetBride(wedding.id);
   const { data: groom, refetch: isGroomRefetch } = useGetGroom(wedding.id);
   const { data: events, refetch: isEventRefetch } = useGetWeddingEvents(
     wedding.id,
   );
-  const { data: stories, refetch: isStoryRefetch } = useGetWeddingStories(
-    wedding.id,
-  );
 
-  const { data: images, refetch: isImageRefetch } = useWeddingImages(
-    wedding.id,
-  );
+  const [isOpenQrModal, setIsOpenQrModal] = useState(false);
+
+  const { data: images } = useWeddingImages(wedding.id);
 
   const mainEvent = events?.find(
     (e) => e.type === "ceremony" || e.type === "reception",
@@ -70,11 +59,10 @@ function PublicWeddingContent({
       isBrideRefetch();
       isGroomRefetch();
       isEventRefetch();
-      isStoryRefetch();
     }
 
     return () => {};
-  }, [wedding]);
+  }, [isBrideRefetch, isEventRefetch, isGroomRefetch, wedding]);
 
   return (
     <>
@@ -82,16 +70,11 @@ function PublicWeddingContent({
       <main className={`template-wrapper min-h-screen bg-background ${""}`}>
         {/* Hero Section */}
         <Hero
-          colors={colors}
           coupleData={{ bride: bride, groom: groom }}
-          countdown={getWeddingCountdown(
-            mainEvent?.eventDate || wedding.weddingDate,
-          )}
           date={mainEvent?.eventDate || wedding.weddingDate}
-          setShowShareModal={() => setShowShareModal(true)}
         />
 
-        <div className="w-full p-6">
+        <div className="w-full p-4">
           <WeddingInvitationCard
             groomName={groom?.fullName}
             brideName={bride?.fullName}
@@ -102,7 +85,9 @@ function PublicWeddingContent({
           />
         </div>
 
-        <TopAlbumCover image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769883220/Vowly/o8qp0zzg30wrcfxrdpnp.jpg" />
+        <div className="my-8">
+          <TopAlbumCover image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769883220/Vowly/o8qp0zzg30wrcfxrdpnp.jpg" />
+        </div>
 
         <WeddingCalendar
           date={new Date(mainEvent?.eventDate || wedding.weddingDate)}
@@ -112,13 +97,6 @@ function PublicWeddingContent({
           targetTime={mainEvent?.eventDate || wedding.weddingDate}
         />
 
-        {/* Bank Account / Gift Section */}
-        {/* <BankAccountSection
-          colors={colors}
-          brideName={bride?.fullName}
-          groomName={groom?.fullName}
-        /> */}
-
         {/* Gallery */}
         <GallerySection
           colors={colors}
@@ -126,7 +104,10 @@ function PublicWeddingContent({
           onImageClick={(index) => handleGalleryClick(index)}
         />
 
-        <WeddingGiftCard image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769885240/Vowly/wrqvppxdh0ytxborfptl.png" />
+        <WeddingGiftCard
+          image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769885240/Vowly/wrqvppxdh0ytxborfptl.png"
+          onClick={() => setIsOpenQrModal(true)}
+        />
 
         <section className="relative">
           <img
@@ -158,6 +139,26 @@ function PublicWeddingContent({
             <Play className="w-5 h-5" />
           )}
         </Button>
+        <BankAccountModal
+          isOpen={isOpenQrModal}
+          setIsOpen={setIsOpenQrModal}
+          brideAcc={{
+            id: "giang",
+            role: "bride",
+            bankName: "Vietcomback",
+            accountNumber: "0201000703255",
+            accountHolder: "Lê Thị Huyền Giang",
+            qrCodeImg: "",
+          }}
+          groomAcc={{
+            id: "duc",
+            role: "bride",
+            bankName: "Vietcomback",
+            accountNumber: "0201000876543",
+            accountHolder: "Lê Minh Đức",
+            qrCodeImg: "",
+          }}
+        />
       </main>
     </>
   );
