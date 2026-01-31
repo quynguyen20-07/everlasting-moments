@@ -117,7 +117,10 @@ function PublicWeddingContent({
           />
 
           <WeddingFooterQuote
-            text={`In you\nI've found my home\nmy heart\nand my forever`}
+            text={`Trong em,
+                  là nơi tôi thuộc về,
+                  là trái tim tôi nương tựa,
+                  là mãi mãi.`}
           />
         </section>
 

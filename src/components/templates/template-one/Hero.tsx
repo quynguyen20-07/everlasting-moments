@@ -18,27 +18,44 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
     <>
       <section
         className="
-          relative min-h-screen flex items-center justify-center overflow-hidden
-          bg-cover
-          bg-[position:calc(50%+1.5rem)_center]
-          md:bg-center
-        "
+        relative min-h-screen flex items-center justify-center overflow-hidden
+        bg-cover
+        bg-[position:calc(50%+1.5rem)_center]
+        md:bg-center
+      "
         style={{
-          backgroundImage: `
-        linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
-        url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769889755/Vowly/cfxvg8jghatc0wnugocy.jpg')
-        `,
+          backgroundImage: `url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769889755/Vowly/cfxvg8jghatc0wnugocy.jpg')`,
         }}
       >
         {/* url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769856287/Vowly/uawkfojulqisc555gaqt.jpg') */}
+
+        {/* overlay làm ảnh sáng + dịu */}
+        <div className="absolute inset-0 bg-white/25" />
+
+        {/* fade trắng ở CHÂN ảnh */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
         <div className="absolute bottom-0  container  mx-auto px-4  z-10 text-center py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="font-['Great_Vibes'] font-normal text-[55px] leading-[64px] tracking-[0px] text-center text-black mb-4">
-              Save The Day
+            <h1
+              className="
+              font-['Great_Vibes']
+              font-normal
+              text-[48px]
+              leading-[64px]
+              tracking-[0px]
+              text-center
+              mb-4
+            "
+              style={{
+                color: "#000",
+                textShadow: "0 2px 8px rgba(255,255,255,0.85)",
+              }}
+            >
+              Ngày Chung Đôi
             </h1>
 
             {/* Names - Modern Typography */}
@@ -49,25 +66,20 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
               text-[22px]
               leading-[48px]
               tracking-[0px]
-              align-middle
               text-center
             "
+              style={{
+                color: "#000",
+                textShadow: "0 2px 8px rgba(255,255,255,0.8)",
+              }}
             >
-              <span
-                className="inline-block align-middle"
-                style={{ color: "#000" }}
-              >
+              <span className="inline-block align-middle">
                 {coupleData.bride?.fullName}
               </span>
 
-              <span className="mx-4 align-middle" style={{ color: "#000" }}>
-                &
-              </span>
+              <span className="inline-block mx-4 align-middle">&</span>
 
-              <span
-                className="inline-block align-middle"
-                style={{ color: "#000" }}
-              >
+              <span className="inline-block align-middle">
                 {coupleData.groom?.fullName}
               </span>
             </h1>
@@ -76,25 +88,31 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
               className="
               font-['Aleo']
               font-normal
-              text-[18px]
+              text-[24px]
+              leading-[48px]
               tracking-[0px]
-              align-middle
+              text-center
+              mb-0
             "
-              style={{ color: "#000" }}
+              style={{
+                color: "#000",
+                textShadow: "0 2px 8px rgba(255,255,255,0.8)",
+              }}
             >
               {formatDateStr(date)}
             </p>
+
             <p
               className="
               font-['Aleo']
               font-normal
-              text-[11px]
+              text-[14px]
               md:text-[20px]
               tracking-[0px]
               align-middle
               italic
             "
-              style={{ color: "#efc7ba" }}
+              style={{ color: "#667085" }}
             >
               {`Tức Ngày ${formatLunarVietnamese(date)}`}
             </p>
@@ -158,14 +176,14 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
               mt-8
             "
             >
-              WHEN TWO HEARTS BEAT AS ONE
+              KHI HAI TRÁI TIM CHUNG MỘT NHỊP ĐẬP
             </h1>
 
             <span
-              className="inline-block align-middle mb-4"
+              className="inline-block align-middle mb-4 text-[14px]"
               style={{ color: "#000000" }}
             >
-              They create a soul strong enough to last forever
+              Họ cùng nhau tạo nên một tâm hồn vĩnh cửu
             </span>
 
             <div className="px-4 mt-4 mb-12">
@@ -173,15 +191,27 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
                 {/* Groom */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-                  whileHover={{ scale: 1.05 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    y: [0, 6, 0],
+                  }}
+                  transition={{
+                    opacity: { duration: 0.8, ease: "easeOut" },
+                    scale: { duration: 0.8, ease: "easeOut" },
+                    y: {
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
+                  whileHover={{ scale: 1.05, y: 0 }}
                   className="
                   relative
                   w-[calc(50vw-1rem)]
                   h-[calc(65vw-1rem)]
-                  max-w-[190px]
-                  max-h-[260px]
+                  max-w-[176px]
+                  max-h-[250px]
                   md:w-56 md:h-80
                   rounded-t-[2.5rem]
                   rounded-b-lg
@@ -191,34 +221,40 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
                   bg-white
                 "
                 >
-                  <motion.img
+                  <img
                     src={
                       coupleData.groom?.avatar ||
                       "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/ql1zux8ckf7nhtxd5ckm.jpg"
                     }
                     alt="Chú Rể"
                     className="absolute inset-0 w-full h-full object-cover"
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
                   />
                 </motion.div>
 
                 {/* Bride */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.05 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    y: [0, -6, 0],
+                  }}
+                  transition={{
+                    opacity: { duration: 0.8, ease: "easeOut" },
+                    scale: { duration: 0.8, ease: "easeOut" },
+                    y: {
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
+                  whileHover={{ scale: 1.05, y: 0 }}
                   className="
                   relative
                   w-[calc(50vw-1rem)]
                   h-[calc(65vw-1rem)]
-                  max-w-[190px]
-                  max-h-[260px]
+                  max-w-[176px]
+                  max-h-[250px]
                   md:w-56 md:h-80
                   rounded-t-[2.5rem]
                   rounded-b-lg
@@ -228,19 +264,13 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
                   bg-white
                 "
                 >
-                  <motion.img
+                  <img
                     src={
                       coupleData.bride?.avatar ||
                       "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769859331/Vowly/cenqoxr172ilzqrzjwsz.jpg"
                     }
                     alt="Cô dâu"
                     className="absolute inset-0 w-full h-full object-cover"
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
                   />
                 </motion.div>
               </div>

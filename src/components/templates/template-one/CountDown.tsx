@@ -35,7 +35,7 @@ const WeddingCountdown = ({ targetTime, colors }: CountdownProps) => {
   }, [targetTime]);
 
   return (
-    <div className="grid grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto my-6 px-6">
+    <div className="grid grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto my-6 px-4">
       {[
         { value: countdown.days, label: "NGÀY" },
         { value: countdown.hours, label: "GIỜ" },
@@ -68,7 +68,7 @@ const WeddingCountdown = ({ targetTime, colors }: CountdownProps) => {
             {/* Number */}
             <div
               className="
-                font-['Playfair_Display']
+                font-['Aleo']
                 font-normal
                 text-[32px]
                 leading-[52px]

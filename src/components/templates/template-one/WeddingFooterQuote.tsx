@@ -10,35 +10,46 @@ const WeddingFooterQuote = ({ text }: WeddingFooterQuoteProps) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 1.4, ease: "easeOut" }}
       className="
         absolute
         bottom-0
         left-0
-        -translate-x-1/2
-        px-2
-        py-1
-        backdrop-blur-[1px]
-        text-center
-        rounded-xl
-        pb-[24px]
+        px-4
+        pb-[28px]
+        text-left
       "
     >
-      <p
+      <motion.p
+        animate={{
+          y: [-2, 2],
+          opacity: [0.92, 1],
+        }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+        }}
+        style={{
+          textShadow: `
+          0 1px 2px rgba(255,255,255,0.9),
+          0 2px 6px rgba(0,0,0,0.12)
+        `,
+        }}
         className="
-          font-['Allura']
-          font-normal
-          text-[32px] md:text-[36px]
-          leading-[42px]
-          tracking-[0px]
-          align-middle
-          text-black
-          whitespace-pre-line
-          mb-0
-        "
+        font-['Allura']
+        font-normal
+        text-[24px] md:text-[42px] md:mb-2rem
+        md:mr-2rem
+        leading-[42px]
+        text-black
+        whitespace-pre-line
+        mb-0
+      "
       >
         {text}
-      </p>
+      </motion.p>
     </motion.div>
   );
 };
