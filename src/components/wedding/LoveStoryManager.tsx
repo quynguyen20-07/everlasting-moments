@@ -87,10 +87,16 @@ export const LoveStoryManager = ({
 
   const handleOpenEdit = (story: ILoveStory) => {
     setEditingStory(story);
+
+    // Convert ISO date to YYYY-MM-DD format for date input
+    const formattedDate = story.storyDate
+      ? new Date(story.storyDate).toISOString().split('T')[0]
+      : '';
+
     form.reset({
       title: story.title,
       content: story.content,
-      storyDate: story.storyDate,
+      storyDate: formattedDate,
       imageUrl: story.imageUrl || "",
     });
     setIsDialogOpen(true);

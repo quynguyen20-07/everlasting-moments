@@ -269,7 +269,7 @@ export function useAddLoveStory() {
 export function useUpdateLoveStory() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, story }: { id: string; story: UpdateLoveStoryDto }) => LoveStoryApi.update(id, story),
+    mutationFn: ({ weddingId, storyId, story }: { weddingId: string; storyId: string; story: UpdateLoveStoryDto }) => LoveStoryApi.update(storyId, story),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }
@@ -277,7 +277,7 @@ export function useUpdateLoveStory() {
 export function useDeleteLoveStory() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: LoveStoryApi.remove,
+    mutationFn: ({ weddingId, storyId }: { weddingId: string; storyId: string }) => LoveStoryApi.remove(storyId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }
