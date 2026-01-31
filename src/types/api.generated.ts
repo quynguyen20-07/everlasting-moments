@@ -142,6 +142,20 @@ export interface UpdateWishDto {
     isActive?: boolean;
 }
 
+export interface CreateImageInput {
+    url: string;
+    order?: number;
+}
+
+export interface UpdateImageInput {
+    url?: string;
+    order?: number;
+}
+
+export interface ReplaceImagesInput {
+    images: CreateImageInput[];
+}
+
 // Response Types
 export interface LoginResponse {
     user: User;
@@ -169,3 +183,4 @@ export type User = CreateUserDto & { id: string };
 export type UserSession = UpdateUserSessionDto & { id: string };
 export type Wedding = UpdateWeddingDto & { id: string };
 export type Wish = UpdateWishDto & { id: string };
+export type Image = UpdateImageInput & { id: string; weddingId: string; url: string };

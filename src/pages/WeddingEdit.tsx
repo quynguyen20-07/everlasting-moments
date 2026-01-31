@@ -19,6 +19,11 @@ import {
   useWedding,
 } from "@/hooks";
 import {
+  useWeddingImages,
+  useReplaceWeddingImages,
+} from "@/hooks/useImages";
+import { Image as ImageType } from "@/types/api.generated";
+import {
   Form,
   FormControl,
   FormField,
@@ -76,6 +81,10 @@ const WeddingEdit = () => {
   const [activeTab, setActiveTab] = useState("info");
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [galleryImages, setGalleryImages] = useState<ImageType[]>([]);
+
+  const { data: imagesData } = useWeddingImages(id);
+  const { mutateAsync: replaceImages } = useReplaceWeddingImages(id || "");
 
   const brideGroomForm = useForm<BrideGroomFormData>({
     resolver: zodResolver(brideGroomSchema),
@@ -108,6 +117,12 @@ const WeddingEdit = () => {
       });
     }
   }, [currentWedding, brideGroomForm]);
+
+  useEffect(() => {
+    if (imagesData) {
+      setGalleryImages(imagesData);
+    }
+  }, [imagesData]);
 
   const handleSaveBrideGroom = async (data: BrideGroomFormData) => {
     if (!id || !currentWedding) return;
@@ -161,6 +176,34 @@ const WeddingEdit = () => {
     }
   };
 
+  const handleSaveGallery = async () => {
+    if (!id) return;
+
+    setIsSaving(true);
+    try {
+      await replaceImages({
+        images: galleryImages.map((img, index) => ({
+          url: img.url,
+          order: img.order ?? index,
+        })),
+      });
+
+      setLastSaved(new Date());
+      toast({
+        title: "Đã lưu",
+        description: "Thư viện ảnh đã được cập nhật.",
+      });
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể lưu thư viện ảnh.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleManualSave = async () => {
     if (!id || !currentWedding) return;
 
@@ -169,6 +212,11 @@ const WeddingEdit = () => {
       if (isValid) {
         await handleSaveBrideGroom(brideGroomForm.getValues());
       }
+      return;
+    }
+
+    if (activeTab === "gallery") {
+      await handleSaveGallery();
       return;
     }
 
@@ -568,20 +616,45 @@ const WeddingEdit = () => {
                       accept="image/*"
                       maxSizeMB={10}
                       label="Tải ảnh lên"
+                      initialUrls={galleryImages.map((img) => img.url)}
                       onUploadSuccess={(urls) => {
-                        console.log("Image", urls);
+                        const newImages = urls.map((url, index) => ({
+                          id: `new-${Date.now()}-${index}`,
+                          url,
+                          weddingId: id || "",
+                          order: galleryImages.length + index,
+                        }));
+                        setGalleryImages((prev) => [...prev, ...newImages]);
                         toast({
-                          title: "Đã tải lên",
-                          description: `${urls.length} ảnh đã được tải lên thành công`,
+                          title: "Đã thêm",
+                          description: `${urls.length} ảnh đã được thêm vào danh sách chờ lưu`,
                         });
                       }}
                       onDelete={(url) => {
+                        setGalleryImages((prev) =>
+                          prev.filter((img) => img.url !== url),
+                        );
                         toast({
                           title: "Đã xóa",
-                          description: "Ảnh đã được xóa khỏi thư viện",
+                          description: "Ảnh đã được xóa khỏi danh sách chờ lưu",
                         });
                       }}
                     />
+
+                    <div className="flex justify-end pt-4">
+                      <Button
+                        onClick={handleSaveGallery}
+                        disabled={isSaving}
+                        className="rounded-full bg-[#C4A484] text-white hover:bg-[#A68B6A] px-8"
+                      >
+                        {isSaving ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Save className="w-4 h-4 mr-2" />
+                        )}
+                        Lưu thư viện
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
