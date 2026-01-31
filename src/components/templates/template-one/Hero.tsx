@@ -18,54 +18,55 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
     <>
       <section
         className="
-      relative min-h-screen flex items-center justify-center overflow-hidden
-      bg-cover
-      bg-[position:calc(50%+3.5rem)_center]
-      md:bg-center
-    "
+          relative min-h-screen flex items-center justify-center overflow-hidden
+          bg-cover
+          bg-[position:calc(50%+1.5rem)_center]
+          md:bg-center
+        "
         style={{
           backgroundImage: `
         linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
-        url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769856287/Vowly/uawkfojulqisc555gaqt.jpg')
-      `,
+        url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769889755/Vowly/cfxvg8jghatc0wnugocy.jpg')
+        `,
         }}
       >
+        {/* url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769856287/Vowly/uawkfojulqisc555gaqt.jpg') */}
         <div className="absolute bottom-0  container  mx-auto px-4  z-10 text-center py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="font-['Great_Vibes'] font-normal text-[55px] leading-[64px] tracking-[0px] text-center text-white mb-4">
+            <h1 className="font-['Great_Vibes'] font-normal text-[55px] leading-[64px] tracking-[0px] text-center text-black mb-4">
               Save The Day
             </h1>
 
             {/* Names - Modern Typography */}
             <h1
               className="
-            font-['Aleo']
-            font-normal
-            text-[22px]
-            leading-[48px]
-            tracking-[0px]
-            align-middle
-            text-center
-          "
+              font-['Aleo']
+              font-normal
+              text-[22px]
+              leading-[48px]
+              tracking-[0px]
+              align-middle
+              text-center
+            "
             >
               <span
                 className="inline-block align-middle"
-                style={{ color: "#fff" }}
+                style={{ color: "#000" }}
               >
                 {coupleData.bride?.fullName}
               </span>
 
-              <span className="mx-4 align-middle" style={{ color: "#fff" }}>
+              <span className="mx-4 align-middle" style={{ color: "#000" }}>
                 &
               </span>
 
               <span
                 className="inline-block align-middle"
-                style={{ color: "#fff" }}
+                style={{ color: "#000" }}
               >
                 {coupleData.groom?.fullName}
               </span>
@@ -79,7 +80,7 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
               tracking-[0px]
               align-middle
             "
-              style={{ color: "#fff" }}
+              style={{ color: "#000" }}
             >
               {formatDateStr(date)}
             </p>
@@ -118,18 +119,22 @@ const Hero: React.FC<HeroProps> = ({ coupleData, date }) => {
         className="
         relative
         w-full
-        h-[520px]
-        md:w-[446px]
-        md:h-[476px]
-        md:left-[-12px]
-        md:top-[801px]
+        min-h-[520px]
         bg-cover
+        bg-center
         overflow-hidden
-        pt-10
+        py-16
+        md:py-24
+        flex
+        items-center
+        justify-center
       "
         style={{
           backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+          linear-gradient(
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.12)
+          ),
           url('https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769858874/Vowly/xotpnc3jqzvyjiuzn3g8.png')
         `,
         }}
