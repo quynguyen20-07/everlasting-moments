@@ -1,10 +1,10 @@
-import { ColorScheme, GalleryImage } from "@/types";
+import { ColorScheme, Image } from "@/types";
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
 
 export type GallerySectionProps = {
   colors: ColorScheme;
-  images: GalleryImage[];
+  images: Image[];
   onImageClick: (index: number) => void;
 };
 
@@ -73,8 +73,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 transition={{ duration: 0.9, ease: "easeOut" }}
               >
                 <motion.img
-                  src={image.src}
-                  alt={image.alt}
+                  src={image.url}
+                  alt={image.id}
                   className="w-full h-full object-cover"
                   style={{
                     transform: "translateZ(0)",
@@ -103,7 +103,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 transition={{ duration: 0.45, ease: "easeOut" }}
               >
                 <span className="text-white text-sm md:text-base font-medium tracking-wide drop-shadow-xl">
-                  {image.alt}
+                  {image.id}
                 </span>
               </motion.div>
             </motion.div>

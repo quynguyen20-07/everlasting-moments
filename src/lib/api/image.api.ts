@@ -1,8 +1,7 @@
 import {
-  CreateImageInput,
-  UpdateImageInput,
-  ReplaceImagesInput,
   Image,
+  ReplaceImagesInput,
+  UpdateImageInput,
 } from "../../types/api.generated";
 import api from "./axios";
 

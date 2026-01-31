@@ -11,7 +11,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Plus, Heart, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
 import { useState } from "react";

@@ -1,3 +1,5 @@
+import { Bride, Groom } from "./api.generated";
+
 export type ColorScheme = {
   primary: string;
   secondary: string;
@@ -12,15 +14,6 @@ export type ITimeCountdown = {
   hours: number;
   minutes: number;
   seconds: number;
-};
-
-export type CoupleInfo = {
-  name: string;
-};
-
-export type CoupleData = {
-  bride: CoupleInfo;
-  groom: CoupleInfo;
 };
 
 export type TemplateInfo = {

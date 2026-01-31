@@ -8,16 +8,16 @@ import PublicWeddingContent from "@/components/wedding-ui/PublicWeddingContent";
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";
+import { useGetWeddingSetting, usePublicWedding } from "@/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
-import { WeddingApi } from "@/lib/api/wedding.api";
-import { ColorType, TemplateType } from "@/types";
 import { TemplateProvider } from "@/components/public";
 import { useEffect, useMemo, useState } from "react";
+import { ColorType, TemplateType } from "@/types";
 import { GuestApi } from "@/lib/api/guest.api";
-import { useToast } from "@/hooks/use-toast";
 import { WishApi } from "@/lib/api/wish.api";
-import type { WeddingWithDetails as Wedding, Wish } from "@/types";
+import { useToast } from "@/hooks/useToast";
+import type { Wish } from "@/types";
 import useSound from "use-sound";
 
 const templatesData = Object.fromEntries(
@@ -35,6 +35,9 @@ export default function PublicWedding() {
   const { toast } = useToast();
   const { slug } = useParams<{ slug: string }>();
 
+  const { data: publicWedding, isFetching: isLoading } = usePublicWedding(slug);
+  const { data: themeSettings } = useGetWeddingSetting(publicWedding?.id);
+
   const [playing, setPlaying] = useState(false);
 
   const [play, { stop }] = useSound("/music/i-do.mp3", {
@@ -43,8 +46,6 @@ export default function PublicWedding() {
     onstop: () => setPlaying(false),
   });
 
-  const [wedding, setWedding] = useState<Wedding | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [template, setTemplate] = useState<TemplateType>();
   const [colors, setColors] = useState<ColorType>();
   const [error, setError] = useState<string | null>(null);
@@ -76,46 +77,11 @@ export default function PublicWedding() {
   );
 
   useEffect(() => {
-    async function fetchWedding() {
-      if (!slug) {
-        setError("Không tìm thấy thiệp mời");
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const data = await WeddingApi.findBySlug(slug);
-        if (data) {
-          setWedding(data);
-          // Load wishes using WishApi
-          try {
-            const allWishes = await WishApi.findAll();
-            // Client-side filter for now
-            const weddingWishes = allWishes.filter(w => w.weddingId === data.id && w.isApproved);
-            setWishes(weddingWishes);
-          } catch (e) {
-            console.error("Failed to load wishes", e);
-            setWishes([]);
-          }
-        } else {
-          setError("Thiệp mời không tồn tại hoặc chưa được công khai");
-        }
-      } catch (err) {
-        console.error("Error fetching wedding:", err);
-        setError("Không thể tải thiệp mời. Vui lòng thử lại sau.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchWedding();
-  }, [slug]);
-
-  useEffect(() => {
     const calculateCountdown = () => {
       const now = new Date();
       const diff =
-        mapWeddingToCoupleData(wedding)?.weddingDate?.getTime() - now.getTime();
+        mapWeddingToCoupleData(publicWedding)?.weddingDate?.getTime() -
+        now.getTime();
 
       if (diff > 0) {
         setCountdown({
@@ -130,23 +96,20 @@ export default function PublicWedding() {
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [wedding, navigate, template]);
+  }, [publicWedding, navigate, template]);
 
   useEffect(() => {
-    if (wedding) {
+    if (publicWedding) {
       const template =
-        templatesData[
-        wedding.themeSettings.template as keyof typeof templatesData
-        ];
+        templatesData[themeSettings?.template as keyof typeof templatesData];
       const colors =
-        COLOR_SCHEMES[
-        wedding.themeSettings.template as keyof typeof COLOR_SCHEMES
-        ] || DEFAULT_COLORS;
+        COLOR_SCHEMES[themeSettings?.template as keyof typeof COLOR_SCHEMES] ||
+        DEFAULT_COLORS;
 
       setTemplate(template);
       setColors(colors);
     }
-  }, [wedding]);
+  }, [publicWedding]);
 
   useEffect(() => {
     play();
@@ -157,7 +120,7 @@ export default function PublicWedding() {
     return <PageLoading text="Đang tải thiệp mời..." />;
   }
 
-  if (error || !wedding) {
+  if (error || !publicWedding) {
     return (
       <NotfoundFallback
         title="Không tìm thấy thiệp mời"
@@ -168,23 +131,20 @@ export default function PublicWedding() {
 
   // Handle RSVP submission
   const handleRSVP = async (data: RSVPFormData) => {
-    if (!wedding?.id) {
+    if (!publicWedding?.id) {
       throw new Error("Wedding ID không tồn tại");
     }
 
     try {
-      // Create empty guest first
       const newGuest = await GuestApi.create();
       if (newGuest?.id) {
         await GuestApi.update(newGuest.id, {
-          weddingId: wedding.id,
+          weddingId: publicWedding.id,
           fullName: data.fullName,
           email: data.email || undefined,
           phone: data.phone || undefined,
           numberOfGuests: data.numberOfGuests,
           attendanceStatus: data.attendanceStatus,
-          // dietaryRestrictions: data.dietaryRestrictions || undefined, // Removed from API
-          // message: data.message || undefined, // Removed from API
         });
       }
 
@@ -203,7 +163,7 @@ export default function PublicWedding() {
 
   // Handle Wish submission
   const handleWish = async (data: WishFormData) => {
-    if (!wedding?.id) {
+    if (!publicWedding?.id) {
       throw new Error("Wedding ID không tồn tại");
     }
 
@@ -211,10 +171,10 @@ export default function PublicWedding() {
       const tempWish = await WishApi.create();
       if (tempWish?.id) {
         const newWish = await WishApi.update(tempWish.id, {
-          weddingId: wedding.id,
+          weddingId: publicWedding.id,
           guestName: data.guestName,
           message: data.message,
-          isApproved: false // Default pending
+          isApproved: false,
         });
 
         // Add to local state (pending approval)
@@ -237,12 +197,10 @@ export default function PublicWedding() {
   };
 
   return (
-    <TemplateProvider themeSettings={wedding.themeSettings}>
+    <TemplateProvider themeSettings={themeSettings}>
       <PublicWeddingContent
-        wedding={wedding}
-        template={template}
+        wedding={publicWedding}
         colors={colors}
-        images={images}
         wishes={wishes}
         setWishes={setWishes}
         showShareModal={showShareModal}

@@ -43,7 +43,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { formatDateVN } from "@/lib/utils";
 import type { ILoveStory } from "@/types";
 import { useForm } from "react-hook-form";
@@ -90,8 +90,8 @@ export const LoveStoryManager = ({
 
     // Convert ISO date to YYYY-MM-DD format for date input
     const formattedDate = story.storyDate
-      ? new Date(story.storyDate).toISOString().split('T')[0]
-      : '';
+      ? new Date(story.storyDate).toISOString().split("T")[0]
+      : "";
 
     form.reset({
       title: story.title,

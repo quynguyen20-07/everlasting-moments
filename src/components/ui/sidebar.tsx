@@ -8,7 +8,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/useMobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slot } from "@radix-ui/react-slot";

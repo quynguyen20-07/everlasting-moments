@@ -1,15 +1,20 @@
-import { motion } from "framer-motion";
-import { Heart, MapPin, Calendar } from "lucide-react";
-import type { IWeddingEvent, ILoveStory, BrideGroom } from "@/types/wedding";
-import type { TemplateTheme } from "@/lib/templates/wedding-templates";
-import type { ColorScheme, Wish } from "@/types";
+import BankAccountSection, {
+  BankAccountInfo,
+} from "@/components/wedding-ui/BankAccountSection";
+import GuestWishesSection, {
+  WishFormData,
+} from "@/components/wedding-ui/GuestWishesSection";
 import RSVPSection, { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
-import BankAccountSection, { BankAccountInfo } from "@/components/wedding-ui/BankAccountSection";
-import GuestWishesSection, { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
+import type { IWeddingEvent, ILoveStory, BrideGroom } from "@/types/wedding";
+import type { Bride, ColorScheme, Groom, WeddingEvent, Wish } from "@/types";
+import type { TemplateTheme } from "@/lib/templates/wedding-templates";
+import { Heart, MapPin, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Helper to format timestamp to Date
 const formatTimestamp = (timestamp: string | number): Date => {
-  const ts = typeof timestamp === "string" ? parseInt(timestamp, 10) : timestamp;
+  const ts =
+    typeof timestamp === "string" ? parseInt(timestamp, 10) : timestamp;
   return new Date(ts);
 };
 
@@ -36,11 +41,11 @@ const formatFullDateVi = (timestamp: string | number) => {
 
 export interface VietnamTraditionalLayoutProps {
   theme: TemplateTheme;
-  bride?: BrideGroom;
-  groom?: BrideGroom;
+  bride?: Bride;
+  groom?: Groom;
   weddingDate?: string | number;
   weddingId?: string;
-  events?: IWeddingEvent[];
+  events?: WeddingEvent[];
   loveStories?: ILoveStory[];
   galleryImages?: { id: string; url: string; caption?: string }[];
   onImageClick?: (index: number) => void;
@@ -119,7 +124,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
         >
           <h1
             className="font-serif text-4xl md:text-5xl italic mb-2"
-            style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: primaryColor,
+            }}
           >
             Happy Wedding
           </h1>
@@ -135,9 +143,18 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
 
         {/* Decorative line */}
         <div className="flex items-center justify-center gap-3 my-6">
-          <div className="h-px w-16" style={{ backgroundColor: primaryColor }} />
-          <Heart className="w-4 h-4" style={{ color: primaryColor, fill: primaryColor }} />
-          <div className="h-px w-16" style={{ backgroundColor: primaryColor }} />
+          <div
+            className="h-px w-16"
+            style={{ backgroundColor: primaryColor }}
+          />
+          <Heart
+            className="w-4 h-4"
+            style={{ color: primaryColor, fill: primaryColor }}
+          />
+          <div
+            className="h-px w-16"
+            style={{ backgroundColor: primaryColor }}
+          />
         </div>
       </section>
 
@@ -151,15 +168,22 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
             className="max-w-xs mx-auto p-6 rounded-2xl shadow-lg"
             style={{ backgroundColor: cardColor }}
           >
-            <p className="text-sm uppercase tracking-widest mb-2" style={{ color: mutedColor }}>
+            <p
+              className="text-sm uppercase tracking-widest mb-2"
+              style={{ color: mutedColor }}
+            >
               {dateParts.dayOfWeek}
             </p>
             <div className="flex items-center justify-center gap-4">
               <div className="text-right">
                 <p className="text-sm" style={{ color: mutedColor }}>
-                  {dateParts.month < 10 ? `0${dateParts.month}` : dateParts.month}
+                  {dateParts.month < 10
+                    ? `0${dateParts.month}`
+                    : dateParts.month}
                 </p>
-                <p className="text-xs" style={{ color: mutedColor }}>{dateParts.year}</p>
+                <p className="text-xs" style={{ color: mutedColor }}>
+                  {dateParts.year}
+                </p>
               </div>
               <div
                 className="text-5xl md:text-6xl font-bold px-4 border-x-2"
@@ -171,14 +195,20 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
                 <p className="text-sm" style={{ color: mutedColor }}>
                   {mainEvent?.startTime || "10:00"}
                 </p>
-                <p className="text-xs" style={{ color: mutedColor }}>Giờ</p>
+                <p className="text-xs" style={{ color: mutedColor }}>
+                  Giờ
+                </p>
               </div>
             </div>
             {mainEvent && (
               <div className="mt-4 text-sm" style={{ color: foregroundColor }}>
                 <p className="font-medium">Địa điểm tổ chức:</p>
-                <p className="italic" style={{ color: primaryColor }}>{mainEvent.title}</p>
-                <p className="text-xs mt-1" style={{ color: mutedColor }}>{mainEvent.address}</p>
+                <p className="italic" style={{ color: primaryColor }}>
+                  {mainEvent.title}
+                </p>
+                <p className="text-xs mt-1" style={{ color: mutedColor }}>
+                  {mainEvent.address}
+                </p>
               </div>
             )}
           </motion.div>
@@ -195,7 +225,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
         >
           <h2
             className="font-serif text-2xl md:text-3xl italic"
-            style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: primaryColor,
+            }}
           >
             Giới Thiệu
           </h2>
@@ -220,7 +253,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
               style={{ borderColor: primaryColor }}
             />
             <div>
-              <p className="font-semibold text-lg" style={{ color: foregroundColor }}>
+              <p
+                className="font-semibold text-lg"
+                style={{ color: foregroundColor }}
+              >
                 {bride?.fullName || "Cô Dâu"}
               </p>
               <p className="text-sm" style={{ color: mutedColor }}>
@@ -244,7 +280,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
               style={{ borderColor: primaryColor }}
             />
             <div>
-              <p className="font-semibold text-lg" style={{ color: foregroundColor }}>
+              <p
+                className="font-semibold text-lg"
+                style={{ color: foregroundColor }}
+              >
                 {groom?.fullName || "Chú Rể"}
               </p>
               <p className="text-sm" style={{ color: mutedColor }}>
@@ -265,7 +304,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
         >
           <h2
             className="font-serif text-2xl md:text-3xl italic"
-            style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: primaryColor,
+            }}
           >
             Save The Date
           </h2>
@@ -286,7 +328,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
               >
                 <h3
                   className="font-serif text-xl italic mb-2"
-                  style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    color: primaryColor,
+                  }}
                 >
                   {event.title}
                 </h3>
@@ -301,7 +346,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
                       {eventDateParts.dayOfWeek}
                     </p>
                     <p className="text-xs" style={{ color: mutedColor }}>
-                      {eventDateParts.month < 10 ? `0${eventDateParts.month}` : eventDateParts.month}.{eventDateParts.year}
+                      {eventDateParts.month < 10
+                        ? `0${eventDateParts.month}`
+                        : eventDateParts.month}
+                      .{eventDateParts.year}
                     </p>
                   </div>
                   <div
@@ -311,7 +359,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
                     {eventDateParts.day}
                   </div>
                   <div className="text-left">
-                    <p className="text-sm font-medium" style={{ color: foregroundColor }}>
+                    <p
+                      className="text-sm font-medium"
+                      style={{ color: foregroundColor }}
+                    >
                       {event.startTime || "10:00"}
                     </p>
                   </div>
@@ -333,7 +384,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
           >
             <h2
               className="font-serif text-2xl md:text-3xl italic"
-              style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: primaryColor,
+              }}
             >
               Chuyện Tình Yêu
             </h2>
@@ -341,7 +395,9 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
 
           <div className="max-w-md mx-auto space-y-6">
             {loveStories.map((story, index) => {
-              const storyDate = story.storyDate ? formatFullDateVi(story.storyDate) : null;
+              const storyDate = story.storyDate
+                ? formatFullDateVi(story.storyDate)
+                : null;
               return (
                 <motion.div
                   key={story.id}
@@ -354,7 +410,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
                   {/* Timeline dot */}
                   <div
                     className="absolute left-0 top-2 w-4 h-4 rounded-full border-2"
-                    style={{ borderColor: primaryColor, backgroundColor: cardColor }}
+                    style={{
+                      borderColor: primaryColor,
+                      backgroundColor: cardColor,
+                    }}
                   />
                   {/* Timeline line */}
                   {index < loveStories.length - 1 && (
@@ -368,11 +427,17 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
                     className="p-4 rounded-xl shadow-sm"
                     style={{ backgroundColor: cardColor }}
                   >
-                    <h4 className="font-semibold mb-1" style={{ color: foregroundColor }}>
+                    <h4
+                      className="font-semibold mb-1"
+                      style={{ color: foregroundColor }}
+                    >
                       {story.title}
                     </h4>
                     {storyDate && (
-                      <p className="text-xs mb-2 flex items-center gap-1" style={{ color: mutedColor }}>
+                      <p
+                        className="text-xs mb-2 flex items-center gap-1"
+                        style={{ color: mutedColor }}
+                      >
                         <Calendar className="w-3 h-3" />
                         {storyDate}
                       </p>
@@ -399,7 +464,10 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
           >
             <h2
               className="font-serif text-2xl md:text-3xl italic"
-              style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: primaryColor,
+              }}
             >
               Hình Cưới Chúng Mình
             </h2>
@@ -473,14 +541,26 @@ const VietnamTraditionalLayout: React.FC<VietnamTraditionalLayoutProps> = ({
         >
           <h2
             className="font-serif text-3xl md:text-4xl italic mb-4"
-            style={{ fontFamily: "'Playfair Display', serif", color: primaryColor }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: primaryColor,
+            }}
           >
             Thank you!
           </h2>
           <div className="flex items-center justify-center gap-2">
-            <div className="h-px w-12" style={{ backgroundColor: primaryColor }} />
-            <Heart className="w-5 h-5" style={{ color: primaryColor, fill: primaryColor }} />
-            <div className="h-px w-12" style={{ backgroundColor: primaryColor }} />
+            <div
+              className="h-px w-12"
+              style={{ backgroundColor: primaryColor }}
+            />
+            <Heart
+              className="w-5 h-5"
+              style={{ color: primaryColor, fill: primaryColor }}
+            />
+            <div
+              className="h-px w-12"
+              style={{ backgroundColor: primaryColor }}
+            />
           </div>
         </motion.div>
       </section>

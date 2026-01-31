@@ -13,10 +13,6 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   colors,
   stories,
 }) => {
-  const sortedStories = [...stories].sort(
-    (a, b) => Number(a.storyDate) - Number(b.storyDate),
-  );
-
   return (
     <section
       className="py-20 md:py-28"
@@ -62,67 +58,69 @@ const LoveStorySection: React.FC<LoveStorySectionProps> = ({
 
           <div className="space-y-6">
             <AnimatePresence mode="popLayout">
-              {sortedStories.map((story, index) => (
-                <motion.div
-                  key={story.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="relative pl-14"
-                >
-                  {/* Dot */}
-                  <div
-                    className="absolute left-4 top-6 w-5 h-5 rounded-2xl border-4 shadow-sm"
-                    style={{
-                      background: colors?.primary,
-                      borderColor: colors?.background ?? "#fff",
-                    }}
-                  />
+              {Array.isArray(stories)
+                ? stories?.map((story, index) => (
+                    <motion.div
+                      key={story.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="relative pl-14"
+                    >
+                      {/* Dot */}
+                      <div
+                        className="absolute left-4 top-6 w-5 h-5 rounded-2xl border-4 shadow-sm"
+                        style={{
+                          background: colors?.primary,
+                          borderColor: colors?.background ?? "#fff",
+                        }}
+                      />
 
-                  <Card
-                    className="backdrop-blur-sm"
-                    style={{
-                      background: `${colors?.accent}10`,
-                      borderColor: `${colors?.primary}20`,
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      {story.storyDate && (
-                        <div
-                          className="text-xs mb-2 flex items-center gap-1"
-                          style={{ color: `${colors?.text}80` }}
-                        >
-                          <Calendar className="w-3 h-3" />
-                          {formatDateVN(story.storyDate)}
-                        </div>
-                      )}
-
-                      <h3
-                        className="font-display text-xl font-semibold mb-2"
-                        style={{ color: colors?.text }}
+                      <Card
+                        className="backdrop-blur-sm"
+                        style={{
+                          background: `${colors?.accent}10`,
+                          borderColor: `${colors?.primary}20`,
+                        }}
                       >
-                        {story.title}
-                      </h3>
+                        <CardContent className="p-6">
+                          {story.storyDate && (
+                            <div
+                              className="text-xs mb-2 flex items-center gap-1"
+                              style={{ color: `${colors?.text}80` }}
+                            >
+                              <Calendar className="w-3 h-3" />
+                              {formatDateVN(story.storyDate)}
+                            </div>
+                          )}
 
-                      <p
-                        className="font-serif leading-relaxed text-justify"
-                        style={{ color: `${colors?.text}CC` }}
-                      >
-                        {story.content}
-                      </p>
+                          <h3
+                            className="font-display text-xl font-semibold mb-2"
+                            style={{ color: colors?.text }}
+                          >
+                            {story.title}
+                          </h3>
 
-                      {story.imageUrl && (
-                        <img
-                          src={story.imageUrl}
-                          alt={story.title}
-                          className="mt-4 rounded-2xl max-h-64 object-cover"
-                        />
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                          <p
+                            className="font-serif leading-relaxed text-justify"
+                            style={{ color: `${colors?.text}CC` }}
+                          >
+                            {story.content}
+                          </p>
+
+                          {story.imageUrl && (
+                            <img
+                              src={story.imageUrl}
+                              alt={story.title}
+                              className="mt-4 rounded-2xl max-h-64 object-cover"
+                            />
+                          )}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))
+                : []}
             </AnimatePresence>
           </div>
         </div>

@@ -35,8 +35,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Hero from "@/components/wedding-ui/Hero";
 import { Button } from "@/components/ui/button";
 import { ITimeCountdown, Wish } from "@/types";
-import { useToast } from "@/hooks/use-toast";
 import { WeddingSEO } from "@/components/seo";
+import { useToast } from "@/hooks/useToast";
 
 const TemplateDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -199,7 +199,6 @@ const TemplateDetailPage = () => {
       isApproved: true,
       isActive: true,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
     setDemoWishes((prev) => [...prev, newWish]);
     toast({
@@ -236,7 +235,7 @@ const TemplateDetailPage = () => {
         description={`Xem trước mẫu thiệp cưới ${currentTheme.name} - True Loves`}
         pageType="template"
       />
-      
+
       <div
         className="min-h-screen bg-background"
         style={
@@ -250,56 +249,57 @@ const TemplateDetailPage = () => {
           } as React.CSSProperties
         }
       >
-      {/* Header with Theme Selector */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-[#e8d4c8]/50 shadow-sm">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            {/* Back Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-2 text-[#4a3f3a] hover:bg-[#f8f1ed]"
-              onClick={() => navigate("/templates")}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Quay Lại</span>
-            </Button>
-
-            {/* Theme Selector */}
-            <div
-              className="flex items-center gap-2"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
+        {/* Header with Theme Selector */}
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-[#e8d4c8]/50 shadow-sm">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              {/* Back Button */}
               <Button
                 variant="ghost"
-                size="icon"
-                className="h-8 w-8 rounded-2xl hover:bg-[#f8f1ed]"
-                onClick={handlePrevTheme}
-                disabled={isAnimating}
+                size="sm"
+                className="gap-2 text-[#4a3f3a] hover:bg-[#f8f1ed]"
+                onClick={() => navigate("/templates")}
               >
-                <ChevronLeft className="w-4 h-4 text-[#4a3f3a]" />
+                <ArrowLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">Quay Lại</span>
               </Button>
 
-              {/* Theme Pills */}
-              <div className="flex items-center gap-1 overflow-hidden max-w-[200px] md:max-w-none">
-                {TEMPLATES_THEME_LIST.slice(
-                  Math.max(0, selectedThemeIndex - 2),
-                  selectedThemeIndex + 3,
-                ).map((theme, idx) => {
-                  const actualIndex = Math.max(0, selectedThemeIndex - 2) + idx;
-                  const isActive = actualIndex === selectedThemeIndex;
-                  return (
-                    <button
-                      key={theme.id}
-                      onClick={() => {
-                        if (!isAnimating) {
-                          setIsAnimating(true);
-                          setSelectedThemeIndex(actualIndex);
-                          setTimeout(() => setIsAnimating(false), 400);
-                        }
-                      }}
-                      className={`
+              {/* Theme Selector */}
+              <div
+                className="flex items-center gap-2"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-2xl hover:bg-[#f8f1ed]"
+                  onClick={handlePrevTheme}
+                  disabled={isAnimating}
+                >
+                  <ChevronLeft className="w-4 h-4 text-[#4a3f3a]" />
+                </Button>
+
+                {/* Theme Pills */}
+                <div className="flex items-center gap-1 overflow-hidden max-w-[200px] md:max-w-none">
+                  {TEMPLATES_THEME_LIST.slice(
+                    Math.max(0, selectedThemeIndex - 2),
+                    selectedThemeIndex + 3,
+                  ).map((theme, idx) => {
+                    const actualIndex =
+                      Math.max(0, selectedThemeIndex - 2) + idx;
+                    const isActive = actualIndex === selectedThemeIndex;
+                    return (
+                      <button
+                        key={theme.id}
+                        onClick={() => {
+                          if (!isAnimating) {
+                            setIsAnimating(true);
+                            setSelectedThemeIndex(actualIndex);
+                            setTimeout(() => setIsAnimating(false), 400);
+                          }
+                        }}
+                        className={`
                         px-3 py-1.5 rounded-2xl text-xs font-medium transition-all duration-300
                         ${
                           isActive
@@ -307,145 +307,147 @@ const TemplateDetailPage = () => {
                             : "bg-[#f8f1ed] text-[#7a6b64] hover:bg-[#e8d4c8]"
                         }
                       `}
-                      style={
-                        isActive
-                          ? {
-                              backgroundColor: `hsl(${theme.primaryHsl})`,
-                            }
-                          : {}
-                      }
-                    >
-                      {isActive && <Check className="w-3 h-3 inline mr-1" />}
-                      <span className="hidden sm:inline">{theme.name}</span>
-                      <span
-                        className="sm:hidden w-3 h-3 rounded-2xl inline-block"
-                        style={{ backgroundColor: `hsl(${theme.primaryHsl})` }}
-                      />
-                    </button>
-                  );
-                })}
+                        style={
+                          isActive
+                            ? {
+                                backgroundColor: `hsl(${theme.primaryHsl})`,
+                              }
+                            : {}
+                        }
+                      >
+                        {isActive && <Check className="w-3 h-3 inline mr-1" />}
+                        <span className="hidden sm:inline">{theme.name}</span>
+                        <span
+                          className="sm:hidden w-3 h-3 rounded-2xl inline-block"
+                          style={{
+                            backgroundColor: `hsl(${theme.primaryHsl})`,
+                          }}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-2xl hover:bg-[#f8f1ed]"
+                  onClick={handleNextTheme}
+                  disabled={isAnimating}
+                >
+                  <ChevronRight className="w-4 h-4 text-[#4a3f3a]" />
+                </Button>
               </div>
 
+              {/* Buy Button */}
               <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 rounded-2xl hover:bg-[#f8f1ed]"
-                onClick={handleNextTheme}
-                disabled={isAnimating}
+                size="sm"
+                className="bg-[#c4a99b] hover:bg-[#b39888] text-white rounded-2xl px-4"
               >
-                <ChevronRight className="w-4 h-4 text-[#4a3f3a]" />
+                Mua Ngay
               </Button>
             </div>
 
-            {/* Buy Button */}
-            <Button
-              size="sm"
-              className="bg-[#c4a99b] hover:bg-[#b39888] text-white rounded-2xl px-4"
-            >
-              Mua Ngay
-            </Button>
-          </div>
-
-          {/* Theme Dots */}
-          <div className="flex items-center justify-center gap-1 mt-2">
-            {TEMPLATES_THEME_LIST.map((theme, index) => (
-              <button
-                key={theme.id}
-                onClick={() => {
-                  if (!isAnimating && index !== selectedThemeIndex) {
-                    setIsAnimating(true);
-                    setSelectedThemeIndex(index);
-                    setTimeout(() => setIsAnimating(false), 400);
-                  }
-                }}
-                className={`w-1.5 h-1.5 rounded-2xl transition-all duration-300 ${
-                  index === selectedThemeIndex
-                    ? "w-4 bg-[#c4a99b]"
-                    : "bg-[#c4a99b]/30 hover:bg-[#c4a99b]/50"
-                }`}
-                title={theme.name}
-              />
-            ))}
+            {/* Theme Dots */}
+            <div className="flex items-center justify-center gap-1 mt-2">
+              {TEMPLATES_THEME_LIST.map((theme, index) => (
+                <button
+                  key={theme.id}
+                  onClick={() => {
+                    if (!isAnimating && index !== selectedThemeIndex) {
+                      setIsAnimating(true);
+                      setSelectedThemeIndex(index);
+                      setTimeout(() => setIsAnimating(false), 400);
+                    }
+                  }}
+                  className={`w-1.5 h-1.5 rounded-2xl transition-all duration-300 ${
+                    index === selectedThemeIndex
+                      ? "w-4 bg-[#c4a99b]"
+                      : "bg-[#c4a99b]/30 hover:bg-[#c4a99b]/50"
+                  }`}
+                  title={theme.name}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <FallingHearts colors={colors} />
+        <FallingHearts colors={colors} />
 
-      {/* Hero Section */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentTheme.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+        {/* Hero Section */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentTheme.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Hero
+              colors={colors}
+              template={template}
+              coupleData={coupleData}
+              countdown={countdown}
+              date={"2026-01-08T10:00:00Z"}
+              setShowShareModal={() => setShowShareModal(true)}
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Love Story Section */}
+        <LoveStorySection colors={colors} stories={coupleData.story} />
+
+        {/* Events Timeline */}
+        <EventsTimelineSection colors={colors} events={coupleData.events} />
+
+        {/* Gallery */}
+        <GallerySection
+          colors={colors}
+          images={images}
+          onImageClick={(index) => setCurrentImageIndex(index)}
+        />
+
+        {/* RSVP Section */}
+        <RSVPSection colors={colors} weddingId="demo" onSubmit={handleRSVP} />
+
+        {/* Guest Wishes */}
+        <GuestWishesSection
+          colors={colors}
+          wishes={demoWishes}
+          weddingId="demo"
+          onSubmit={handleWish}
+        />
+
+        {/* Footer */}
+        <FooterSection
+          colors={colors}
+          brideName={coupleData.bride.name}
+          groomName={coupleData.groom.name}
+          weddingDate={"14 Tháng 2, 2025"}
+        />
+
+        {/* Share Modal */}
+        <ShareModal
+          title={"Đã Sao Chép!"}
+          colorsText={colors.text}
+          colorsPrimary={colors.primary}
+          open={showShareModal}
+          setOpen={setShowShareModal}
+        />
+
+        {/* Music Toggle */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed bottom-6 right-6 z-40 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 bg-white border-[#c4a99b]"
+          onClick={toggleMusic}
         >
-          <Hero
-            colors={colors}
-            template={template}
-            coupleData={coupleData}
-            countdown={countdown}
-            date={"2026-01-08T10:00:00Z"}
-            setShowShareModal={() => setShowShareModal(true)}
-          />
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Love Story Section */}
-      <LoveStorySection colors={colors} stories={coupleData.story} />
-
-      {/* Events Timeline */}
-      <EventsTimelineSection colors={colors} events={coupleData.events} />
-
-      {/* Gallery */}
-      <GallerySection
-        colors={colors}
-        images={images}
-        onImageClick={(index) => setCurrentImageIndex(index)}
-      />
-
-      {/* RSVP Section */}
-      <RSVPSection colors={colors} weddingId="demo" onSubmit={handleRSVP} />
-
-      {/* Guest Wishes */}
-      <GuestWishesSection
-        colors={colors}
-        wishes={demoWishes}
-        weddingId="demo"
-        onSubmit={handleWish}
-      />
-
-      {/* Footer */}
-      <FooterSection
-        colors={colors}
-        brideName={coupleData.bride.name}
-        groomName={coupleData.groom.name}
-        weddingDate={"14 Tháng 2, 2025"}
-      />
-
-      {/* Share Modal */}
-      <ShareModal
-        title={"Đã Sao Chép!"}
-        colorsText={colors.text}
-        colorsPrimary={colors.primary}
-        open={showShareModal}
-        setOpen={setShowShareModal}
-      />
-
-      {/* Music Toggle */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed bottom-6 right-6 z-40 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 bg-white border-[#c4a99b]"
-        onClick={toggleMusic}
-      >
-        {isPlaying ? (
-          <Pause className="w-5 h-5 text-[#c4a99b]" />
-        ) : (
-          <Play className="w-5 h-5 text-[#c4a99b]" />
-        )}
-      </Button>
+          {isPlaying ? (
+            <Pause className="w-5 h-5 text-[#c4a99b]" />
+          ) : (
+            <Play className="w-5 h-5 text-[#c4a99b]" />
+          )}
+        </Button>
       </div>
     </>
   );

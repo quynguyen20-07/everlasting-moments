@@ -7,7 +7,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { QRCodeSVG } from "qrcode.react";
 import { ColorType } from "@/types";
 import { useState } from "react";

@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Guest Hooks - React Query based guest management
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { GuestApi } from '@/lib/api/guest.api';
-import type { UpdateGuestDto, Guest } from '@/types/api.generated';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { UpdateGuestDto, Guest } from "@/types/api.generated";
+import { GuestApi } from "@/lib/api/guest.api";
 
 // Query Keys
 export const guestKeys = {
-  all: ['guests'] as const,
-  lists: () => [...guestKeys.all, 'list'] as const,
+  all: ["guests"] as const,
+  lists: () => [...guestKeys.all, "list"] as const,
   list: (weddingId: string) => [...guestKeys.lists(), weddingId] as const,
-  stats: (weddingId: string) => [...guestKeys.all, 'stats', weddingId] as const,
+  stats: (weddingId: string) => [...guestKeys.all, "stats", weddingId] as const,
 };
 
 // ==================== Queries ====================
@@ -57,10 +58,14 @@ export function useGuestStats(weddingId: string | undefined) {
   // Calculate stats on client side
   const stats = {
     total: guests?.length || 0,
-    confirmed: guests?.filter(g => g.attendanceStatus === 'confirmed').length || 0,
-    pending: guests?.filter(g => g.attendanceStatus === 'pending').length || 0,
-    declined: guests?.filter(g => g.attendanceStatus === 'declined').length || 0,
-    totalGuests: guests?.reduce((acc, g) => acc + (g.numberOfGuests || 0), 0) || 0,
+    confirmed:
+      guests?.filter((g) => g.attendanceStatus === "confirmed").length || 0,
+    pending:
+      guests?.filter((g) => g.attendanceStatus === "pending").length || 0,
+    declined:
+      guests?.filter((g) => g.attendanceStatus === "declined").length || 0,
+    totalGuests:
+      guests?.reduce((acc, g) => acc + (g.numberOfGuests || 0), 0) || 0,
   };
 
   return { data: stats, ...rest };
@@ -73,7 +78,7 @@ export function useGuestStats(weddingId: string | undefined) {
  * NOTE: Swagger POST /api/v1/guests response defined, but requestBody?
  * /api/v1/guests POST -> operationId: GuestController_create.
  * Responses defined. Request Body?
- * Looking at the provided json: 
+ * Looking at the provided json:
  * "/api/v1/guests": { "post": { "operationId": "GuestController_create", "parameters": [], "responses": ... } }
  * NO REQUEST BODY!
  * Again, strictly following Swagger, creates an empty guest?
@@ -97,8 +102,14 @@ export function useUpdateGuest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, guest }: { id: string; guest: UpdateGuestDto; weddingId?: string }) =>
-      GuestApi.update(id, guest),
+    mutationFn: ({
+      id,
+      guest,
+    }: {
+      id: string;
+      guest: UpdateGuestDto;
+      weddingId?: string;
+    }) => GuestApi.update(id, guest),
     onSuccess: (updatedGuest) => {
       queryClient.invalidateQueries({ queryKey: guestKeys.all });
     },
@@ -112,7 +123,8 @@ export function useDeleteGuest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id }: { id: string; weddingId?: string }) => GuestApi.remove(id),
+    mutationFn: ({ id }: { id: string; weddingId?: string }) =>
+      GuestApi.remove(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: guestKeys.all });
     },
@@ -135,7 +147,7 @@ export function useSubmitRSVP() {
       // The UI must provide it.
       // If RSVP was by email/generic, this API doesn't support it without ID.
       // Assuming rsvp contains ID or we treat it as update.
-      // If "rsvp" object has `id`, we use it. 
+      // If "rsvp" object has `id`, we use it.
       // But the type signature in old code was `RSVPInput`.
       // We will assume `rsvp` has `id`.
       if (!rsvp.id) throw new Error("Guest ID required for RSVP");

@@ -1,20 +1,16 @@
-import {
-  ChevronDown,
-  Flower2,
-  Gem,
-  Heart,
-  Share2,
-  Sparkles,
-  Users,
-} from "lucide-react";
-import { ColorScheme, Countdown, CoupleData, TemplateInfo } from "@/types";
+import { ChevronDown, Flower2, Gem, Heart, Share2, Users } from "lucide-react";
+import { Bride, ColorScheme, Countdown, Groom, TemplateInfo } from "@/types";
 import { formatDateStr, formatLunarVietnamese } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
+export type CoupleData = {
+  bride: Bride;
+  groom: Groom;
+};
+
 export type HeroProps = {
   colors: ColorScheme;
-  template: TemplateInfo;
   coupleData: CoupleData;
   countdown: Countdown;
   date: string;
@@ -23,7 +19,6 @@ export type HeroProps = {
 
 const Hero: React.FC<HeroProps> = ({
   colors,
-  template,
   coupleData,
   countdown,
   setShowShareModal,
@@ -71,13 +66,13 @@ const Hero: React.FC<HeroProps> = ({
           {/* Names - Modern Typography */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
             <span className="inline-block" style={{ color: colors?.primary }}>
-              {coupleData.bride.name}
+              {coupleData.bride?.fullName}
             </span>
             <span className="mx-4 md:mx-8" style={{ color: colors?.muted }}>
               &
             </span>
             <span className="inline-block" style={{ color: colors?.primary }}>
-              {coupleData.groom.name}
+              {coupleData.groom?.fullName}
             </span>
           </h1>
 

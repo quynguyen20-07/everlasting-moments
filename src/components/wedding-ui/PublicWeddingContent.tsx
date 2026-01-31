@@ -1,7 +1,14 @@
+import {
+  useGetBride,
+  useGetGroom,
+  useGetWeddingEvents,
+  useGetWeddingStories,
+  useWeddingImages,
+} from "@/hooks";
 import { mapWeddingToCoupleData, getWeddingCountdown } from "@/lib/utils";
 import { Wedding, TemplateType, ColorType, Wish } from "@/types";
+import { useEffect, useMemo } from "react";
 import { Pause, Play } from "lucide-react";
-import { useMemo } from "react";
 
 import GuestWishesSection, { WishFormData } from "./GuestWishesSection";
 import EventsTimelineSection from "./EventsTimelineSection";
@@ -21,9 +28,7 @@ import Hero from "./Hero";
 // Inner component to access useTemplate hook
 interface PublicWeddingContentProps {
   wedding: Wedding;
-  template: TemplateType | undefined;
   colors: ColorType | undefined;
-  images: { id: number; alt: string; src: string }[];
   wishes: Wish[];
   setWishes: React.Dispatch<React.SetStateAction<Wish[]>>;
   showShareModal: boolean;
@@ -37,9 +42,7 @@ interface PublicWeddingContentProps {
 
 function PublicWeddingContent({
   wedding,
-  template,
   colors,
-  images,
   wishes,
   showShareModal,
   setShowShareModal,
@@ -51,22 +54,33 @@ function PublicWeddingContent({
 }: PublicWeddingContentProps) {
   const { layout, theme } = useTemplate();
 
-  const bride = wedding.weddingDetail?.bride;
-  const groom = wedding.weddingDetail?.groom;
-  const mainEvent = wedding.weddingDetail?.weddingEvents?.find(
+  const { data: bride, refetch: isBrideRefetch } = useGetBride(wedding.id);
+  const { data: groom, refetch: isGroomRefetch } = useGetGroom(wedding.id);
+  const { data: events, refetch: isEventRefetch } = useGetWeddingEvents(
+    wedding.id,
+  );
+  const { data: stories, refetch: isStoryRefetch } = useGetWeddingStories(
+    wedding.id,
+  );
+
+  const { data: images, refetch: isImageRefetch } = useWeddingImages(
+    wedding.id,
+  );
+
+  const mainEvent = events?.find(
     (e) => e.type === "ceremony" || e.type === "reception",
   );
 
-  // Gallery images for VietnamTraditionalLayout
-  const galleryImages = useMemo(
-    () =>
-      images.map((img) => ({
-        id: String(img.id),
-        url: img.src,
-        caption: img.alt,
-      })),
-    [images],
-  );
+  useEffect(() => {
+    if (wedding) {
+      isBrideRefetch();
+      isGroomRefetch();
+      isEventRefetch();
+      isStoryRefetch();
+    }
+
+    return () => {};
+  }, [wedding]);
 
   // Render VietnamTraditionalLayout if layout is vietnam-traditional
   if (layout.id === "vietnam-traditional") {
@@ -90,9 +104,9 @@ function PublicWeddingContent({
           bride={bride}
           groom={groom}
           weddingDate={mainEvent?.eventDate || wedding.weddingDate}
-          events={wedding.weddingDetail?.weddingEvents || []}
-          loveStories={wedding.weddingDetail?.loveStories || []}
-          galleryImages={galleryImages}
+          events={events || []}
+          loveStories={stories || []}
+          galleryImages={images}
           onImageClick={handleGalleryClick}
         />
 
@@ -118,7 +132,6 @@ function PublicWeddingContent({
     );
   }
 
-  // Default layout rendering
   return (
     <>
       <WeddingSEO
@@ -139,23 +152,18 @@ function PublicWeddingContent({
         {/* Hero Section */}
         <Hero
           colors={colors}
-          template={template}
-          coupleData={mapWeddingToCoupleData(wedding)}
-          countdown={getWeddingCountdown(wedding.weddingDate)}
-          date={"2026-01-08T10:00:00Z"}
+          coupleData={{ bride: bride, groom: groom }}
+          countdown={getWeddingCountdown(
+            mainEvent?.eventDate || wedding.weddingDate,
+          )}
+          date={mainEvent?.eventDate || wedding.weddingDate}
           setShowShareModal={() => setShowShareModal(true)}
         />
         {/* Love Story Section */}
-        <LoveStorySection
-          colors={colors}
-          stories={mapWeddingToCoupleData(wedding).stories}
-        />
+        <LoveStorySection colors={colors} stories={stories} />
 
         {/* Events Timeline */}
-        <EventsTimelineSection
-          colors={colors}
-          events={mapWeddingToCoupleData(wedding).events}
-        />
+        <EventsTimelineSection colors={colors} events={events} />
 
         {/* Gallery */}
         <GallerySection

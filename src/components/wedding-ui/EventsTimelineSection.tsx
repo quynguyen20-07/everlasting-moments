@@ -1,11 +1,11 @@
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { formatDateFromTimestamp } from "@/lib/utils";
-import { ColorScheme, IWeddingEvent } from "@/types";
+import { ColorScheme, WeddingEvent } from "@/types";
 import { motion } from "framer-motion";
 
 export type EventsTimelineSectionProps = {
   colors: ColorScheme;
-  events: IWeddingEvent[];
+  events: WeddingEvent[];
 };
 
 const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({
@@ -56,77 +56,79 @@ const EventsTimelineSection: React.FC<EventsTimelineSectionProps> = ({
             }}
           />
 
-          {events.map((event, index) => (
-            <motion.div
-              key={event.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-              className={`relative mb-12 ${
-                index % 2 === 0
-                  ? "md:pr-1/2 md:pl-8 md:text-right"
-                  : "md:pl-1/2 md:pr-8 md:text-left"
-              }`}
-            >
-              {/* Timeline Dot */}
-              <div
-                className="absolute left-[1px] top-1/2 w-4 h-4 rounded-2xl z-10 shadow-lg"
-                style={{ background: colors?.primary }}
-              />
-
-              <div
-                className={`ml-12 md:ml-0 ${
-                  index % 2 === 0 ? "md:mr-8" : "md:ml-8"
-                }`}
-              >
-                <div
-                  className="p-6 rounded-2xl backdrop-blur-md border shadow-lg hover:shadow-xl transition-all duration-300"
-                  style={{
-                    background: `linear-gradient(135deg, white 0%, ${colors?.accent}10 100%)`,
-                    borderColor: `${colors?.primary}20`,
-                  }}
+          {Array.isArray(events)
+            ? events.map((event, index) => (
+                <motion.div
+                  key={event.title}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  className={`relative mb-12 ${
+                    index % 2 === 0
+                      ? "md:pr-1/2 md:pl-8 md:text-right"
+                      : "md:pl-1/2 md:pr-8 md:text-left"
+                  }`}
                 >
-                  <div className="flex items-start gap-4">
+                  {/* Timeline Dot */}
+                  <div
+                    className="absolute left-[1px] top-1/2 w-4 h-4 rounded-2xl z-10 shadow-lg"
+                    style={{ background: colors?.primary }}
+                  />
+
+                  <div
+                    className={`ml-12 md:ml-0 ${
+                      index % 2 === 0 ? "md:mr-8" : "md:ml-8"
+                    }`}
+                  >
                     <div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-md"
-                      style={{ background: `${colors?.primary}10` }}
+                      className="p-6 rounded-2xl backdrop-blur-md border shadow-lg hover:shadow-xl transition-all duration-300"
+                      style={{
+                        background: `linear-gradient(135deg, white 0%, ${colors?.accent}10 100%)`,
+                        borderColor: `${colors?.primary}20`,
+                      }}
                     >
-                      <Clock
-                        className="w-6 h-6"
-                        style={{ color: colors?.primary }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3
-                        className="font-display text-xl font-semibold mb-2"
-                        style={{ color: colors?.text }}
-                      >
-                        {event.title}
-                      </h3>
-                      <p
-                        className="font-medium mb-2"
-                        style={{ color: colors?.primary }}
-                      >
-                        ⏰ {event.startTime}-{event.endTime} • 📅
-                        {formatDateFromTimestamp(event.eventDate)}
-                      </p>
-                      <p className="mb-2" style={{ color: colors?.muted }}>
-                        {event.description}
-                      </p>
-                      <p
-                        className="text-sm flex items-start gap-2"
-                        style={{ color: colors?.muted }}
-                      >
-                        <MapPin className="w-4 h-4 shrink-0 mt-1" />
-                        {event.address}
-                      </p>
+                      <div className="flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-md"
+                          style={{ background: `${colors?.primary}10` }}
+                        >
+                          <Clock
+                            className="w-6 h-6"
+                            style={{ color: colors?.primary }}
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h3
+                            className="font-display text-xl font-semibold mb-2"
+                            style={{ color: colors?.text }}
+                          >
+                            {event.title}
+                          </h3>
+                          <p
+                            className="font-medium mb-2"
+                            style={{ color: colors?.primary }}
+                          >
+                            ⏰ {event.startTime}-{event.endTime} • 📅
+                            {formatDateFromTimestamp(event.eventDate)}
+                          </p>
+                          <p className="mb-2" style={{ color: colors?.muted }}>
+                            {event.description}
+                          </p>
+                          <p
+                            className="text-sm flex items-start gap-2"
+                            style={{ color: colors?.muted }}
+                          >
+                            <MapPin className="w-4 h-4 shrink-0 mt-1" />
+                            {event.address}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </motion.div>
+              ))
+            : []}
         </div>
       </div>
     </section>

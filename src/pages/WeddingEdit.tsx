@@ -19,11 +19,6 @@ import {
   useWedding,
 } from "@/hooks";
 import {
-  useWeddingImages,
-  useReplaceWeddingImages,
-} from "@/hooks/useImages";
-import { Image as ImageType } from "@/types/api.generated";
-import {
   Form,
   FormControl,
   FormField,
@@ -31,17 +26,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useWeddingImages, useReplaceWeddingImages } from "@/hooks/useImages";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WeddingEventManager } from "@/components/wedding/WeddingEventManager";
 import { LoveStoryManager } from "@/components/wedding/LoveStoryManager";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { FileUpload } from "@/components/upload/FileUpload";
+import { Image as ImageType } from "@/types/api.generated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
