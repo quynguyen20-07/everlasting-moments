@@ -10,10 +10,15 @@ export function formatDateVN(
 ): string {
   if (!date) return fallback;
 
-  const timestamp = typeof date === "string" ? Number(date) : date;
-  if (Number.isNaN(timestamp)) return fallback;
+  // Handle both timestamp numbers and ISO date strings
+  const parsedDate = typeof date === "string"
+    ? new Date(date)
+    : new Date(date);
 
-  return new Date(timestamp).toLocaleDateString("vi-VN", {
+  // Check if date is valid
+  if (isNaN(parsedDate.getTime())) return fallback;
+
+  return parsedDate.toLocaleDateString("vi-VN", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -133,8 +138,8 @@ export const getWeddingCountdown = (
     weddingDate instanceof Date
       ? weddingDate.getTime()
       : typeof weddingDate === "string"
-      ? Number(weddingDate)
-      : weddingDate;
+        ? Number(weddingDate)
+        : weddingDate;
 
   const now = Date.now();
   const diff = target - now;

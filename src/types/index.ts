@@ -10,4 +10,5 @@ export interface WeddingWithDetails extends Wedding {
 }
 
 export * from "./invitation";
+export * from "./wedding";
 export type { MediaInput, GalleryLayout, GallerySettings } from "./media";

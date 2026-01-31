@@ -1,15 +1,15 @@
 import {
   ArrowLeft,
-  Save,
+  BookHeart,
+  Calendar,
+  Check,
   Eye,
   Globe,
   GlobeLock,
   Heart,
-  Calendar,
   Image,
   Loader2,
-  Check,
-  BookHeart,
+  Save,
 } from "lucide-react";
 import {
   useUpdateBride,
@@ -29,16 +29,15 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WeddingEventManager } from "@/components/wedding/WeddingEventManager";
 import { LoveStoryManager } from "@/components/wedding/LoveStoryManager";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import MediaManager from "@/components/wedding/MediaManager";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { motion, AnimatePresence } from "framer-motion";
+import { FileUpload } from "@/components/upload/FileUpload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
@@ -68,8 +67,6 @@ const WeddingEdit = () => {
     isFetching: loading,
     refetch: fetchWedding,
   } = useWedding(id);
-
-  console.log("Current Wedding:", currentWedding);
 
   const { mutateAsync: updateWedding } = useUpdateWedding();
   const { mutateAsync: updateBride } = useUpdateBride();
@@ -555,7 +552,37 @@ const WeddingEdit = () => {
 
               <TabsContent value="gallery" className="mt-0">
                 <div className="bg-white rounded-[20px] shadow-sm border border-[#E8DDD5] p-6 sm:p-8">
-                  <MediaManager weddingId={currentWedding.id} />
+                  <div className="space-y-4">
+                    <div>
+                      <h2 className="font-display text-lg font-semibold text-[#5D4A3C] flex items-center gap-2 mb-1">
+                        <Image className="w-5 h-5 text-[#C4A484]" />
+                        Thư viện ảnh
+                      </h2>
+                      <p className="text-sm text-[#8B7355]">
+                        Tải lên và quản lý ảnh cho thiệp cưới của bạn
+                      </p>
+                    </div>
+
+                    <FileUpload
+                      mode="multiple"
+                      accept="image/*"
+                      maxSizeMB={10}
+                      label="Tải ảnh lên"
+                      onUploadSuccess={(urls) => {
+                        console.log("Image", urls);
+                        toast({
+                          title: "Đã tải lên",
+                          description: `${urls.length} ảnh đã được tải lên thành công`,
+                        });
+                      }}
+                      onDelete={(url) => {
+                        toast({
+                          title: "Đã xóa",
+                          description: "Ảnh đã được xóa khỏi thư viện",
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
