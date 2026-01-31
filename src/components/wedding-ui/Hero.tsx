@@ -128,7 +128,7 @@ const Hero: React.FC<HeroProps> = ({
 
               {/* Image */}
               <motion.img
-                src="/images/co-dau.webp"
+                src={coupleData.bride?.avatar || "/heart.svg"}
                 alt="Cô dâu"
                 className="absolute inset-0 w-full h-full object-cover z-10"
                 animate={{ y: [0, -6, 0] }}
@@ -187,7 +187,7 @@ const Hero: React.FC<HeroProps> = ({
 
               {/* Image */}
               <motion.img
-                src="/images/chu-re.webp"
+                src={coupleData.groom?.avatar || "/heart.svg"}
                 alt="Chú Rể"
                 className="absolute inset-0 w-full h-full object-cover z-10"
                 animate={{ y: [0, 6, 0] }}

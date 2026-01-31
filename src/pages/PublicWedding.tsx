@@ -4,7 +4,7 @@ import {
   mapWeddingToCoupleData,
   TEMPLATES_LIST,
 } from "@/lib/utils";
-import PublicWeddingContent from "@/components/wedding-ui/PublicWeddingContent";
+import PublicWeddingContent from "@/components/templates/template-one/PublicWeddingContent";
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";

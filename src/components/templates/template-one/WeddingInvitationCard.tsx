@@ -1,0 +1,97 @@
+import { motion } from "framer-motion";
+
+type InvitationCardProps = {
+  groomName: string;
+  brideName: string;
+  dateText: string;
+  timeText: string;
+  location: string;
+  address: string;
+};
+
+const WeddingInvitationCard = ({
+  groomName,
+  brideName,
+  dateText,
+  timeText,
+  location,
+  address,
+}: InvitationCardProps) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.9, ease: "easeOut" }}
+      className="
+        relative
+        w-full
+        min-h-[525px]
+        bg-white
+        border-2 border-black
+        p-6
+        shadow-lg
+        flex
+        items-center
+        justify-center
+      "
+    >
+      {/* Inner border */}
+      <div className="w-full h-full border border-black/70 px-6 py-10 text-center flex flex-col justify-between">
+        {/* Header */}
+        <p className="font-['Aleo'] text-sm tracking-wide mb-6">
+          TIỆC MỪNG LỄ THÀNH HÔN
+        </p>
+
+        {/* Names */}
+        <div>
+          <h1 className="font-['Playfair_Display'] text-3xl font-semibold tracking-wide">
+            {groomName?.toUpperCase()}
+          </h1>
+
+          <p className="font-['Great_Vibes'] text-2xl my-2">and</p>
+
+          <h1 className="font-['Playfair_Display'] text-3xl font-semibold tracking-wide mb-6">
+            {brideName?.toUpperCase()}
+          </h1>
+        </div>
+
+        {/* Time */}
+        <div>
+          <p className="font-['Aleo'] text-sm mb-2">ĐƯỢC TỔ CHỨC VÀO LÚC</p>
+          <p className="font-['Aleo'] text-sm font-medium">
+            {timeText} | {dateText}
+          </p>
+        </div>
+
+        {/* Location */}
+        <div className="mt-6">
+          <h2 className="font-['Playfair_Display'] text-xl font-semibold mb-2">
+            {location.toUpperCase()}
+          </h2>
+          <p className="font-['Aleo'] text-xs leading-relaxed mb-6">
+            {address}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div>
+          <p className="font-['Great_Vibes'] text-sm italic mb-6">
+            Sự hiện diện của Quý khách là niềm vinh hạnh cho gia đình chúng tôi!
+          </p>
+
+          <div className="flex justify-center">
+            <svg width="120" height="20" viewBox="0 0 120 20" fill="none">
+              <path
+                d="M5 10 C30 0, 90 20, 115 10"
+                stroke="black"
+                strokeWidth="1"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default WeddingInvitationCard;
