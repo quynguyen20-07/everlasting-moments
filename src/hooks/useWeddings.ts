@@ -294,7 +294,7 @@ export function useAddWeddingEvent() {
 export function useUpdateWeddingEvent() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, event }: { id: string; event: WeddingEventInput }) => EventApi.update(id, event),
+    mutationFn: ({ weddingId, eventId, event }: { weddingId: string; eventId: string; event: WeddingEventInput }) => EventApi.update(eventId, event),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }
@@ -302,7 +302,7 @@ export function useUpdateWeddingEvent() {
 export function useDeleteWeddingEvent() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: EventApi.remove,
+    mutationFn: ({ weddingId, eventId }: { weddingId: string; eventId: string }) => EventApi.remove(eventId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: weddingKeys.all }),
   });
 }

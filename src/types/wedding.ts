@@ -5,10 +5,18 @@ export type WeddingLanguage = "vi" | "en";
 
 // User is in api.generated
 // AuthState is frontend specific, keep it.
+export interface IUserPayload {
+  id: string;
+  email: string;
+  fullName: string;
+  role: string;
+  isActive: boolean;
+  createdAt: string | Date;
+}
 export interface AuthState {
-  // User type might refer to the one in api.generated if imported, but here it's defining its own interface? 
+  // User type might refer to the one in api.generated if imported, but here it's defining its own interface?
   // We should import User from api.generated or define it locally if different structure.
-  // The existing User interface had phone, avatar etc. 
+  // The existing User interface had phone, avatar etc.
   // api.generated User (UpdateUserDto & {id}) has fullName, email, password, role, isActive.
   // Missing: phone, avatar, lastLogin.
   // If the backend assumes User has avatar, but Swagger doesn't showing it, then Swagger is incomplete or we have mismatch.
@@ -16,7 +24,7 @@ export interface AuthState {
   // So I should use the API type. I'll import User from api.generated.
   // But wait, if I import it, I can't name this file's export "User".
   // I will just use `any` or generic for AuthState for now to avoid circular dependency or import User from api.generated.
-  user: any | null;
+  user: IUserPayload | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -28,6 +36,7 @@ export interface ILoveStory {
   content: string;
   storyDate?: string;
   imageUrl?: string;
+  weddingId?: string;
 }
 
 export interface Person {
@@ -132,7 +141,7 @@ export interface WeddingDetail {
   weddingId: string;
   bride: Bride;
   groom: Groom;
-  loveStories: LoveStory[];
+  loveStories: ILoveStory[];
   weddingEvents: WeddingEvent[];
 }
 
@@ -140,7 +149,6 @@ export type WeddingWithDetails = Wedding & {
   weddingDetail?: WeddingDetail;
   themeSettings?: ThemeSettings;
 };
-
 
 export interface WeddingFormData {
   name: string;
