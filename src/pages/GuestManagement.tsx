@@ -9,7 +9,7 @@ import { useGuests, useGuestStats, useAddGuest, useUpdateGuest, useDeleteGuest }
 import { useWedding } from '@/hooks/useWeddings';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useToast } from '@/hooks/use-toast';
-import type { Guest, GuestInput } from '@/types/graphql';
+import type { Guest, UpdateGuestDto as GuestInput } from '@/types/api.generated';
 
 export default function GuestManagement() {
   const { weddingId } = useParams<{ weddingId: string }>();
@@ -34,7 +34,11 @@ export default function GuestManagement() {
         await updateGuestMutation.mutateAsync({ id: editGuest.id, guest: data, weddingId });
         toast({ title: 'Đã cập nhật', description: 'Thông tin khách mời đã được cập nhật.' });
       } else {
-        await addGuestMutation.mutateAsync({ weddingId, guest: data });
+        // API requires creating empty guest first then updating
+        const newGuest = await addGuestMutation.mutateAsync();
+        if (newGuest?.id) {
+          await updateGuestMutation.mutateAsync({ id: newGuest.id, guest: data, weddingId });
+        }
         toast({ title: 'Đã thêm', description: 'Khách mời mới đã được thêm.' });
       }
       setEditGuest(null);

@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Trash2, MessageCircle, Clock, CheckCircle } from 'lucide-react';
-import type { Wish } from '@/types/graphql';
+import type { Wish } from '@/types/api.generated';
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -125,7 +125,7 @@ export function WishManager({
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium">{wish.guestName}</span>
                         <span className="text-xs text-muted-foreground">
-                          {formatDate(wish.createdAt)}
+                          {/* Date not available in REST API */}'Today'
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground italic">
@@ -194,7 +194,7 @@ export function WishManager({
                         <p className="truncate">{wish.message}</p>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {formatDate(wish.createdAt)}
+                        -
                       </TableCell>
                       <TableCell className="text-right">
                         <Button

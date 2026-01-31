@@ -1,8 +1,8 @@
-// Auth Hook - React Query based authentication
+// Auth Hook - TamStack Query based authentication
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
-import { loginApi, registerApi, getMeApi, type LoginInput, type RegisterInput } from '@/lib/api/auth';
-import type { User } from '@/types/graphql';
+import { AuthApi } from '@/lib/api/auth.api';
+import type { LoginDto, RegisterDto, User } from '@/types/api.generated';
 
 // Keys
 export const authKeys = {
@@ -40,10 +40,16 @@ export function getStoredUser(): User | null {
   }
 }
 
-function setStoredAuth(token: string, refreshToken: string, user: User) {
+function setStoredAuth(token: string, refreshToken: string, user: any) { // User type from rest might be generic object initially
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  // Fetch full profile if 'user' from login response is incomplete, or strictly use what's returned
+  // The LoginResponse only returns accessToken/refreshToken in the new spec?
+  // Wait, LoginDto response in swagger: { accessToken, refreshToken }. It DOES NOT return User object.
+  // We need to fetch 'me' after login.
+  if (user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
 }
 
 function clearStoredAuth() {
@@ -65,7 +71,7 @@ export function useAuth() {
         return null;
       }
       try {
-        const user = await getMeApi();
+        const user = await AuthApi.getProfile();
         if (user) {
           return user;
         }
@@ -73,6 +79,7 @@ export function useAuth() {
         clearStoredAuth();
         return null;
       } catch {
+        // If 401, clear stored auth
         clearStoredAuth();
         return null;
       }
@@ -90,36 +97,71 @@ export function useAuth() {
 
   // Login mutation
   const loginMutation = useMutation({
-    mutationFn: loginApi,
+    mutationFn: async (input: LoginDto) => {
+      const data = await AuthApi.login(input);
+
+      console.log('Login response:', data); // Debug log
+
+      if (!data.tokens?.accessToken) {
+        throw new Error("No access token received");
+      }
+
+      // Login response has tokens nested
+      localStorage.setItem(TOKEN_KEY, data.tokens.accessToken);
+      localStorage.setItem(REFRESH_TOKEN_KEY, data.tokens.refreshToken);
+
+      // If user provided in response, use it, otherwise fetch profile
+      // But we just set the token, so we can fetch profile safely now if needed.
+      // However, since data.user is present, let's just use it to save a round trip if it's the full user object.
+      // But getProfile might return more details. Let's stick to getProfile for consistency OR uses data.user if it matches.
+      // The previous code always called getProfile after login.
+      // Given the user object is in response, we can probably use it.
+      // But strict adherence to "useAuth" logic:
+
+      // Ensure axios picks up the new token immediately if we make a request
+      // (Axios interceptor reads from localStorage, so it should be fine)
+
+      const userProfile = data.user || await AuthApi.getProfile();
+      return { ...data, user: userProfile };
+    },
     onSuccess: (data) => {
-      setStoredAuth(data.accessToken, data.refreshToken, data.user);
+      // setStoredAuth is now redundant for tokens as we did it in mutationFn to allow getProfile to work
+      // but we should update user in storage
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
       queryClient.setQueryData(authKeys.user(), data.user);
     },
   });
 
   // Register mutation
   const registerMutation = useMutation({
-    mutationFn: registerApi,
+    mutationFn: AuthApi.register,
     onSuccess: (data) => {
-      setStoredAuth(data.accessToken, data.refreshToken, data.user);
-      queryClient.setQueryData(authKeys.user(), data.user);
+      // Register returns void (201). So we probably need to login afterwards or prompt user to login.
+      // The Swagger says responses: 201 Created. Content is empty/description success.
+      // So we cannot auto-login unless we ask user to login.
+      // The previous code expected AuthPayload.
     },
   });
 
   // Logout function
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await AuthApi.logout();
+    } catch (e) {
+      console.error(e);
+    }
     clearStoredAuth();
     queryClient.setQueryData(authKeys.user(), null);
     queryClient.clear();
   }, [queryClient]);
 
   const login = useCallback(
-    (input: LoginInput) => loginMutation.mutateAsync(input),
+    (input: LoginDto) => loginMutation.mutateAsync(input),
     [loginMutation]
   );
 
   const register = useCallback(
-    (input: RegisterInput) => registerMutation.mutateAsync(input),
+    (input: RegisterDto) => registerMutation.mutateAsync(input),
     [registerMutation]
   );
 

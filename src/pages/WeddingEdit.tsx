@@ -117,9 +117,21 @@ const WeddingEdit = () => {
 
     setIsSaving(true);
     try {
+      const brideId = currentWedding.weddingDetail?.bride?.id;
+      const groomId = currentWedding.weddingDetail?.groom?.id;
+
+      if (!brideId || !groomId) {
+        toast({
+          title: "Lỗi",
+          description: "Không tìm thấy thông tin cô dâu/chú rể.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       await Promise.all([
         updateBride({
-          weddingId: id,
+          id: brideId,
           bride: {
             fullName: data.bride.fullName,
             shortBio: data.bride.shortBio,
@@ -127,7 +139,7 @@ const WeddingEdit = () => {
           },
         }),
         updateGroom({
-          weddingId: id,
+          id: groomId,
           groom: {
             fullName: data.groom.fullName,
             shortBio: data.groom.shortBio,

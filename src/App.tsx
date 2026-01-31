@@ -4,8 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PageLoading } from "@/components/LoadingSpinner";
-import { setLogoutCallback } from "@/lib/graphql/client";
-import { setApiLogoutCallback } from "@/lib/api/client";
 import { DashboardLayout } from "@/layouts/MainLayout";
 import GuestManagement from "@/pages/GuestManagement";
 import WishManagement from "@/pages/WishManagement";
@@ -39,11 +37,9 @@ const queryClient = new QueryClient({
 const AppContent = () => {
   const { isLoading, logout } = useAuth();
 
-  // Set up logout callbacks for API clients
-  useEffect(() => {
-    setLogoutCallback(logout);
-    setApiLogoutCallback(logout);
-  }, [logout]);
+  // Check auth on mount
+  // usage of useAuth checks it internally
+
 
   // Show loading while checking auth status
   if (isLoading) {

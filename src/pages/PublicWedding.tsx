@@ -10,14 +10,14 @@ import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
-import { getWeddingBySlugApi } from "@/lib/api/wedding";
-import { ColorType, TemplateType, Wish } from "@/types";
+import { WeddingApi } from "@/lib/api/wedding.api";
+import { ColorType, TemplateType } from "@/types";
 import { TemplateProvider } from "@/components/public";
 import { useEffect, useMemo, useState } from "react";
-import { submitRSVPApi } from "@/lib/api/guest";
+import { GuestApi } from "@/lib/api/guest.api";
 import { useToast } from "@/hooks/use-toast";
-import { addWishApi } from "@/lib/api/wish";
-import type { Wedding } from "@/types";
+import { WishApi } from "@/lib/api/wish.api";
+import type { WeddingWithDetails as Wedding, Wish } from "@/types";
 import useSound from "use-sound";
 
 const templatesData = Object.fromEntries(
@@ -84,11 +84,19 @@ export default function PublicWedding() {
       }
 
       try {
-        const data = await getWeddingBySlugApi(slug);
+        const data = await WeddingApi.findBySlug(slug);
         if (data) {
           setWedding(data);
-          // Initialize wishes from mock data (will be replaced with API call)
-          setWishes(mapWeddingToCoupleData(data).wishes || []);
+          // Load wishes using WishApi
+          try {
+            const allWishes = await WishApi.findAll();
+            // Client-side filter for now
+            const weddingWishes = allWishes.filter(w => w.weddingId === data.id && w.isApproved);
+            setWishes(weddingWishes);
+          } catch (e) {
+            console.error("Failed to load wishes", e);
+            setWishes([]);
+          }
         } else {
           setError("Thiệp mời không tồn tại hoặc chưa được công khai");
         }
@@ -128,11 +136,11 @@ export default function PublicWedding() {
     if (wedding) {
       const template =
         templatesData[
-          wedding.themeSettings.template as keyof typeof templatesData
+        wedding.themeSettings.template as keyof typeof templatesData
         ];
       const colors =
         COLOR_SCHEMES[
-          wedding.themeSettings.template as keyof typeof COLOR_SCHEMES
+        wedding.themeSettings.template as keyof typeof COLOR_SCHEMES
         ] || DEFAULT_COLORS;
 
       setTemplate(template);
@@ -165,15 +173,20 @@ export default function PublicWedding() {
     }
 
     try {
-      await submitRSVPApi(wedding.id, {
-        fullName: data.fullName,
-        email: data.email || undefined,
-        phone: data.phone || undefined,
-        numberOfGuests: data.numberOfGuests,
-        attendanceStatus: data.attendanceStatus,
-        dietaryRestrictions: data.dietaryRestrictions || undefined,
-        message: data.message || undefined,
-      });
+      // Create empty guest first
+      const newGuest = await GuestApi.create();
+      if (newGuest?.id) {
+        await GuestApi.update(newGuest.id, {
+          weddingId: wedding.id,
+          fullName: data.fullName,
+          email: data.email || undefined,
+          phone: data.phone || undefined,
+          numberOfGuests: data.numberOfGuests,
+          attendanceStatus: data.attendanceStatus,
+          // dietaryRestrictions: data.dietaryRestrictions || undefined, // Removed from API
+          // message: data.message || undefined, // Removed from API
+        });
+      }
 
       toast({
         title: "Đã Xác Nhận!",
@@ -195,19 +208,24 @@ export default function PublicWedding() {
     }
 
     try {
-      const newWish = await addWishApi(wedding.id, {
-        guestName: data.guestName,
-        message: data.message,
-      });
+      const tempWish = await WishApi.create();
+      if (tempWish?.id) {
+        const newWish = await WishApi.update(tempWish.id, {
+          weddingId: wedding.id,
+          guestName: data.guestName,
+          message: data.message,
+          isApproved: false // Default pending
+        });
 
-      // Add to local state (pending approval)
-      setWishes((prev) => [...prev, newWish]);
+        // Add to local state (pending approval)
+        setWishes((prev) => [...prev, newWish]);
 
-      toast({
-        title: "Đã Gửi Lời Chúc!",
-        description:
-          "Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.",
-      });
+        toast({
+          title: "Đã Gửi Lời Chúc!",
+          description:
+            "Cảm ơn bạn! Lời chúc sẽ được hiển thị sau khi được duyệt.",
+        });
+      }
     } catch (error) {
       console.error("Wish submission error:", error);
       throw new Error("Không thể gửi lời chúc. Vui lòng thử lại sau.");

@@ -37,7 +37,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
 
@@ -56,12 +56,14 @@ const Auth = () => {
           title: "Tạo tài khoản thành công!",
           description: "Đang chuyển hướng...",
         });
+        navigate("/");
       } else {
         await login({ email: formData.email, password: formData.password });
         toast({
           title: "Đăng nhập thành công!",
           description: "Chào mừng bạn trở lại!",
         });
+        navigate("/");
       }
     } catch (error) {
       toast({
