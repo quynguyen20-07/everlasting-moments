@@ -30,7 +30,6 @@ interface PublicWeddingContentProps {
   setShowShareModal: (open: boolean) => void;
   isPlaying: boolean;
   toggleMusic: () => void;
-  handleGalleryClick: (index: number) => void;
 }
 
 function PublicWeddingContent({
@@ -38,7 +37,6 @@ function PublicWeddingContent({
   colors,
   isPlaying,
   toggleMusic,
-  handleGalleryClick,
 }: PublicWeddingContentProps) {
   const { data: bride, refetch: isBrideRefetch } = useGetBride(wedding.id);
   const { data: groom, refetch: isGroomRefetch } = useGetGroom(wedding.id);
@@ -98,11 +96,7 @@ function PublicWeddingContent({
         />
 
         {/* Gallery */}
-        <GallerySection
-          colors={colors}
-          images={images}
-          onImageClick={(index) => handleGalleryClick(index)}
-        />
+        <GallerySection colors={colors} images={images} />
 
         <WeddingGiftCard
           image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769885240/Vowly/wrqvppxdh0ytxborfptl.png"
@@ -149,17 +143,19 @@ function PublicWeddingContent({
             id: "giang",
             role: "bride",
             bankName: "Vietcomback",
-            accountNumber: "0201000703255",
+            accountNumber: "3883868820",
             accountHolder: "Lê Thị Huyền Giang",
-            qrCodeImg: "",
+            qrCodeImg:
+              "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769929670/Vowly/mvn8gaaezhwyblwa3o5i.jpg",
           }}
           groomAcc={{
             id: "duc",
             role: "bride",
             bankName: "Vietcomback",
-            accountNumber: "0201000876543",
+            accountNumber: "3883868898",
             accountHolder: "Lê Minh Đức",
-            qrCodeImg: "",
+            qrCodeImg:
+              "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769929698/Vowly/kngetdht63wd3iw8mkpq.jpg",
           }}
         />
       </main>

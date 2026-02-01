@@ -207,9 +207,9 @@ export default function PublicWedding() {
         setShowShareModal={setShowShareModal}
         isPlaying={playing}
         toggleMusic={() => (playing ? stop() : play())}
-        handleRSVP={handleRSVP}
-        handleWish={handleWish}
-        handleGalleryClick={handleGalleryClick}
+        // handleRSVP={handleRSVP}
+        // handleWish={handleWish}
+        // handleGalleryClick={handleGalleryClick}
       />
     </TemplateProvider>
   );
