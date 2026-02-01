@@ -142,7 +142,7 @@ function PublicWeddingContent({
           brideAcc={{
             id: "giang",
             role: "bride",
-            bankName: "Vietcomback",
+            bankName: "Techcombank",
             accountNumber: "3883868820",
             accountHolder: "Lê Thị Huyền Giang",
             qrCodeImg:
@@ -151,7 +151,7 @@ function PublicWeddingContent({
           groomAcc={{
             id: "duc",
             role: "bride",
-            bankName: "Vietcomback",
+            bankName: "Techcombank",
             accountNumber: "3883868898",
             accountHolder: "Lê Minh Đức",
             qrCodeImg:
