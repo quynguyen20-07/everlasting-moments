@@ -13,7 +13,6 @@ import { Pause, Play } from "lucide-react";
 import GuestWishesSection, { WishFormData } from "./GuestWishesSection";
 import EventsTimelineSection from "./EventsTimelineSection";
 import RSVPSection, { RSVPFormData } from "./RSVPSection";
-import { VietnamTraditionalLayout } from "../templates";
 import BankAccountSection from "./BankAccountSection";
 import LoveStorySection from "./LoveStorySection";
 import ShareModal from "../wedding/ShareModal";
@@ -98,17 +97,6 @@ function PublicWeddingContent({
         />
 
         <FallingHearts colors={colors} />
-
-        <VietnamTraditionalLayout
-          theme={theme}
-          bride={bride}
-          groom={groom}
-          weddingDate={mainEvent?.eventDate || wedding.weddingDate}
-          events={events || []}
-          loveStories={stories || []}
-          galleryImages={images}
-          onImageClick={handleGalleryClick}
-        />
 
         {/* Music Toggle */}
         <Button

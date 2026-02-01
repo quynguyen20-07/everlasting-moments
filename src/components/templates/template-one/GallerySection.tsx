@@ -48,7 +48,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ colors, images }) => {
 
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
-          {images.map((image, index) => (
+          {images?.map((image, index) => (
             <motion.div
               key={image.id}
               initial={{ opacity: 0, y: 30 }}
