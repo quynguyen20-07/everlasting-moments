@@ -8,7 +8,7 @@ import PublicWeddingContent from "@/components/templates/template-one/PublicWedd
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";
-import { useGetWeddingSetting, usePublicWedding } from "@/hooks";
+import { useGetBride, useGetGroom, useGetWeddingSetting, usePublicWedding } from "@/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { TemplateProvider } from "@/components/public";
@@ -19,6 +19,7 @@ import { WishApi } from "@/lib/api/wish.api";
 import { useToast } from "@/hooks/useToast";
 import type { Wish } from "@/types";
 import useSound from "use-sound";
+import { Helmet } from "react-helmet-async";
 
 const templatesData = Object.fromEntries(
   TEMPLATES_LIST.map((t) => [
@@ -35,8 +36,12 @@ export default function PublicWedding() {
   const { toast } = useToast();
   const { slug } = useParams<{ slug: string }>();
 
+
+
   const { data: publicWedding, isFetching: isLoading } = usePublicWedding(slug);
   const { data: themeSettings } = useGetWeddingSetting(publicWedding?.id);
+    const { data: bride, refetch: isBrideRefetch } = useGetBride(publicWedding?.id);
+    const { data: groom, refetch: isGroomRefetch } = useGetGroom(publicWedding?.id);
 
   const [playing, setPlaying] = useState(false);
 
@@ -196,21 +201,46 @@ export default function PublicWedding() {
     setCurrentImageIndex(index);
   };
 
+    
+  const title = bride && groom 
+    ? `${bride?.fullName} & ${groom?.fullName}`
+    : "Thiệp cưới";
+
+   
+  const description = publicWedding && groom && bride 
+    ? `Trân trọng kính mời bạn tham dự lễ cưới của ${bride?.fullName} và ${groom?.fullName} vào ${publicWedding.weddingDate}`
+    : "Thiệp cưới online";
+
+  const ogImage =  "/images/template-one/banner.jpg";
+
   return (
-    <TemplateProvider themeSettings={themeSettings}>
-      <PublicWeddingContent
-        wedding={publicWedding}
-        colors={colors}
-        wishes={wishes}
-        setWishes={setWishes}
-        showShareModal={showShareModal}
-        setShowShareModal={setShowShareModal}
-        isPlaying={playing}
-        toggleMusic={() => (playing ? stop() : play())}
+    <>
+      <Helmet>
+        <title>{title}</title>
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+
+        {/* Optional nhưng nên có */}
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+      <TemplateProvider themeSettings={themeSettings}>
+        <PublicWeddingContent
+          wedding={publicWedding}
+          colors={colors}
+          wishes={wishes}
+          setWishes={setWishes}
+          showShareModal={showShareModal}
+          setShowShareModal={setShowShareModal}
+          isPlaying={playing}
+          toggleMusic={() => (playing ? stop() : play())}
         // handleRSVP={handleRSVP}
         // handleWish={handleWish}
         // handleGalleryClick={handleGalleryClick}
-      />
-    </TemplateProvider>
+        />
+      </TemplateProvider></>
   );
 }
