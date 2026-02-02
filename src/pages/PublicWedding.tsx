@@ -217,7 +217,7 @@ export default function PublicWedding() {
       : "Thiệp cưới online";
 
   const ogImage =
-    "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1770029543/Vowly/ojjkspr5xl53kmavd9wo.jpg";
+    "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1770031965/Vowly/yyj3tebxq1gi1snebbfu.jpg";
 
   return (
     <>
