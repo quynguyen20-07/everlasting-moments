@@ -40,7 +40,6 @@ const AppContent = () => {
   // Check auth on mount
   // usage of useAuth checks it internally
 
-
   // Show loading while checking auth status
   if (isLoading) {
     return <PageLoading text="Đang khởi tạo..." />;

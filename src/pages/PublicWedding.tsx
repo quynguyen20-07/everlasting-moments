@@ -219,8 +219,6 @@ export default function PublicWedding() {
   const ogImage =
     "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1770029543/Vowly/ojjkspr5xl53kmavd9wo.jpg";
 
-  console.log({ title, description, ogImage });
-
   return (
     <>
       <Helmet>
