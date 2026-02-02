@@ -72,7 +72,7 @@ function PublicWeddingContent({
           date={mainEvent?.eventDate || wedding.weddingDate}
         />
 
-        <div className="w-full px-4 py-12">
+        <div className="w-full px-4 pt-12">
           <WeddingInvitationCard
             groomName={groom?.fullName}
             brideName={bride?.fullName}

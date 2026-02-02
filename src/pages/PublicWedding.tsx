@@ -14,10 +14,6 @@ import PublicWeddingContent from "@/components/templates/template-one/PublicWedd
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";
-<<<<<<< Updated upstream
-import { useGetWeddingSetting, usePublicWedding } from "@/hooks";
-=======
->>>>>>> Stashed changes
 import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { TemplateProvider } from "@/components/public";
@@ -47,15 +43,12 @@ export default function PublicWedding() {
 
   const { data: publicWedding, isFetching: isLoading } = usePublicWedding(slug);
   const { data: themeSettings } = useGetWeddingSetting(publicWedding?.id);
-<<<<<<< Updated upstream
-=======
   const { data: bride, refetch: isBrideRefetch } = useGetBride(
     publicWedding?.id,
   );
   const { data: groom, refetch: isGroomRefetch } = useGetGroom(
     publicWedding?.id,
   );
->>>>>>> Stashed changes
 
   const [playing, setPlaying] = useState(false);
 
@@ -215,24 +208,6 @@ export default function PublicWedding() {
     setCurrentImageIndex(index);
   };
 
-<<<<<<< Updated upstream
-  return (
-    <TemplateProvider themeSettings={themeSettings}>
-      <PublicWeddingContent
-        wedding={publicWedding}
-        colors={colors}
-        wishes={wishes}
-        setWishes={setWishes}
-        showShareModal={showShareModal}
-        setShowShareModal={setShowShareModal}
-        isPlaying={playing}
-        toggleMusic={() => (playing ? stop() : play())}
-        // handleRSVP={handleRSVP}
-        // handleWish={handleWish}
-        // handleGalleryClick={handleGalleryClick}
-      />
-    </TemplateProvider>
-=======
   const title =
     bride && groom ? `${bride?.fullName} & ${groom?.fullName}` : "Thiệp cưới";
 
@@ -277,6 +252,5 @@ export default function PublicWedding() {
         />
       </TemplateProvider>
     </>
->>>>>>> Stashed changes
   );
 }
