@@ -27,7 +27,8 @@ const WeddingCalendar = ({ date }: WeddingCalendarProps) => {
         mx-auto
         bg-white
         px-6
-        py-8
+        pt-12
+        pb-6
         text-center
         font-['Playfair_Display']
       "

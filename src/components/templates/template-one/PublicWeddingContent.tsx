@@ -72,7 +72,7 @@ function PublicWeddingContent({
           date={mainEvent?.eventDate || wedding.weddingDate}
         />
 
-        <div className="w-full p-4">
+        <div className="w-full px-4 py-12">
           <WeddingInvitationCard
             groomName={groom?.fullName}
             brideName={bride?.fullName}
@@ -83,7 +83,7 @@ function PublicWeddingContent({
           />
         </div>
 
-        <div className="my-8">
+        <div className="my-12">
           <TopAlbumCover image="https://res.cloudinary.com/nguyen-the-quy/image/upload/v1769883220/Vowly/o8qp0zzg30wrcfxrdpnp.jpg" />
         </div>
 

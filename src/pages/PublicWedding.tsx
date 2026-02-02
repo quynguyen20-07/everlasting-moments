@@ -4,11 +4,20 @@ import {
   mapWeddingToCoupleData,
   TEMPLATES_LIST,
 } from "@/lib/utils";
+import {
+  useGetBride,
+  useGetGroom,
+  useGetWeddingSetting,
+  usePublicWedding,
+} from "@/hooks";
 import PublicWeddingContent from "@/components/templates/template-one/PublicWeddingContent";
 import type { WishFormData } from "@/components/wedding-ui/GuestWishesSection";
 import type { RSVPFormData } from "@/components/wedding-ui/RSVPSection";
 import NotfoundFallback from "@/components/ui/notfound-fallback";
+<<<<<<< Updated upstream
 import { useGetWeddingSetting, usePublicWedding } from "@/hooks";
+=======
+>>>>>>> Stashed changes
 import { useNavigate, useParams } from "react-router-dom";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { TemplateProvider } from "@/components/public";
@@ -17,6 +26,7 @@ import { ColorType, TemplateType } from "@/types";
 import { GuestApi } from "@/lib/api/guest.api";
 import { WishApi } from "@/lib/api/wish.api";
 import { useToast } from "@/hooks/useToast";
+import { Helmet } from "react-helmet-async";
 import type { Wish } from "@/types";
 import useSound from "use-sound";
 
@@ -37,6 +47,15 @@ export default function PublicWedding() {
 
   const { data: publicWedding, isFetching: isLoading } = usePublicWedding(slug);
   const { data: themeSettings } = useGetWeddingSetting(publicWedding?.id);
+<<<<<<< Updated upstream
+=======
+  const { data: bride, refetch: isBrideRefetch } = useGetBride(
+    publicWedding?.id,
+  );
+  const { data: groom, refetch: isGroomRefetch } = useGetGroom(
+    publicWedding?.id,
+  );
+>>>>>>> Stashed changes
 
   const [playing, setPlaying] = useState(false);
 
@@ -196,6 +215,7 @@ export default function PublicWedding() {
     setCurrentImageIndex(index);
   };
 
+<<<<<<< Updated upstream
   return (
     <TemplateProvider themeSettings={themeSettings}>
       <PublicWeddingContent
@@ -212,5 +232,51 @@ export default function PublicWedding() {
         // handleGalleryClick={handleGalleryClick}
       />
     </TemplateProvider>
+=======
+  const title =
+    bride && groom ? `${bride?.fullName} & ${groom?.fullName}` : "Thiệp cưới";
+
+  const description =
+    publicWedding && groom && bride
+      ? `Trân trọng kính mời bạn tham dự lễ cưới của ${bride?.fullName} và ${groom?.fullName} vào ${publicWedding.weddingDate}`
+      : "Thiệp cưới online";
+
+  const ogImage =
+    "https://res.cloudinary.com/nguyen-the-quy/image/upload/v1770029543/Vowly/ojjkspr5xl53kmavd9wo.jpg";
+
+  console.log({ title, description, ogImage });
+
+  return (
+    <>
+      <Helmet>
+        <title>{title}</title>
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+      <TemplateProvider themeSettings={themeSettings}>
+        <PublicWeddingContent
+          wedding={publicWedding}
+          colors={colors}
+          wishes={wishes}
+          setWishes={setWishes}
+          showShareModal={showShareModal}
+          setShowShareModal={setShowShareModal}
+          isPlaying={playing}
+          toggleMusic={() => (playing ? stop() : play())}
+          // handleRSVP={handleRSVP}
+          // handleWish={handleWish}
+          // handleGalleryClick={handleGalleryClick}
+        />
+      </TemplateProvider>
+    </>
+>>>>>>> Stashed changes
   );
 }
